@@ -50,7 +50,7 @@ const compSize = computed(() => {
     font-size:${sizes[props.size].fontSize}px;
     padding: ${sizes[props.size].padY}px ${sizes[props.size].padX}px;
     height: ${sizes[props.size].height}px;
-    border-radius: ${props.rounded ? ' 999px' : sizes[props.size].height/10 + 'px'};
+    border-radius: ${props.rounded ? ' 999px' : 0 + 'px'};
     background-color:${props.color};
   `
 })
@@ -76,6 +76,8 @@ button {
   flex-wrap: nowrap;
   border: none;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   cursor: pointer;
   transition: opacity ease-in-out 0.2s;
   border-radius: 6px;

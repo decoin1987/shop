@@ -7,10 +7,6 @@ const props = defineProps({
     type: String,
     default: 'md'
   },
-  color: {
-    type: String,
-    default: 'transparent',
-  }
 })
 
 
@@ -33,7 +29,6 @@ const compSize = computed(() => {
   return `
     height: ${sizes[props.size].height}px;
     width: ${sizes[props.size].height}px;
-    background-color:${props.color};
   `
 })
 </script>
@@ -52,6 +47,7 @@ button {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  background-color: transparent;
   transition: opacity ease-in-out 0.2s;
   border-radius: 999px;
 }

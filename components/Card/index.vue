@@ -58,7 +58,7 @@ defineProps({
 
       <header style="flex: 1 1 100%; align-items: stretch; justify-content: space-between; padding-left: 8px" class="flex-col gap-2">
         <NuxtLink>
-          <h1 style="font-size: 28px; font-weight: 600">{{ product.title }}</h1>
+          <h1 style="font-size: 20px; font-weight: 600">{{ product.title }}</h1>
         </NuxtLink>
           <div class="flex-row gap-2" style="margin-bottom: auto; align-items: baseline">
 

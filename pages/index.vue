@@ -133,6 +133,6 @@ bouquetNameMap()
 .grid-container {
   margin-top: 28px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 </style>
