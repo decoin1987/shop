@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import Flicking from "@egjs/vue3-flicking";
 import {useTemplateRef} from "@vue/runtime-core";
+import {ref} from "@vue/reactivity";
 
 const show = ref(true)
 const vazes = [
@@ -57,6 +58,7 @@ const sliderOptions = {
   bound: true,
   preventDefaultOnDrag: true,
 }
+const heart = ref(true)
 
 const slider = useTemplateRef('flickSlider')
 
@@ -106,7 +108,12 @@ const prev = () => {
       </div>
     </div>
     <div class="flex-col gap-8" style="min-width: 300px; max-width: 50%; padding: 38px 44px; align-self: flex-start">
-      <h1 style="font-size: 44px; line-height: 1">Романтический подарок</h1>
+      <div class="flex-row gap-3" style="flex: 1 1; align-items: flex-start;">
+        <h1 style="font-size: 44px; line-height: 1">Романтический подарок</h1>
+        <IconButton style="padding: 2px" size="xs">
+          <IconHeart @click="heart = !heart" :color="!!heart ? 'red' : '#00000080'" />
+        </IconButton>
+      </div>
       <div class="flex-row gap-3" style="align-items: baseline; margin-top: -10px">
         <p style="font-size: 16px; text-decoration: line-through">
           {{
