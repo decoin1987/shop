@@ -27,6 +27,9 @@ const links = ref([
         <Button rounded size="md" color="#ccc" type="button" @click="$router.push('/account')">
           ЛК
         </Button>
+        <Button rounded size="md" color="#ccc" type="button" @click="$router.push('/admin')">
+          Админка
+        </Button>
       </div>
     </div>
   </header>

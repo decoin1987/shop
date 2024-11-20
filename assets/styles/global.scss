@@ -8,9 +8,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: var(--mine-700);
+  color: inherit;
   font-family: 'Raleway', sans-serif;
 }
+
+div, ul, section, article, aside {
+  color: var(--mine-700);
+}
+
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Cormorant', serif;

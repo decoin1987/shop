@@ -14,7 +14,7 @@ const goToBack = () => {
 <template>
   <div class="w-full">
     <section class="flex flex-col gap-10">
-      <div class="flex gap-3" style="align-items: center">
+      <div class="flex-col gap-3" style="align-items: center">
         <h1 class="" style="font-size: 32px">Личный кабинет</h1>
       </div>
     </section>
