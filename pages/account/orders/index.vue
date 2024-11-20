@@ -14,9 +14,11 @@ const goToBack = () => {
 <template>
   <div class="w-full">
     <section class="flex flex-col gap-10">
-      <div class="flex gap-3" style="align-items: center">
-        <h1 class="" style="font-size: 32px">Личный кабинет</h1>
+      <div class="flex-row" style="align-items: center">
+        <IconButton size="md" @click="goToBack" style="background-color: var(--mine-200); padding: 10px"><IconArrowLeft color="#000"/></IconButton>
+        <h1 style="font-size: 32px">Заказы</h1>
       </div>
+
     </section>
   </div>
 </template>

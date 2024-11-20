@@ -18,20 +18,26 @@ const links = ref([
         <img style="height: 65px; width: auto; margin-top: 8px" alt="букет72.рф логотип" src="/icon/logo1.svg"/>
       </NuxtLink>
       <div class="flex-row gap-4">
-        <Button rounded size="md" color="#f43f48">
+        <Button rounded size="md" color="#f43f48" @click="$router.push('/login')">
           Войти
+        </Button>
+        <Button rounded size="md" color="#ccc" @click="$router.push('/registration')">
+          Регистрация
+        </Button>
+        <Button rounded size="md" color="#ccc" type="button" @click="$router.push('/account')">
+          ЛК
         </Button>
       </div>
     </div>
   </header>
   <nav>
-    <div class="container flex-row gap-5">
+    <div class="container flex-row gap-5" style="align-items: center">
       <ul class="flex-row gap-2">
         <li v-for="link in links">
-          <MainLink hovered to="/">{{ link.name }}</MainLink>
+          <MainLink hovered :to="`/catalog/${link.link}`">{{ link.name }}</MainLink>
         </li>
       </ul>
-
+      <Button rounded style="margin-left: auto" @click="$router.push('/cart')">Корзина</Button>
     </div>
   </nav>
   <slot/>

@@ -64,6 +64,7 @@ const slider = useTemplateRef('flickSlider')
 
 const next = () => {
   try {
+    console.log('next')
     slider.value.next();
   } catch (e) {
     // console.log(e)
@@ -72,6 +73,7 @@ const next = () => {
 }
 const prev = () => {
   try {
+    console.log('prev')
     slider.value.prev();
   } catch (e) {
     // console.log(e)
@@ -84,14 +86,12 @@ const prev = () => {
   <section class="container" style="display: flex; padding: 0">
     <div class="flex-col gap-4" style="min-width: 300px; max-width: 50%; position: relative; align-self: flex-start">
       <div style="position: relative">
-        <div class="flex-row" style="flex:1 1; justify-content: space-between; position: absolute; top: calc(50% - 22px); left: 15px; right: 15px; z-index: 999">
-          <IconButton size="lg" class="arrows" @click="next">
-            <IconArrowLeft height="32" style="margin-right: 2px"/>
-          </IconButton>
-          <IconButton size="lg" class="arrows" @click="prev">
-            <IconArrowRight height="32" style="margin-left: 2px"/>
-          </IconButton>
-        </div>
+        <IconButton size="lg" class="arrows" @click="prev" style="position: absolute; top: calc(50% - 22px); left: 15px; z-index: 999">
+          <IconArrowLeft height="32" style="margin-right: 2px"/>
+        </IconButton>
+        <IconButton size="lg" class="arrows" @click="next" style="position: absolute; top: calc(50% - 22px); right: 15px; z-index: 999">
+          <IconArrowRight height="32" style="margin-left: 2px"/>
+        </IconButton>
         <Flicking ref="flickSlider" :options="sliderOptions">
           <article @click="console.log('рыготница')" v-for="(link, i) in flowers" :key="i" style="width: 100%">
             <img style="object-fit: cover; width: 100%; aspect-ratio: 1/1" :src="link" alt="">
@@ -111,7 +111,7 @@ const prev = () => {
       <div class="flex-row gap-3" style="flex: 1 1; align-items: flex-start;">
         <h1 style="font-size: 44px; line-height: 1">Романтический подарок</h1>
         <IconButton style="padding: 2px" size="xs">
-          <IconHeart @click="heart = !heart" :color="!!heart ? 'red' : '#00000080'" />
+          <IconHeart @click="heart = !heart" :color="!!heart ? '#f43f48' : '#00000080'" />
         </IconButton>
       </div>
       <div class="flex-row gap-3" style="align-items: baseline; margin-top: -10px">
@@ -120,7 +120,7 @@ const prev = () => {
             numberToRub(12256)
           }}
         </p>
-        <p style="font-size: 28px; color: var(--thunderbird-600); font-weight: 500">
+        <p style="font-size: 28px; color: var(--thunderbird-500); font-weight: 500">
           {{ numberToRub(10256) }}
         </p>
       </div>

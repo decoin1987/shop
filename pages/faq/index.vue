@@ -12,11 +12,12 @@ const goToBack = () => {
 </script>
 
 <template>
-  <div class="w-full">
-    <section class="flex flex-col gap-10">
-      <div class="flex gap-3" style="align-items: center">
-        <h1 class="" style="font-size: 32px">Личный кабинет</h1>
+  <div>
+    <section>
+      <div>
+        <h1>FAQ</h1>
       </div>
+
     </section>
   </div>
 </template>

@@ -111,19 +111,18 @@ bouquetNameMap()
   <div>
 
     <div class="container">
-      <Stories />
+      <Stories/>
     </div>
     <section class="container" style="margin-top: 44px">
-
       <h1 style="font-size: 52px; font-weight: 500">Витрина</h1>
-    <div class="grid-container gap-3">
-      <Card
-          v-for="p in products"
-          :key="p.id"
-          @showSaleDescription="showSaleDescription"
-          :product="p"
-      />
-    </div>
+      <div class="grid-container gap-3">
+        <Card
+            v-for="p in products"
+            :key="p.id"
+            @showSaleDescription="showSaleDescription"
+            :product="p"
+        />
+      </div>
 
     </section>
   </div>
@@ -133,6 +132,6 @@ bouquetNameMap()
 .grid-container {
   margin-top: 28px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 </style>
