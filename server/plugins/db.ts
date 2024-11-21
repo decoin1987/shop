@@ -4,7 +4,7 @@ import {sequelize} from "../utils/db.connect"
 export default defineNitroPlugin( async()=> {
     try {
         await sequelize.authenticate()
-        await sequelize.sync({ force: true })
+        await sequelize.sync({ alter: true })
 //         await User.sync({force: true});
         console.log('Соединение с БД было успешно установлено')
     } catch (e) {

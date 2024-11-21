@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
 import {sequelize} from "../utils/db.connect";
 import {Upsell} from "./upsell";
-import {urlRusLat} from "../utils/helpers";
+import {stringSlugify} from "../utils/helpers";
 
 export const Category = sequelize.define('category', {
     id: {
@@ -21,7 +21,7 @@ export const Category = sequelize.define('category', {
     slug: {
         type: DataTypes.STRING,
         async set(value: string) {
-            this.setDataValue('slug', urlRusLat(value))
+            this.setDataValue('slug', stringSlugify(value))
         }
     },
 }, {

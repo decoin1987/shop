@@ -64,7 +64,7 @@ export const IMAGES = {
 }
 
 //Транслитерация кириллицы в URL
-export const urlRusLat = (str: String) => {
+export const stringSlugify = (str: String) => {
     str = str.toLowerCase(); // все в нижний регистр
     var cyr2latChars = [['а', 'a'], ['б', 'b'], ['в', 'v'], ['г', 'g'],
         ['д', 'd'],  ['е', 'e'], ['ё', 'yo'], ['ж', 'zh'], ['з', 'z'],
@@ -128,5 +128,5 @@ export const urlRusLat = (str: String) => {
 export default {
     CONFIG,
     IMAGES,
-    urlRusLat,
+    stringSlugify,
 }

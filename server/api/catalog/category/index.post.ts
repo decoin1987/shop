@@ -1,21 +1,25 @@
 import {Category} from "../../../models/category";
 import {createError, defineEventHandler, EventHandlerRequest, H3Event, readBody} from "h3";
-import {urlRusLat} from "../../../utils/helpers";
+import {stringSlugify} from "../../../utils/helpers";
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
     const {title, description, sort, parent_id} = await readBody(event)
     console.log({title, description, sort, parent_id})
     try {
-        const category = await Category.create({
-            title, description, sort, slug: urlRusLat(title)
-        })
-        return category
+        if (!/[^ ]/.test(title) || title.length < 1) {
+            return createError('Введите название категории')
+        } else {
+            await Category.create({
+                title: title.trim(), description, sort, slug: title, parent_id
+            })
+        }
     } catch (error) {
-        throw createError({
-            statusCode: error.status,
-            message: error.message
-        })
+        throw createError(error.message)
     }
-
-
+    return await Category.findAndCountAll({
+            order: [
+                // Will escape title and validate DESC against a list of valid direction parameters
+                ['sort', 'ASC'],]
+        }
+    )
 });

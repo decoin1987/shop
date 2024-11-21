@@ -9,7 +9,6 @@ export interface userModel {
     lastLoginAt?: string
     createdAt?: string
     updatedAt?: string
-
 }
 
 export default class UserDto {
