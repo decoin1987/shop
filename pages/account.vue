@@ -13,7 +13,7 @@
         <NuxtLink to="/account/wishlist">Избранное</NuxtLink>
         <NuxtLink to="/account/subscribe">Подписки</NuxtLink>
         <NuxtLink to="/faq" >Вопрос-ответ</NuxtLink>
-        <Button type="button">Выйти</Button>
+        <UButton type="button">Выйти</UButton>
       </div>
       <NuxtPage />
   </div>

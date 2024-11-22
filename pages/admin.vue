@@ -127,7 +127,7 @@ const reportLinks = [
 
 <template>
   <section class="flex-row" style="min-height: 100vh;">
-    <nav class="flex-col gap-8" style="padding: 20px; background-color: var(--mine-400); width: 390px; height: 100vh; overflow-y: scroll">
+    <nav class="flex-col gap-8" style="position:sticky; top: 0; padding: 20px; background-color: var(--mine-400); min-width: 320px; height: 100vh; overflow-y: scroll">
       <img src="/icon/logo2.svg" width="200px" alt="">
       <ul class="flex-col gap-4">
         <li>
@@ -192,8 +192,12 @@ const reportLinks = [
       </ul>
     </nav>
     <div class="flex-col" style="width: 100%">
-      <nav class="flex-row gap-2" style="background-color: var(--mine-300); padding: 20px; position: sticky; top: 0;">12341234</nav>
-      <NuxtPage/>
+      <nav class="flex-row gap-2" style="z-index:1; background-color: var(--mine-300); padding: 20px; position: sticky; top: 0;">
+        <NuxtLink to="/">На главную</NuxtLink>
+      </nav>
+      <ClientOnly>
+        <NuxtPage/>
+      </ClientOnly>
     </div>
 
   </section>

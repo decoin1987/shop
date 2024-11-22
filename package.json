@@ -27,15 +27,16 @@
     "sequelize": "^6.37.5",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
+    "uuid": "^9.0.1",
     "vue": "latest",
     "vue-router": "latest",
-    "vue-yandex-maps": "^2.1.4",
-    "uuid": "^9.0.1"
+    "vue-yandex-maps": "^2.1.4"
   },
   "overrides": {
     "vue": "latest"
   },
   "devDependencies": {
+    "@nuxt/ui": "^2.19.2",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node-telegram-bot-api": "^0.64.4",

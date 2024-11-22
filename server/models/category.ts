@@ -21,6 +21,7 @@ export const Category = sequelize.define('category', {
     slug: {
         type: DataTypes.STRING,
         async set(value: string) {
+            console.log(value)
             this.setDataValue('slug', stringSlugify(value))
         }
     },
@@ -29,6 +30,7 @@ export const Category = sequelize.define('category', {
 });
 
 Category.hasMany(Category, { foreignKey: 'parent_id', as: 'child' })
+Category.belongsTo(Category, { foreignKey: 'parent_id', as: 'parent' })
 Category.belongsToMany(Upsell, { through: 'category_upsells', as: 'categories_upsells', timestamps: false })
 Upsell.belongsToMany(Category, { through: 'category_upsells', as: 'upsells_categories', timestamps: false })
 

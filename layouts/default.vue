@@ -18,18 +18,18 @@ const links = ref([
         <img style="height: 65px; width: auto; margin-top: 8px" alt="букет72.рф логотип" src="/icon/logo1.svg"/>
       </NuxtLink>
       <div class="flex-row gap-4">
-        <Button rounded size="md" color="#f43f48" @click="$router.push('/login')">
+        <UButton rounded size="md"  @click="$router.push('/login')">
           Войти
-        </Button>
-        <Button rounded size="md" color="#ccc" @click="$router.push('/registration')">
+        </UButton>
+        <UButton rounded size="md"  @click="$router.push('/registration')">
           Регистрация
-        </Button>
-        <Button rounded size="md" color="#ccc" type="button" @click="$router.push('/account')">
+        </UButton>
+        <UButton rounded size="md" type="button" @click="$router.push('/account')">
           ЛК
-        </Button>
-        <Button rounded size="md" color="#ccc" type="button" @click="$router.push('/admin')">
+        </UButton>
+        <UButton rounded size="md"  type="button" @click="$router.push('/admin')">
           Админка
-        </Button>
+        </UButton>
       </div>
     </div>
   </header>
@@ -40,7 +40,7 @@ const links = ref([
           <MainLink hovered :to="`/catalog/${link.link}`">{{ link.name }}</MainLink>
         </li>
       </ul>
-      <Button rounded style="margin-left: auto" @click="$router.push('/cart')">Корзина</Button>
+      <UButton rounded style="margin-left: auto" @click="$router.push('/cart')">Корзина</UButton>
     </div>
   </nav>
   <slot/>

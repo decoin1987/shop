@@ -35,7 +35,7 @@ const options = {
     <div class="flex-col gap-4" style="align-items: stretch; flex: 1 1; height: 2000px; width: 60%; padding-right: 32px">
       <h1>Ваша корзина</h1>
       <div class="flex-row gap-4" style="padding-bottom: 20px; border-bottom: 1px solid var(--mine-200);">
-        <Button v-if="!different_address" size="xs">К определенному времени</Button>
+        <UButton v-if="!different_address" size="xs">К определенному времени</UButton>
         <label for="diffAddr" class="gap-2" style="display: flex; align-items: center">
           <input v-model="different_address" id="diffAddr" type="checkbox">
           Доставить на разные адреса
@@ -44,24 +44,24 @@ const options = {
 
       <div class="flex-col gap-1" style="width: 100%; border-bottom: 1px solid var(--mine-200); padding-bottom: 20px">
         <div v-if="different_address" class="flex-row gap-4" style="margin-bottom: 10px">
-          <Button size="xs">Выбрать адрес</Button>
-          <Button size="xs">К определенному времени</Button>
+          <UButton size="xs">Выбрать адрес</UButton>
+          <UButton size="xs">К определенному времени</UButton>
         </div>
         <div class="flex-row gap-4" style="padding: 10px 0; flex: 1 1;">
           <img style="object-fit: cover" src="https://www.odealarose.com/media/cache/720_960_webp/product/phpEZE3lX-64c3ddf515a1b.webp" width="100px" height="100px" alt="">
           <div class="flex-col gap-3" style="padding: 5px 0">
             <p>Романтический подарок</p>
             <div class="flex-row gap-2" style="margin-top: auto;">
-              <IconButton>
+              <IconUButton>
                 <IconMinus color="#000" />
-              </IconButton>
+              </IconUButton>
               <Input style="width: 80px" />
-              <IconButton>
+              <IconUButton>
                 <IconPlus color="#000" />
-              </IconButton>
-              <IconButton size="md" style="padding: 3px">
+              </IconUButton>
+              <IconUButton size="md" style="padding: 3px">
                 <IconTrash color="#00000050" />
-              </IconButton>
+              </IconUButton>
             </div>
           </div>
           <div class="flex-col gap-1" style="margin-left: auto; margin-top: auto; align-items: flex-end;">
@@ -86,7 +86,7 @@ const options = {
                 <div class="flex-col" style="padding: 2px; flex: 1 1; position: relative">
                   <img :src="link" alt="">
                   <p style="font-size: 11px; padding: 3px 3px">Подарок № {{ i+1 }}</p>
-                  <Button style="margin-top: auto" size="xs" color="#000">Убрать</Button>
+                  <UButton style="margin-top: auto" size="xs" color="#000">Убрать</UButton>
                 </div>
 
               </article>
@@ -100,7 +100,7 @@ const options = {
       <div class="" style="background-color: var(--mine-50); border-radius: 10px; padding: 15px 20px">
         <h2>Ваш заказ</h2>
         <p class="order-mini-title">Адрес заказа</p>
-        <Button size="xs">Выбрать адрес</Button>
+        <UButton size="xs">Выбрать адрес</UButton>
         <p class="order-mini-title">Состав заказа:</p>
         <hr style="margin: 20px 0">
         <p class="order-mini-title">Оплата</p>

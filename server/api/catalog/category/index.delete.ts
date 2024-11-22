@@ -8,5 +8,22 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
             id
         },
     });
-    return await Category.findAndCountAll()
+    return await Category.findAndCountAll(
+        {
+            include: [
+                {
+                    model: Category,
+                    as: 'parent',
+                },
+                {
+                    model: Category,
+                    as: 'child',
+                },
+            ],
+            distinct:true,
+            order: [['sort', 'ASC']],
+            // limit: 5,
+            // offset:2,
+        }
+    )
 });

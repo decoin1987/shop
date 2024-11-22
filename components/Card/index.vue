@@ -72,9 +72,9 @@ defineProps({
 
           </div>
         <div class="flex-row" style="justify-content: space-between; align-items: center">
-          <Button color="#000" style="align-self: flex-end; border-radius: 21px 0 21px 0; margin-left: auto">
+          <UButton color="#000" style="align-self: flex-end; border-radius: 21px 0 21px 0; margin-left: auto">
             Заказать
-          </Button>
+          </UButton>
         </div>
       </header>
     </template>

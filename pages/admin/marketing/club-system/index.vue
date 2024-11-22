@@ -6,7 +6,7 @@
   <section>
     <div class="flex flex-row gap-6">
       <h1>Категории</h1>
-      <UButton size="sm">Создать категорию</UButton>
+      <UUButton size="sm">Создать категорию</UUButton>
     </div>
 
     <div class="">

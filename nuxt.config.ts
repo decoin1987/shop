@@ -18,15 +18,13 @@ export default defineNuxtConfig({
             }
         },
     },
-    modules: [
-        'nuxt-scheduler',
-        ['dayjs-nuxt', {
-            locales: ['ru'],
-            plugins: ['relativeTime', 'utc', 'timezone', 'duration'],
-            defaultTimezone: 'Asia/Yekaterinburg',
-            defaultLocale: 'ru'
-        }], ['vue-yandex-maps', {
+    modules: ['nuxt-scheduler', ['dayjs-nuxt', {
+        locales: ['ru'],
+        plugins: ['relativeTime', 'utc', 'timezone', 'duration'],
+        defaultTimezone: 'Asia/Yekaterinburg',
+        defaultLocale: 'ru'
+    }], ['vue-yandex-maps', {
             strictMode: true,
             apikey: '0ad0d51c-6191-457e-92fb-b8225caac0d5',
-        }], '@pinia/nuxt', '@vueuse/nuxt', "@nuxt/image", 'dayjs-nuxt'],
+        }], '@pinia/nuxt', '@vueuse/nuxt', "@nuxt/image", 'dayjs-nuxt', '@nuxt/ui'],
 })

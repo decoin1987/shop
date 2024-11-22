@@ -15,11 +15,11 @@ const goToBack = () => {
   <div class="w-full">
     <section class="flex flex-col gap-10">
       <div class="flex-row" style="align-items: center">
-        <IconButton size="md" @click="goToBack" style="background-color: var(--mine-200); padding: 10px"><IconArrowLeft color="#000"/></IconButton>
+        <IconUButton size="md" @click="goToBack" style="background-color: var(--mine-200); padding: 10px"><IconArrowLeft color="#000"/></IconUButton>
         <h1 style="font-size: 32px">Профиль</h1>
 
       </div>
-      <Button class="self-start">Удалить профиль</Button>
+      <UButton class="self-start">Удалить профиль</UButton>
 
 
 

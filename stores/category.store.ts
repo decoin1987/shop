@@ -17,9 +17,27 @@ export const useCategoryStore = defineStore('category', () => {
     const getCategory = async () => {
         useFetch('/api/catalog/category', {
             onResponse({response}) {
+                console.dir(response._data)
                 return updateCategory(response._data)
             },
             method: "GET"
+        })
+    }
+
+    const editCategory = async (data) => {
+        useFetch('/api/catalog/category', {
+            headers: {
+                authorization: !!token.value ? token.value : '',
+            },
+            method: "PUT",
+            onResponse({request, response, options}) {
+                if (response._data.statusCode) {
+                    return console.error(response._data.message)
+                }
+                console.log(response._data)
+                return updateCategory(response._data)
+            },
+            body: data
         })
     }
 
@@ -54,5 +72,5 @@ export const useCategoryStore = defineStore('category', () => {
         })
     }
 
-    return {createCategory,getCategory,deleteCategory, categories}
+    return {createCategory, getCategory, deleteCategory, editCategory, categories}
 })

@@ -16,10 +16,22 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
     } catch (error) {
         throw createError(error.message)
     }
-    return await Category.findAndCountAll({
-            order: [
-                // Will escape title and validate DESC against a list of valid direction parameters
-                ['sort', 'ASC'],]
+    return await Category.findAndCountAll(
+        {
+            include: [
+                {
+                    model: Category,
+                    as: 'parent',
+                },
+                {
+                    model: Category,
+                    as: 'child',
+                },
+            ],
+            distinct:true,
+            // limit: 5,
+            // offset:2,
+            order: [['sort', 'ASC']],
         }
     )
 });

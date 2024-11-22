@@ -6,6 +6,7 @@
   <section>
     <h1>Товары</h1>
     <div class=""></div>
+
   </section>
 </template>
 
