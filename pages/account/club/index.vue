@@ -14,7 +14,7 @@ const goToBack = () => {
 <template>
     <section class="flex-col gap-6" style="width: 100%">
       <div class="flex-row" style="align-items: center">
-        <IconUButton size="md" @click="goToBack" style="background-color: var(--mine-200); padding: 10px"><IconArrowLeft color="#000"/></IconUButton>
+        <IconButton size="md" @click="goToBack" style="background-color: var(--mine-200); padding: 10px"><IconArrowLeft color="#000"/></IconButton>
         <h1 style="font-size: 32px">Скидки и бонусы</h1>
       </div>
       <div class="flex-col gap-3">

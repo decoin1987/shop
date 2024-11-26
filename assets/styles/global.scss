@@ -1,9 +1,12 @@
-@use '_variable.scss';
-@use '_gap.scss';
-@use '_displays.scss';
-@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 @import url("@egjs/vue3-flicking/dist/flicking.css");
 @import url("@egjs/flicking-plugins/dist/flicking-plugins.css");
+
+#buket {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -29,6 +32,6 @@ ul {
   width: 100%;
   min-width: 320px;
   max-width: 1400px;
-  padding: 0 10px;
+  padding: 0 30px;
   margin: 0 auto;
 }

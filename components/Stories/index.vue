@@ -12,12 +12,13 @@ const options = {
   circularFallback: 'bound',
   bound: true,
   renderOnlyVisible: true,
+  preventDefaultOnDrag: true,
 }
 
 const stories = ref([
   {
     id: 1,
-    link: '/',
+    link: 'cat1.png',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -28,7 +29,7 @@ const stories = ref([
   },
   {
     id: 1,
-    link: '/',
+    link: 'cat2.png',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -39,7 +40,7 @@ const stories = ref([
   },
   {
     id: 1,
-    link: '/',
+    link: 'cat3.png',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -50,7 +51,7 @@ const stories = ref([
   },
   {
     id: 1,
-    link: '/',
+    link: 'cat4.png',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -61,7 +62,7 @@ const stories = ref([
   },
   {
     id: 1,
-    link: '/',
+    link: '5.jpg',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -72,7 +73,7 @@ const stories = ref([
   },
   {
     id: 1,
-    link: '/',
+    link: '6.jpg',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -83,7 +84,7 @@ const stories = ref([
   },
   {
     id: 1,
-    link: '/',
+    link: '7.jpg',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -94,7 +95,7 @@ const stories = ref([
   },
   {
     id: 1,
-    link: '/',
+    link: '10.jpg',
     label: 'Режим работы',
     minTitle: 'Закроемся:',
     title: '23:00',
@@ -109,9 +110,10 @@ const stories = ref([
 <template>
   <div class="">
     <Flicking :options="options">
-      <article v-for="(store, index) in stories" :key="store.id + index" class="panel">
-        <div class="story-card">
+      <article v-for="(store, index) in stories" :key="store.id + index" class="panel" style="position: relative">
+        <div class="story-card" style="position: relative">
           <h1>{{ store.label }}</h1>
+          <img style="object-fit: cover; position: absolute; top: 0; bottom: 0; right: 0; left: 0;" :src="`/images/${store.link}`" alt="">
         </div>
       </article>
 <!--      <template #viewport>-->
@@ -128,6 +130,7 @@ const stories = ref([
   width: 300px;
   aspect-ratio: 3/4.5;
   display: flex;
+
 }
 
 .story-card {
@@ -135,5 +138,6 @@ const stories = ref([
   display: flex;
   flex: 1 1;
   border-radius: 10px;
+  overflow: hidden;
 }
 </style>

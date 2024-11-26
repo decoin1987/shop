@@ -52,16 +52,16 @@ const options = {
           <div class="flex-col gap-3" style="padding: 5px 0">
             <p>Романтический подарок</p>
             <div class="flex-row gap-2" style="margin-top: auto;">
-              <IconUButton>
+              <IconButton>
                 <IconMinus color="#000" />
-              </IconUButton>
+              </IconButton>
               <Input style="width: 80px" />
-              <IconUButton>
+              <IconButton>
                 <IconPlus color="#000" />
-              </IconUButton>
-              <IconUButton size="md" style="padding: 3px">
+              </IconButton>
+              <IconButton size="md" style="padding: 3px">
                 <IconTrash color="#00000050" />
-              </IconUButton>
+              </IconButton>
             </div>
           </div>
           <div class="flex-col gap-1" style="margin-left: auto; margin-top: auto; align-items: flex-end;">
@@ -86,7 +86,7 @@ const options = {
                 <div class="flex-col" style="padding: 2px; flex: 1 1; position: relative">
                   <img :src="link" alt="">
                   <p style="font-size: 11px; padding: 3px 3px">Подарок № {{ i+1 }}</p>
-                  <UButton style="margin-top: auto" size="xs" color="#000">Убрать</UButton>
+                  <UButton style="margin-top: auto" size="xs" color="orange">Убрать</UButton>
                 </div>
 
               </article>

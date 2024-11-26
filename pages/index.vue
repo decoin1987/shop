@@ -95,6 +95,10 @@ const products =
         "url": "https://www.odealarose.com/media/cache/720_960_webp/product/phpEZE3lX-64c3ddf515a1b.webp"
       }
     ]
+
+const catalogPresents = [
+    'День рождения', 'Годовщина', 'Поздравления', 'Поправляйся', 'Симпатия', 'Рождение ребенка', 'Свадьба'
+]
 const showSaleDescription = () => {
   console.log('salemodaldescription')
 }
@@ -114,16 +118,92 @@ bouquetNameMap()
       <Stories/>
     </div>
     <section class="container" style="margin-top: 44px">
-      <h1 style="font-size: 52px; font-weight: 500">Витрина</h1>
-      <div class="grid-container gap-3">
-        <Card
-            v-for="p in products"
-            :key="p.id"
-            @showSaleDescription="showSaleDescription"
-            :product="p"
-        />
-      </div>
+      <article>
+        <h1 style="font-size: 52px; font-weight: 500">Витрина</h1>
+        <div class="grid-container gap-3">
+          <Card
+              v-for="p in products.slice(0, 8)"
+              :key="p.id"
+              @showSaleDescription="showSaleDescription"
+              :product="p"
+          />
+        </div>
+        <UButton>Смотреть всё</UButton>
+      </article>
 
+      <article style="margin-top: 40px; background-color: var(--thunderbird-100); padding: 40px">
+        <h1 style="font-size: 52px; font-weight: 500; margin-bottom: 30px">Букеты на любой случай</h1>
+        <div class="flex-row gap-5">
+          <UButton v-for="item in catalogPresents" size="lg" :ui="{ rounded: 'rounded-full' }" color="orange"  variant="soft">{{ item }}</UButton>
+        </div>
+      </article>
+      <article style="margin-top: 40px">
+        <h1 style="font-size: 52px; font-weight: 500;">Авторские букеты</h1>
+        <p>Букеты под заказ от наших флористов</p>
+        <div class="grid-container gap-3">
+          <Card
+              v-for="p in products.slice(0, 4)"
+              :key="p.id"
+              @showSaleDescription="showSaleDescription"
+              :product="p"
+          />
+        </div>
+        <UButton>Смотреть всё</UButton>
+      </article>
+      <section style="margin-top: 40px">
+        <div class="grid-container gap-3">
+          <article class="">
+            <h1>Доставка от часа</h1>
+          </article>
+          <article class="">
+            <h1>Свежие цветы</h1>
+          </article>
+          <article class="">
+            <h1>Фирменная упаковка</h1>
+          </article>
+          <article class="">
+            <h1>Фото букета до отправки</h1>
+          </article>
+        </div>
+      </section>
+      <article style="margin-top: 40px;">
+        <h1 style="font-size: 52px; font-weight: 500; margin-bottom: 30px">О нас говорят</h1>
+        <div class="flex-row gap-5">
+          <div class="" style="height: 450px; width: 300px; background-color: #cccccc; margin-top: 20px">123</div>
+          <div class="" style="height: 450px; width: 300px; background-color: #cccccc;">123</div>
+          <div class="" style="height: 450px; width: 300px; background-color: #cccccc; margin-top: 20px">123</div>
+          <div class="" style="height: 450px; width: 300px; background-color: #cccccc;">123</div>
+        </div>
+      </article>
+      <article style="margin-top: 40px; margin-bottom: 10px">
+        <h1 style="font-size: 32px; margin-bottom: 20px">Доставка цветов в Тюмени</h1>
+        <div class="flex gap-10">
+          <div class="" style="flex: 1 1">
+            <p style="margin-bottom: 10px">
+              На нашем сайте вы можете заказать цветочные букеты домой или в офис в Тюмени от цветочной мастерской "букет72.рф" Наши букеты всегда свежие. Мы гордимся тем, что делаем, мы рады приносить счастье вашим родным и близким. Мы всегда рады вашим отзывам и предложениям!
+            </p>
+            <p style="margin-bottom: 10px">
+              Наши специалисты очень бережно относятся к своим цветам и ревностно следят за правильным хранением и оформлением букетов. Поэтому мы всегда уверены в качестве букетов и даем своим клиентам гарантию на любой букет. Наша круглосуточная служба доставки оперативно доставляет букеты по городу и пригороду.
+            </p>
+            <p style="margin-bottom: 10px">
+              Наши букеты содержат все самые полюбившиеся цветы: тюльпаны, лилии, гвоздики, хризантемы и конечно же розы, классические и кустовые. Помимо "классических" букетов, мы готовы порадовать самых изысканных любителей букетами с альстромерией, солигадо, статица, гипсофила и многие другие. Подробную информацию о всех возможных букетах вы можете найти в нашем каталоге.
+            </p>
+            <p style="margin-bottom: 10px">
+              Помимо цветочных букетов мы создаем потрясающие композиции для подарков в коробках. В таких подарочных наборах цветы миксуются с лучшими конфетами или свежими ягодами/фруктами. В нашем каталоге вы сможете найти их в разделе "Цветы в коробке, корзине, кашпо". Для сладкоежек у нас есть особенные подарки - композиции только из разнообразных любимых сладостей. Такой подарок оставит светлые и яркие эмоции на долгое время. Не будем скромничать - наши клиенты часто делятся своими красивыми подарками в инстаграме, будем рады и вашим отзывам! ;)
+            </p>
+            <p style="margin-bottom: 10px">
+              Мы не обошли вниманием и мужчин. Для них у нас есть эксклюзивные букеты состоящие из кофейных, сувенирных букетов, для любителей пива и мяса имеются букеты с отборной колбаской и снеками, и конечно венцом такого букета может быть бутылка отличного виски или крафтового пива. С этими букетами вы легко удивите вашего мужа, брата или даже отца, если сомневаетесь, то обратитесь к нашему специалисту и он поможет подобрать, то что надо.
+            </p>
+            <p style="margin-bottom: 10px">
+              Наша команда не только продает и доставляет подарки, но и создаст настроение праздника на любом мероприятии. Мы организуем и декорируем залы торжеств, собираем свадебные букеты невесты. Обращаясь в нашу цветочную мастерскую вы передаете создание красоты профессионалам и будьте уверены, все пройдет по высшему классу.
+            </p>
+          </div>
+          <div class="" style="background-color: #ccc; flex: 1 1">
+            карта
+          </div>
+        </div>
+
+      </article>
     </section>
   </div>
 </template>

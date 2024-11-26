@@ -135,8 +135,6 @@ const items = row => [
           </UDropdown>
         </template>
       </UTable>
-      <pre>
-    </pre>
     </div>
 
   </section>

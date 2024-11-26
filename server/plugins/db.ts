@@ -71,21 +71,20 @@ const flowers = [
 export default defineNitroPlugin( async()=> {
     try {
         await sequelize.authenticate()
-        await sequelize.sync({ alter: true })
+        await sequelize.sync({ force: true })
 //         await User.sync({force: true});
         await Category.bulkCreate(cat)
         const flower = await Category.findOne({where: {title: "Цветы"}})
-        console.log(JSON.stringify(flower))
-        console.log(JSON.stringify(flower))
-        for (let i in flowers) {
-            console.log(i)
-            try {
-                await flower.createChild(flowers[i])
-            } catch (e) {
-                console.log(e)
-            }
-        }
 
+        // Добавляем parent_id ко всем цветам
+        const flowersWithParent = flowers.map(item => ({
+            ...item,
+            parent_id: flower.id
+        }))
+        
+        // Создаем все подкатегории цветов одним запросом
+        await Category.bulkCreate(flowersWithParent)
+        
         console.log('Соединение с БД было успешно установлено')
     } catch (e) {
         console.log(

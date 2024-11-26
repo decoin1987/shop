@@ -34,7 +34,7 @@ export const useCategoryStore = defineStore('category', () => {
                 if (response._data.statusCode) {
                     return console.error(response._data.message)
                 }
-                console.log(response._data)
+                // console.log(response._data)
                 return updateCategory(response._data)
             },
             body: data

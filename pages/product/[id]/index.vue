@@ -55,7 +55,7 @@ const sliderOptions = {
   circular: true,
   adaptive: false,
   circularFallback: 'bound',
-  bound: true,
+  // bound: true,
   preventDefaultOnDrag: true,
 }
 const heart = ref(true)
@@ -86,12 +86,12 @@ const prev = () => {
   <section class="container" style="display: flex; padding: 0">
     <div class="flex-col gap-4" style="min-width: 300px; max-width: 50%; position: relative; align-self: flex-start">
       <div style="position: relative">
-        <IconUButton size="lg" class="arrows" @click="prev" style="position: absolute; top: calc(50% - 22px); left: 15px; z-index: 999">
+        <IconButton size="lg" class="arrows" @click="prev" style="position: absolute; top: calc(50% - 22px); left: 15px; z-index: 999">
           <IconArrowLeft height="32" style="margin-right: 2px"/>
-        </IconUButton>
-        <IconUButton size="lg" class="arrows" @click="next" style="position: absolute; top: calc(50% - 22px); right: 15px; z-index: 999">
+        </IconButton>
+        <IconButton size="lg" class="arrows" @click="next" style="position: absolute; top: calc(50% - 22px); right: 15px; z-index: 999">
           <IconArrowRight height="32" style="margin-left: 2px"/>
-        </IconUButton>
+        </IconButton>
         <Flicking ref="flickSlider" :options="sliderOptions">
           <article @click="console.log('рыготница')" v-for="(link, i) in flowers" :key="i" style="width: 100%">
             <img style="object-fit: cover; width: 100%; aspect-ratio: 1/1" :src="link" alt="">
@@ -110,9 +110,12 @@ const prev = () => {
     <div class="flex-col gap-8" style="min-width: 300px; max-width: 50%; padding: 38px 44px; align-self: flex-start">
       <div class="flex-row gap-3" style="flex: 1 1; align-items: flex-start;">
         <h1 style="font-size: 44px; line-height: 1">Романтический подарок</h1>
-        <IconUButton style="padding: 2px" size="xs">
-          <IconHeart @click="heart = !heart" :color="!!heart ? '#f43f48' : '#00000080'" />
-        </IconUButton>
+        <ClientOnly>
+          <IconButton style="padding: 2px" size="xs">
+            <IconHeart @click="heart = !heart" :color="!!heart ? '#f43f48' : '#00000080'" />
+          </IconButton>
+        </ClientOnly>
+
       </div>
       <div class="flex-row gap-3" style="align-items: baseline; margin-top: -10px">
         <p style="font-size: 16px; text-decoration: line-through">
@@ -127,27 +130,27 @@ const prev = () => {
       <div class="">
         <p>Размер букета:</p>
         <div class="flex-row gap-4" style="margin-top: 16px">
-          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="#85868B" color="transparent">M</UButton>
-          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="#85868B" color="transparent">L</UButton>
-          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="#85868B" color="transparent">XL</UButton>
+          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="green" color="primary">M</UButton>
+          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="green" color="primary">L</UButton>
+          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="green" color="primary">XL</UButton>
         </div>
       </div>
 
       <div class="flex-row gap-2">
         <template v-if="show === true">
-          <UButton @click="show = false" rounded color="#000">Добавить в корзину</UButton>
+          <UButton @click="show = false" rounded color="green">Добавить в корзину</UButton>
         </template>
         <template v-if="show===false">
-          <IconUButton>
+          <IconButton>
             <IconMinus color="#000" />
-          </IconUButton>
+          </IconButton>
           <Input style="width: 80px" />
-          <IconUButton>
+          <IconButton>
             <IconPlus color="#000" />
-          </IconUButton>
-          <IconUButton @click="show = true" size="md" style="padding: 3px">
+          </IconButton>
+          <IconButton @click="show = true" size="md" style="padding: 3px">
             <IconTrash color="#00000050" />
-          </IconUButton>
+          </IconButton>
         </template>
 
       </div>
@@ -159,7 +162,7 @@ const prev = () => {
               <div class="flex-col" style="padding: 2px; flex: 1 1; position: relative">
                 <img :src="link" alt="">
                 <p style="font-size: 13px; padding: 3px 3px">Ваза для ваших цветов № {{ i+1 }}</p>
-                <UButton size="xs" color="#000">Добавить</UButton>
+                <UButton size="xs" color="orange">Добавить</UButton>
               </div>
 
             </article>
@@ -174,7 +177,7 @@ const prev = () => {
             <div class="flex-col" style="padding: 2px; flex: 1 1; position: relative">
               <img :src="link" alt="">
               <p style="font-size: 13px; padding: 3px 3px">Подарок № {{ i+1 }}</p>
-              <UButton size="xs" color="#000">Добавить</UButton>
+              <UButton size="xs" color="orange">Добавить</UButton>
             </div>
 
           </article>

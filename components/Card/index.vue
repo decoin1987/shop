@@ -72,7 +72,7 @@ defineProps({
 
           </div>
         <div class="flex-row" style="justify-content: space-between; align-items: center">
-          <UButton color="#000" style="align-self: flex-end; border-radius: 21px 0 21px 0; margin-left: auto">
+          <UButton color="primary" style="align-self: flex-end; border-radius: 21px 0 21px 0; margin-left: auto">
             Заказать
           </UButton>
         </div>

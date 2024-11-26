@@ -21,7 +21,6 @@ export const Category = sequelize.define('category', {
     slug: {
         type: DataTypes.STRING,
         async set(value: string) {
-            console.log(value)
             this.setDataValue('slug', stringSlugify(value))
         }
     },
