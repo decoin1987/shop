@@ -17,7 +17,7 @@ export const useCategoryStore = defineStore('category', () => {
     const getCategory = async () => {
         useFetch('/api/catalog/category', {
             onResponse({response}) {
-                console.dir(response._data)
+                // console.dir(response._data)
                 return updateCategory(response._data)
             },
             method: "GET"
@@ -53,7 +53,7 @@ export const useCategoryStore = defineStore('category', () => {
         })
     }
 
-    const categories = useState('categories', () => getCategory())
+    const categories = useState('categories', async () => await getCategory())
 
     const createCategory = async (data) => {
         useFetch('/api/catalog/category', {

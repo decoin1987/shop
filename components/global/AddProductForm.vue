@@ -1,7 +1,7 @@
 <script  lang="ts" setup>
 import {useState, useFetch, useAsyncData} from "nuxt/app";
 import {v4 as uuid} from 'uuid'
-import {defineProps, defineEmits, ref, watch, computed} from "vue";
+import {defineEmits, ref, watch, computed} from "vue";
 import {useCategoryStore} from "~/store/category.store";
 
 const pending = ref(false)

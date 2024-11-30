@@ -1,4 +1,15 @@
 <script lang="ts" setup>
+import {ref} from "vue";
+import {
+  YandexMap,
+  YandexMapDefaultFeaturesLayer,
+  YandexMapDefaultSchemeLayer,
+  YandexMapMarker,
+} from 'vue-yandex-maps';
+import type {YMapLocationRequest} from '@yandex/ymaps3-types/imperative/YMap';
+import Flicking from "@egjs/vue3-flicking";
+
+
 const bouquetName =
     [
       "Романтический подарок",
@@ -97,7 +108,7 @@ const products =
     ]
 
 const catalogPresents = [
-    'День рождения', 'Годовщина', 'Поздравления', 'Поправляйся', 'Симпатия', 'Рождение ребенка', 'Свадьба'
+  'День рождения', 'Годовщина', 'Поздравления', 'Поправляйся', 'Симпатия', 'Рождение ребенка', 'Свадьба'
 ]
 const showSaleDescription = () => {
   console.log('salemodaldescription')
@@ -109,103 +120,166 @@ const bouquetNameMap = () => {
 }
 
 bouquetNameMap()
+
+const LOCATION = ref<YMapLocationRequest>({
+  center: [65.578139, 57.106595],
+  zoom: 19,
+});
+const mapSettings = ref({
+  location: LOCATION,
+})
+const options = {
+  preventClickOnDrag: true,
+  moveType: 'snap',
+  align: 'center',
+  threshold: 80,
+  iOSEdgeSwipeThreshold: 30,
+  circular: false,
+  adaptive: false,
+  circularFallback: 'bound',
+  bound: true,
+  renderOnlyVisible: true,
+  preventDefaultOnDrag: true,
+}
 </script>
 
 <template>
-  <div>
+  <UContainer>
+    <Stories class="mb-14"/>
 
-    <div class="container">
-      <Stories/>
-    </div>
-    <section class="container" style="margin-top: 44px">
-      <article>
-        <h1 style="font-size: 52px; font-weight: 500">Витрина</h1>
-        <div class="grid-container gap-3">
-          <Card
-              v-for="p in products.slice(0, 8)"
-              :key="p.id"
-              @showSaleDescription="showSaleDescription"
-              :product="p"
-          />
-        </div>
-        <UButton>Смотреть всё</UButton>
-      </article>
-
-      <article style="margin-top: 40px; background-color: var(--thunderbird-100); padding: 40px">
-        <h1 style="font-size: 52px; font-weight: 500; margin-bottom: 30px">Букеты на любой случай</h1>
-        <div class="flex-row gap-5">
-          <UButton v-for="item in catalogPresents" size="lg" :ui="{ rounded: 'rounded-full' }" color="orange"  variant="soft">{{ item }}</UButton>
-        </div>
-      </article>
-      <article style="margin-top: 40px">
-        <h1 style="font-size: 52px; font-weight: 500;">Авторские букеты</h1>
-        <p>Букеты под заказ от наших флористов</p>
-        <div class="grid-container gap-3">
-          <Card
-              v-for="p in products.slice(0, 4)"
-              :key="p.id"
-              @showSaleDescription="showSaleDescription"
-              :product="p"
-          />
-        </div>
-        <UButton>Смотреть всё</UButton>
-      </article>
-      <section style="margin-top: 40px">
-        <div class="grid-container gap-3">
-          <article class="">
-            <h1>Доставка от часа</h1>
-          </article>
-          <article class="">
-            <h1>Свежие цветы</h1>
-          </article>
-          <article class="">
-            <h1>Фирменная упаковка</h1>
-          </article>
-          <article class="">
-            <h1>Фото букета до отправки</h1>
-          </article>
-        </div>
-      </section>
-      <article style="margin-top: 40px;">
-        <h1 style="font-size: 52px; font-weight: 500; margin-bottom: 30px">О нас говорят</h1>
-        <div class="flex-row gap-5">
-          <div class="" style="height: 450px; width: 300px; background-color: #cccccc; margin-top: 20px">123</div>
-          <div class="" style="height: 450px; width: 300px; background-color: #cccccc;">123</div>
-          <div class="" style="height: 450px; width: 300px; background-color: #cccccc; margin-top: 20px">123</div>
-          <div class="" style="height: 450px; width: 300px; background-color: #cccccc;">123</div>
-        </div>
-      </article>
-      <article style="margin-top: 40px; margin-bottom: 10px">
-        <h1 style="font-size: 32px; margin-bottom: 20px">Доставка цветов в Тюмени</h1>
-        <div class="flex gap-10">
-          <div class="" style="flex: 1 1">
-            <p style="margin-bottom: 10px">
-              На нашем сайте вы можете заказать цветочные букеты домой или в офис в Тюмени от цветочной мастерской "букет72.рф" Наши букеты всегда свежие. Мы гордимся тем, что делаем, мы рады приносить счастье вашим родным и близким. Мы всегда рады вашим отзывам и предложениям!
-            </p>
-            <p style="margin-bottom: 10px">
-              Наши специалисты очень бережно относятся к своим цветам и ревностно следят за правильным хранением и оформлением букетов. Поэтому мы всегда уверены в качестве букетов и даем своим клиентам гарантию на любой букет. Наша круглосуточная служба доставки оперативно доставляет букеты по городу и пригороду.
-            </p>
-            <p style="margin-bottom: 10px">
-              Наши букеты содержат все самые полюбившиеся цветы: тюльпаны, лилии, гвоздики, хризантемы и конечно же розы, классические и кустовые. Помимо "классических" букетов, мы готовы порадовать самых изысканных любителей букетами с альстромерией, солигадо, статица, гипсофила и многие другие. Подробную информацию о всех возможных букетах вы можете найти в нашем каталоге.
-            </p>
-            <p style="margin-bottom: 10px">
-              Помимо цветочных букетов мы создаем потрясающие композиции для подарков в коробках. В таких подарочных наборах цветы миксуются с лучшими конфетами или свежими ягодами/фруктами. В нашем каталоге вы сможете найти их в разделе "Цветы в коробке, корзине, кашпо". Для сладкоежек у нас есть особенные подарки - композиции только из разнообразных любимых сладостей. Такой подарок оставит светлые и яркие эмоции на долгое время. Не будем скромничать - наши клиенты часто делятся своими красивыми подарками в инстаграме, будем рады и вашим отзывам! ;)
-            </p>
-            <p style="margin-bottom: 10px">
-              Мы не обошли вниманием и мужчин. Для них у нас есть эксклюзивные букеты состоящие из кофейных, сувенирных букетов, для любителей пива и мяса имеются букеты с отборной колбаской и снеками, и конечно венцом такого букета может быть бутылка отличного виски или крафтового пива. С этими букетами вы легко удивите вашего мужа, брата или даже отца, если сомневаетесь, то обратитесь к нашему специалисту и он поможет подобрать, то что надо.
-            </p>
-            <p style="margin-bottom: 10px">
-              Наша команда не только продает и доставляет подарки, но и создаст настроение праздника на любом мероприятии. Мы организуем и декорируем залы торжеств, собираем свадебные букеты невесты. Обращаясь в нашу цветочную мастерскую вы передаете создание красоты профессионалам и будьте уверены, все пройдет по высшему классу.
-            </p>
-          </div>
-          <div class="" style="background-color: #ccc; flex: 1 1">
-            карта
-          </div>
-        </div>
-
-      </article>
+    <section class="mb-14">
+      <h1 class="p-0 m-0 text-5xl mb-6">Витрина</h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <Card
+            v-for="p in products.slice(0, 8)"
+            :key="p.id"
+            @showSaleDescription="showSaleDescription"
+            :product="p"
+        />
+      </div>
+      <UButton>Смотреть всё</UButton>
     </section>
+
+    <section class="bg-red-50 p-10 mb-14 rounded-lg">
+      <h1 class="p-0 text-5xl mb-8">Букеты на любой случай</h1>
+      <div class="flex gap-5 flex-wrap">
+        <UButton v-for="item in catalogPresents" size="lg" :ui="{ rounded: 'rounded-full' }" color="red"
+                 variant="solid">{{ item }}
+        </UButton>
+      </div>
+    </section>
+
+    <section class="mb-14">
+      <h1 class="p-0 mb-2 text-5xl">Авторские букеты</h1>
+      <p class="mb-6">Букеты под заказ от наших флористов</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <Card
+            v-for="p in products.slice(0, 4)"
+            :key="p.id"
+            @showSaleDescription="showSaleDescription"
+            :product="p"
+        />
+      </div>
+      <UButton>Смотреть всё</UButton>
+    </section>
+
+    <section class="mb-14">
+      <div class="flex  flex-wrap gap-3">
+        <article class="">
+          <h1 class="text-3xl">
+            Доставка от часа
+          </h1>
+        </article>
+        <article class="">
+          <h1 class="text-3xl">Свежие цветы</h1>
+        </article>
+        <article class="">
+          <h1 class="text-3xl">Фирменная упаковка</h1>
+        </article>
+        <article class="">
+          <h1 class="text-3xl">Фото букета до отправки</h1>
+        </article>
+      </div>
+    </section>
+  </UContainer>
+  <div class="bg-gray-100 pt-14 mb-14">
+    <UContainer>
+      <section class="mb-14">
+        <h1 class="p-0 m-0 text-5xl mb-6">О нас говорят</h1>
+        <Flicking :options="options">
+          <ReviewCard v-for="i in 8" :key="i" />
+        </Flicking>
+      </section>
+    </UContainer>
   </div>
+  <UContainer>
+    <section class="mb-14 flex  flex-wrap">
+      <h1 class="text-3xl mb-6">Доставка цветов в Тюмени</h1>
+      <div class="flex flex-wrap gap-10">
+        <div class="flex flex-wrap" style="flex: 1 1">
+          <p style="margin-bottom: 10px">
+            На нашем сайте вы можете заказать цветочные букеты домой или в офис в Тюмени от цветочной мастерской
+            "букет72.рф" Наши букеты всегда свежие. Мы гордимся тем, что делаем, мы рады приносить счастье вашим
+            родным и близким. Мы всегда рады вашим отзывам и предложениям!
+          </p>
+          <p style="margin-bottom: 10px">
+            Наши специалисты очень бережно относятся к своим цветам и ревностно следят за правильным хранением и
+            оформлением букетов. Поэтому мы всегда уверены в качестве букетов и даем своим клиентам гарантию на любой
+            букет. Наша круглосуточная служба доставки оперативно доставляет букеты по городу и пригороду.
+          </p>
+          <p style="margin-bottom: 10px">
+            Наши букеты содержат все самые полюбившиеся цветы: тюльпаны, лилии, гвоздики, хризантемы и конечно же
+            розы, классические и кустовые. Помимо "классических" букетов, мы готовы порадовать самых изысканных
+            любителей букетами с альстромерией, солигадо, статица, гипсофила и многие другие. Подробную информацию о
+            всех возможных букетах вы можете найти в нашем каталоге.
+          </p>
+          <p style="margin-bottom: 10px">
+            Помимо цветочных букетов мы создаем потрясающие композиции для подарков в коробках. В таких подарочных
+            наборах цветы миксуются с лучшими конфетами или свежими ягодами/фруктами. В нашем каталоге вы сможете
+            найти их в разделе "Цветы в коробке, корзине, кашпо". Для сладкоежек у нас есть особенные подарки -
+            композиции только из разнообразных любимых сладостей. Такой подарок оставит светлые и яркие эмоции на
+            долгое время. Не будем скромничать - наши клиенты часто делятся своими красивыми подарками в инстаграме,
+            будем рады и вашим отзывам! ;)
+          </p>
+          <p style="margin-bottom: 10px">
+            Мы не обошли вниманием и мужчин. Для них у нас есть эксклюзивные букеты состоящие из кофейных, сувенирных
+            букетов, для любителей пива и мяса имеются букеты с отборной колбаской и снеками, и конечно венцом такого
+            букета может быть бутылка отличного виски или крафтового пива. С этими букетами вы легко удивите вашего
+            мужа, брата или даже отца, если сомневаетесь, то обратитесь к нашему специалисту и он поможет подобрать,
+            то что надо.
+          </p>
+          <p style="margin-bottom: 10px">
+            Наша команда не только продает и доставляет подарки, но и создаст настроение праздника на любом
+            мероприятии. Мы организуем и декорируем залы торжеств, собираем свадебные букеты невесты. Обращаясь в нашу
+            цветочную мастерскую вы передаете создание красоты профессионалам и будьте уверены, все пройдет по высшему
+            классу.
+          </p>
+        </div>
+        <div class="" style="background-color: #ccc; align-self: flex-start">
+          <YandexMap
+              :settings="mapSettings"
+              width="100%"
+              height="600px"
+          >
+            <YandexMapDefaultSchemeLayer/>
+            <YandexMapDefaultFeaturesLayer/>
+            <YandexMapMarker
+                :settings="{
+                                coordinates: [65.578139, 57.106595],
+                              }"
+            >
+              <div
+                  class="flex items-center justify-center bg-white ring-1 ring-primary-700 rounded-full relative w-10 h-10 -mt-7 -ml-5"
+              >
+                <img src="/icon/logoicon.svg" width="30px" height="30px" alt="">
+              </div>
+            </YandexMapMarker>
+          </YandexMap>
+        </div>
+      </div>
+
+    </section>
+  </UContainer>
 </template>
 
 <style scoped lang="scss">

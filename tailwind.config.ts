@@ -17,8 +17,11 @@ export default <Partial<Config>>{
             xl: '1440px',
         },
         extend: {
+            borderRadius: {
+                'card': '21px'
+            },
             colors: {
-                'roze-red': {
+                'red': {
                     '50': '#fef2f2',
                     '100': '#fee2e2',
                     '200': '#fecaca',
@@ -31,7 +34,7 @@ export default <Partial<Config>>{
                     '900': '#7f1d1d',
                     '950': '#450a0a',
                 },
-                'gray': {
+                'cool': {
                     '50': '#f5f5f6',
                     '100': '#e5e6e8',
                     '200': '#cdced4',
@@ -57,7 +60,10 @@ export default <Partial<Config>>{
                     '900': '#085172',
                     '950': '#06334b',
                 },
-            }
+            },
+            maxWidth: {
+                '8xl': '96rem',
+            },
         }
     }
 }

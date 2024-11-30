@@ -39,7 +39,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt', '@vueuse/nuxt', "@nuxt/image", 'dayjs-nuxt', '@nuxt/ui',],
     ui: {
         global: true,
-        safelistColors: ['orange', 'primary', 'green', 'roze-red', 'malibu']
+        safelistColors: ['cool', 'primary', 'green', 'red', 'malibu']
     },
     colorMode: {
         preference: 'light'

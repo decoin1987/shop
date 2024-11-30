@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import {ref} from "@vue/reactivity"
-import {useState} from "nuxt/app";
 import {useCategoryStore} from "@/stores/category.store";
 
 // const links = ref([
@@ -10,7 +8,7 @@ import {useCategoryStore} from "@/stores/category.store";
 //   {link: 'presents', name: 'Подарки'},
 //   {link: 'souvenirs', name: 'Сувениры'},
 // ])
-
+const toast = useToast()
 const menu = [
   {
     name: 'Информация',
@@ -67,18 +65,29 @@ const menu = [
   }
 ]
 const categoryStore = useCategoryStore()
-const links = categoryStore.categories
+// const links =
+const button_ui = {
+  rounded: 'rounded-full',
+  variant: {
+    soft: 'text-red-600 dark:text-red-400 bg-red-100 hover:bg-red-200 disabled:bg-{color}-100 aria-disabled:bg-{color}-100 dark:bg-{color}-950 dark:hover:bg-{color}-900 dark:disabled:bg-{color}-950 dark:aria-disabled:bg-{color}-950 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-{color}-500 dark:focus-visible:ring-{color}-400',
+  },
+}
 
+
+const count = 0
 </script>
 
 <template>
-  <header>
-    <div class="container flex-row items-center gap-10 justify-b">
-      <NuxtLink to="/">
-        <img style="height: 65px; width: auto; margin-top: 8px" alt="букет72.рф логотип" src="/icon/logo1.svg"/>
-      </NuxtLink>
-      <div class="flex-row gap-4">
-        <ColorModeSwitch />
+  <header class="py-5">
+    <UContainer class="w-full flex flex-wrap flex-row items-center gap-10">
+      <div class="flex flex-wrap">
+        <NuxtLink to="/">
+          <img style="height: 65px; width: auto;" alt="букет72.рф логотип" src="/icon/logo1.svg"/>
+        </NuxtLink>
+        <UDivider orientation="vertical" class="my-3 mx-6" />
+        <p class="self-center">Доставка свежих цветов</p>
+      </div>
+      <div class="flex flex-row gap-4 items-center ml-auto">
         <UButton rounded size="md"  @click="$router.push('/login')">
           Войти
         </UButton>
@@ -92,60 +101,90 @@ const links = categoryStore.categories
           Админка
         </UButton>
       </div>
-    </div>
+    </UContainer>
   </header>
-  <nav>
-    <div class="container flex-row gap-5" style="align-items: center">
-      <ul class="flex-row gap-2">
-        <li v-for="link in links.rows">
-          <template v-if="!link.parent_id">
-            <MainLink hovered :to="`/catalog/${link.slug}`">{{ link.title }}</MainLink>
-          </template>
-
-<!--          <MainLink hovered :to="`/catalog/${link.link}`">{{ link.name }}</MainLink>-->
+  <nav class="bg-gray-100 py-6 mb-10">
+    <UContainer class="w-full flex flex-row flex-wrap gap-5 items-center justify-between">
+      <ul class="flex flex-row flex-wrap gap-2">
+        <li v-for="link in categoryStore.categories.rows?.filter(el => !el.parent_id)">
+            <UButton  :ui="button_ui" :to="`/catalog/${link.slug}`" variant="soft" color="red">{{ link.title }}</UButton>
         </li>
       </ul>
-      <UButton rounded style="margin-left: auto" @click="$router.push('/cart')">Корзина</UButton>
-    </div>
+      <UChip
+          :show="true"
+          size="md"
+          inset
+      >
+        <UButton
+            :ui="{rounded: 'rounded-full',}"
+            to="/cart"
+            icon="i-solar-bag-heart-linear"
+            size="xl"
+            color="black"
+            variant="solid"
+            class="ml-auto"
+        >Корзина</UButton>
+      </UChip>
+
+    </UContainer>
   </nav>
-    <slot/>
+  <slot/>
+  <UNotifications color="green" />
+  <footer class="bg-gray-900">
+      <UContainer class="w-full flex py-14 flex-col gap-6">
+          <div class="flex flex-wrap">
+            <Logo width="250px" textColor="#fff" flowerColor="red" secondaryFlowerColor="green"/>
+            <template v-if="0===1">
+              <UButton class="text-gray-300 ml-auto hover:text-gray-500" variant="link" size="xl">
+                Войти на сайт
+              </UButton>
+              <UButton class="text-gray-300 hover:text-gray-500" variant="link" size="xl">
+                Зарегистрироваться
+              </UButton>
+            </template>
+            <template v-else>
+              <UButton class="text-gray-300 ml-auto hover:text-gray-500" variant="link" size="xl">
+                Корзина
+              </UButton>
+              <UButton class="text-gray-300 hover:text-gray-500" variant="link" size="xl">
+                Личный кабинет
+              </UButton>
+              <UButton class="text-gray-300 hover:text-gray-500" variant="link" size="xl">
+                Выйти
+              </UButton>
+            </template>
 
-  <footer>
-
-      <div class="flex w-full mt-14"  style="background-color: var(--mine-800)">
-        <div class="container">
-          <div class="py-6 flex w-full" style="justify-content: space-between; align-items: center">
-            <Logo width="250px" textColor="#fff" flowerColor="#fff" secondaryFlowerColor="#fff"/>
-            <UButton>Заказать цветы</UButton>
           </div>
-          <div class="py-6 flex" >
-            <ul style="color: white;" v-for="menu in menu">
-              <li>{{menu.name}}</li>
-              <li v-if="menu.items">
-                <ul v-for="item in menu.items" style="color: white;">
-                  <li>{{ item.name }}</li>
+          <div class="flex gap-20 flex-wrap" >
+            <ul class="flex flex-col flex-wrap" v-for="m in menu">
+              <li class="mb-3 text-gray-500">{{m.name}}</li>
+              <li class="flex flex-col gap" v-if="m.items">
+                <ul v-for="item in m.items" class="flex flex-row">
+                  <li>
+                    <UButton :ui="{
+                    padding: {
+                      xl: 'px-0 py-2'
+                    }
+                  }" class="text-gray-400 hover:text-gray-500" variant="link" size="xl">
+                    {{ item.name }}
+                  </UButton>
+                  </li>
                 </ul>
               </li>
             </ul>
           </div>
-        </div>
-      </div>
-
+      </UContainer>
   </footer>
 </template>
 
 <style scoped lang="scss">
 nav {
-  display: flex;
-  align-items: center;
-  height: 5rem;
-  background-color: var(--mine-50);
-  column-gap: 10px;
+  //position: sticky;
+  //top: 0;
+  z-index: 10;
 }
-
 header {
   display: flex;
-  height: 100px;
   align-items: center;
   justify-content: space-between;
 }

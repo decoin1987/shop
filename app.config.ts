@@ -2,13 +2,21 @@ export default defineAppConfig({
     ui: {
         // Настройки
         strategy: 'override',
-        primary: 'roze-red',
+        primary: 'red',
         gray: 'cool',
         icons: {
             dynamic: true,
         },
         // Кастомизация компонентов
         button: {
+            padding: {
+                '2xs': 'px-2 py-1',
+                xs: 'px-2.5 py-1.5',
+                sm: 'px-2.5 py-1.5',
+                md: 'px-3 py-2',
+                lg: 'px-3.5 py-2.5',
+                xl: 'px-6 py-2.5'
+            },
             default: {
                 size: 'xl',
                 color: 'primary',
@@ -31,6 +39,10 @@ export default defineAppConfig({
             default: {
                 selectedIcon: 'i-octicon-check-24'
             }
+        },
+        notifications: {
+            // Show toasts at the top right of the screen
+            position: 'top-0 end-0'
         },
         notification: {
             default: {
@@ -89,6 +101,11 @@ export default defineAppConfig({
             default: {
                 divider: 'i-octicon-chevron-right-24'
             }
+        },
+        container: {
+            base: 'mx-auto max-w-8xl',
+            padding: 'px-3',
+            constrained: 'max-w-8xl'
         }
     }
 })

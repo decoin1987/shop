@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Flicking from "@egjs/vue3-flicking";
-import {useTemplateRef} from "@vue/runtime-core";
 import {ref} from "@vue/reactivity";
 
 const show = ref(true)
@@ -46,70 +45,22 @@ const options = {
   renderOnlyVisible: false,
   preventDefaultOnDrag: true,
 }
-const sliderOptions = {
-  preventClickOnDrag: true,
-  moveType: 'snap',
-  align: 'center',
-  threshold: 80,
-  iOSEdgeSwipeThreshold: 30,
-  circular: true,
-  adaptive: false,
-  circularFallback: 'bound',
-  // bound: true,
-  preventDefaultOnDrag: true,
-}
+
 const heart = ref(true)
 
-const slider = useTemplateRef('flickSlider')
 
-const next = () => {
-  try {
-    console.log('next')
-    slider.value.next();
-  } catch (e) {
-    // console.log(e)
-  }
-
-}
-const prev = () => {
-  try {
-    console.log('prev')
-    slider.value.prev();
-  } catch (e) {
-    // console.log(e)
-  }
-}
 
 </script>
 
 <template>
-  <section class="container" style="display: flex; padding: 0">
-    <div class="flex-col gap-4" style="min-width: 300px; max-width: 50%; position: relative; align-self: flex-start">
-      <div style="position: relative">
-        <IconButton size="lg" class="arrows" @click="prev" style="position: absolute; top: calc(50% - 22px); left: 15px; z-index: 999">
-          <IconArrowLeft height="32" style="margin-right: 2px"/>
-        </IconButton>
-        <IconButton size="lg" class="arrows" @click="next" style="position: absolute; top: calc(50% - 22px); right: 15px; z-index: 999">
-          <IconArrowRight height="32" style="margin-left: 2px"/>
-        </IconButton>
-        <Flicking ref="flickSlider" :options="sliderOptions">
-          <article @click="console.log('рыготница')" v-for="(link, i) in flowers" :key="i" style="width: 100%">
-            <img style="object-fit: cover; width: 100%; aspect-ratio: 1/1" :src="link" alt="">
-          </article>
-        </Flicking>
-      </div>
-
-      <div class="flex-col gap-3" style="padding: 0 10px">
-        <h2>Состав букета:</h2>
-        <ul class="flex-row gap-1">
-          <li>Хризантемы</li>
-          <li>Розы</li>
-        </ul>
-      </div>
+  <UContainer as="section" class="w-full -mt-14 flex flex-col md:flex-row flex-wrap w-full mb-6">
+    <div class="flex-col gap-4 w-full md:w-2/4">
+      <ProductSlider :images="flowers" :aspect="0.75" />
     </div>
-    <div class="flex-col gap-8" style="min-width: 300px; max-width: 50%; padding: 38px 44px; align-self: flex-start">
-      <div class="flex-row gap-3" style="flex: 1 1; align-items: flex-start;">
-        <h1 style="font-size: 44px; line-height: 1">Романтический подарок</h1>
+
+    <div class="flex-col gap-8 w-full px-0 pt-10 md:w-2/4 md:pl-10 md:pr-7 ">
+      <div class="flex flex-wrap flex-row gap-3" style="flex: 1 1 50%; align-items: flex-start;">
+        <h1 class="text-4xl">Романтический подарок</h1>
         <ClientOnly>
           <IconButton style="padding: 2px" size="xs">
             <IconHeart @click="heart = !heart" :color="!!heart ? '#f43f48' : '#00000080'" />
@@ -117,26 +68,26 @@ const prev = () => {
         </ClientOnly>
 
       </div>
-      <div class="flex-row gap-3" style="align-items: baseline; margin-top: -10px">
-        <p style="font-size: 16px; text-decoration: line-through">
+      <div class="flex flex-row gap-3 mb-4" style="align-items: baseline">
+        <p class="text-sm" style="text-decoration: line-through">
           {{
             numberToRub(12256)
           }}
         </p>
-        <p style="font-size: 28px; color: var(--thunderbird-500); font-weight: 500">
+        <p class="text-3xl text-red-600 font-medium" style="font-weight: 500">
           {{ numberToRub(10256) }}
         </p>
       </div>
-      <div class="">
-        <p>Размер букета:</p>
-        <div class="flex-row gap-4" style="margin-top: 16px">
-          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="green" color="primary">M</UButton>
-          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="green" color="primary">L</UButton>
-          <UButton style="border: 1px solid var(--mine-400)" size="xs" rounded textColor="green" color="primary">XL</UButton>
+      <div class="mb-5">
+        <p class="text-xs mb-1">Размер букета:</p>
+        <div class="flex flex-row gap-2">
+          <UButton :ui="{rounded: 'rounded-full'}" size="lg" icon color="black">M</UButton>
+          <UButton :ui="{rounded: 'rounded-full'}" size="lg" icon color="black">L</UButton>
+          <UButton :ui="{rounded: 'rounded-full'}" size="lg" icon color="black">XL</UButton>
         </div>
       </div>
 
-      <div class="flex-row gap-2">
+      <div class="flex-row gap-2 mb-6">
         <template v-if="show === true">
           <UButton @click="show = false" rounded color="green">Добавить в корзину</UButton>
         </template>
@@ -183,9 +134,11 @@ const prev = () => {
           </article>
         </Flicking>
       </div>
-
     </div>
-  </section>
+  </UContainer>
+  <UContainer as="section" class="w-full flex flex-col md:flex-row wrap w-full">
+    <h1 class="text-2xl">Состав букета</h1>
+  </UContainer>
 </template>
 
 

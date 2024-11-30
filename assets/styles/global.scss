@@ -7,7 +7,7 @@
   min-height: 100vh;
 }
 
-* {
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -15,23 +15,7 @@
   font-family: 'Raleway', sans-serif;
 }
 
-div, ul, section, article, aside {
-  color: var(--mine-700);
-}
-
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Cormorant', serif;
-}
-
-ul {
-  list-style: none;
-}
-
-.container {
-  width: 100%;
-  min-width: 320px;
-  max-width: 1400px;
-  padding: 0 30px;
-  margin: 0 auto;
 }

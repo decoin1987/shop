@@ -103,29 +103,47 @@ const bouquetNameMap = () => {
     el.title = bouquetName[index]
   })
 }
-
+const links = [{
+  label: 'Главная страница',
+  icon: 'i-solar-home-linear',
+  to: '/'
+}, {
+  label: 'Витрина',
+  // icon: 'i-heroicons-link'
+}]
 bouquetNameMap()
+
+const page = ref(1)
+const items = ref(Array(150))
 </script>
 
 <template>
-  <section class="container" style="margin-top: 44px">
-    <h1 style="font-size: 52px; font-weight: 500">Витрина</h1>
-    <div class="grid-container gap-3">
+  <UContainer id="links" as="section" class="w-full mb-14">
+    <UBreadcrumb class="mb-6" :links="links" />
+    <h1 class="p-0 m-0 text-5xl mb-6">Витрина</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
       <Card
-          v-for="p in products"
-          :key="p.id"
+          v-for="product in products"
+          :key="product.id"
           @showSaleDescription="showSaleDescription"
-          :product="p"
+          :product="product"
       />
     </div>
+    <div class="flex w-full justify-center mt-10">
+      <UPagination
+          size="xl"
+          v-model="page"
+          :page-count="7"
+          :total="items.length"
+          :ui="{rounded: 'first:rounded-s-full last:rounded-e-full'}"
+          :to="(page: Number) => ({ query: { page }, })"
+          :prev-button="{ icon: 'i-solar-alt-arrow-left-bold-duotone', label:'назад', color: 'gray' }"
+          :next-button="{ icon: 'i-solar-alt-arrow-right-bold-duotone', label:'вперед', trailing: true,color: 'gray' }"
+      />
 
-  </section>
+    </div>
+  </UContainer>
 </template>
 
 <style scoped lang="scss">
-.grid-container {
-  margin-top: 28px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-}
 </style>
