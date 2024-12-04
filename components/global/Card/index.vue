@@ -1,11 +1,12 @@
 <script setup>
 import CardButton from "../CardButton.vue";
+import {useCartStore} from "~/stores/cart.store";
+
 
 defineProps({
   product: Object,
   bg: Object,
 })
-
 const card_ui = {
   base: 'hover:shadow-lg flex flex-col',
   background: 'bg-gray-50 dark:bg-gray-900',
@@ -30,6 +31,7 @@ const card_ui = {
     padding: 'px-1 py-1'
   }
 }
+const cardStore = useCartStore()
 </script>
 
 <template>
@@ -70,7 +72,7 @@ const card_ui = {
 
     </div>
     <template #footer>
-        <CardButton>В корзину</CardButton>
+        <CardButton @click="cardStore.addToCart(product)">В корзину</CardButton>
     </template>
   </UCard>
 </template>

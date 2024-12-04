@@ -258,8 +258,6 @@ const options = {
         <div class="" style="background-color: #ccc; align-self: flex-start">
           <YandexMap
               :settings="mapSettings"
-              width="100%"
-              height="600px"
           >
             <YandexMapDefaultSchemeLayer/>
             <YandexMapDefaultFeaturesLayer/>

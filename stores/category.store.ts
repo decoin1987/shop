@@ -1,7 +1,6 @@
 // @ts-nocheck
 import {defineStore} from 'pinia'
 import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
-import {ref} from "vue";
 
 
 
@@ -14,6 +13,7 @@ export const useCategoryStore = defineStore('category', () => {
             categories.value = data
         }
     }
+
     const getCategory = async () => {
         useFetch('/api/catalog/category', {
             onResponse({response}) {
@@ -22,6 +22,7 @@ export const useCategoryStore = defineStore('category', () => {
             },
             method: "GET"
         })
+        // return updateCategory(data.value)
     }
 
     const editCategory = async (data) => {
@@ -53,8 +54,6 @@ export const useCategoryStore = defineStore('category', () => {
         })
     }
 
-    const categories = useState('categories', async () => await getCategory())
-
     const createCategory = async (data) => {
         useFetch('/api/catalog/category', {
             headers: {
@@ -72,5 +71,6 @@ export const useCategoryStore = defineStore('category', () => {
         })
     }
 
+    const categories = useState('categories', async () => await getCategory())
     return {createCategory, getCategory, deleteCategory, editCategory, categories}
 })

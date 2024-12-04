@@ -30,7 +30,8 @@
     "uuid": "^9.0.1",
     "vue": "latest",
     "vue-router": "latest",
-    "vue-yandex-maps": "^2.1.4"
+    "vue-yandex-maps": "^2.1.4",
+    "yup": "^1.5.0"
   },
   "overrides": {
     "vue": "latest"

@@ -1,5 +1,5 @@
 import {DataTypes} from "sequelize";
-import {IMAGES, urlRusLat} from "../utils/helpers";
+import {IMAGES, stringSlugify} from "../utils/helpers";
 import {Consist} from "./consist";
 import {Tag} from "./tag";
 import {Upsell} from "./upsell";
@@ -35,7 +35,7 @@ export const Product = sequelize.define('product', {
     slug: {
         type: DataTypes.STRING,
         async set(value: string) {
-            this.setDataValue('slug', urlRusLat(value))
+            this.setDataValue('slug', stringSlugify(value))
         }
     },
     as_consist: {

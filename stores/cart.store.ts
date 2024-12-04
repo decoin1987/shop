@@ -1,13 +1,15 @@
 //@ts-nocheck
 import {defineStore} from "pinia";
 import {useLocalStorage} from "@vueuse/core";
+import {ref} from "vue";
 
-interface CartStore {
-    cart: []
+type product = {
+    count: number,
+    upSale: Object
 }
 
-export const useCartStore = defineStore('cart', {
-        state: () => ({
+export const useCartStore = defineStore('cart', () => {
+        /*state: () => ({
             cart: []
         }),
         getters: {
@@ -97,6 +99,26 @@ export const useCartStore = defineStore('cart', {
                     }
                 }
             }
+        }*/
+    const cart = ref([])
+
+    const clearCart = () => {
+        cart.value = []
+    }
+    const addToCart = (product):Array => {
+        console.log(cart.value)
+        if(cart.value.find((el) => el.id === product.id)) {
+            cart.value.find((el) => el.id === product.id).count += 1
+        } else {
+            cart.value.push({
+                ...product,
+                count: 1,
+                upSale: {},
+            })
         }
-    },
-)
+    }
+
+    return {clearCart, addToCart, cart}
+
+
+},)

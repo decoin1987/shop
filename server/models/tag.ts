@@ -1,6 +1,6 @@
 import {DataTypes} from "sequelize";
 import {sequelize} from "../utils/db.connect";
-import {urlRusLat} from "../utils/helpers";
+import {stringSlugify} from "../utils/helpers";
 
 
 export const Tag = sequelize.define('tag', {
@@ -21,7 +21,7 @@ export const Tag = sequelize.define('tag', {
     slug: {
         type: DataTypes.STRING,
         async set(value: string) {
-            this.setDataValue('slug', urlRusLat(value))
+            this.setDataValue('slug', stringSlugify(value))
         }
     },
 }, {

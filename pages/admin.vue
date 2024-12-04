@@ -7,7 +7,7 @@ const catalogLinks = [
   {
     label: 'Категории',
     icon: 'i-material-symbols-light-folder-copy-outline',
-    to: '/admin/catalog/category',
+    to: '/admin/catalog/categories',
   },
   {
     label: 'Товары',
@@ -126,7 +126,7 @@ const reportLinks = [
 </script>
 
 <template>
-  <section class="flex-row" style="min-height: 100vh;">
+  <section class="flex flex-row" style="min-height: 100vh;">
     <nav class="flex-col gap-8" style="position:sticky; top: 0; padding: 20px; background-color: var(--mine-400); min-width: 320px; height: 100vh; overflow-y: scroll">
       <img src="/icon/logo2.svg" width="200px" alt="">
       <ul class="flex-col gap-4">

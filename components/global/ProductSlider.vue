@@ -44,12 +44,8 @@ const sliderOptions = {
 
 <template>
   <div class="relative w-full">
-    <IconButton size="lg" class="arrows" @click="prev" style="position: absolute; top: calc(50% - 22px); left: 15px; z-index: 5">
-      <IconArrowLeft height="32" style="margin-right: 2px"/>
-    </IconButton>
-    <IconButton size="lg" class="arrows" @click="next" style="position: absolute; top: calc(50% - 22px); right: 15px; z-index: 5">
-      <IconArrowRight height="32" style="margin-left: 2px"/>
-    </IconButton>
+    <UButton :ui="{ rounded: 'rounded-full' }" size="xl" @click="prev" icon="i-solar-alt-arrow-left-line-duotone" color="black" variant="solid" style="position: absolute; top: calc(50% - 22px); left: 15px; z-index: 5" />
+    <UButton :ui="{ rounded: 'rounded-full' }" size="xl" @click="next" icon="i-solar-alt-arrow-right-line-duotone" color="black" variant="solid" style="position: absolute; top: calc(50% - 22px); right: 15px; z-index: 5" />
     <Flicking ref="flickSlider" :options="sliderOptions">
       <article @click="console.log('click')" v-for="(link, i) in images" :key="i" style="width: 100%">
         <img :style="`aspect-ratio: ${aspect}`" style="object-fit: cover; width: 100%;" :src="link" alt="">
@@ -59,5 +55,11 @@ const sliderOptions = {
 </template>
 
 <style scoped lang="scss">
-
+.arrows {
+  background-color: var(--thunderbird-200);
+}
+.arrows:hover {
+  background-color: var(--mine-950);
+  opacity: 1;
+}
 </style>

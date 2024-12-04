@@ -1,7 +1,29 @@
 <script lang="ts" setup>
 import {ref} from "@vue/reactivity";
-import Flicking from "@egjs/vue3-flicking";
 
+import {computed} from "vue";
+
+const orderDTO = [
+  {
+    address: {
+      street: '',
+      floor: '',
+      flat: '',
+      entrance: '',
+      intercom: '',
+    },
+    time: '',
+    recipient: {
+      initials: ''
+    },
+    payer_id: '',
+    order: {
+      product_id: '',
+      quantity: '',
+    },
+    payment_method: ''
+  }
+]
 const different_address = ref(false)
 const prezents = [
   'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpcgUNUF-659eed4ee1d9d.webp',
@@ -15,92 +37,59 @@ const prezents = [
   'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpsGvZTB-646d25a9499ea.webp',
   'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpG2BRDY-646d270811add.webp',
 ]
-const options = {
-  preventClickOnDrag: true,
-  moveType: 'snap',
-  align: 'center',
-  threshold: 80,
-  iOSEdgeSwipeThreshold: 30,
-  circular: false,
-  adaptive: false,
-  circularFallback: 'bound',
-  bound: true,
-  renderOnlyVisible: false,
-  preventDefaultOnDrag: true,
+
+
+const count = ref(1)
+const isOpen = ref(false)
+const addresses = ref({}
+//     [
+//   { "title": "2-й микрорайон, Тюмень",
+//     "coordinates": [ 65.588631, 57.115134 ],
+//     "entrance": null,
+//     "floor": null,
+//     "flat": null,
+//     "deliveryZonePrice": 250,
+//     "village": true },
+//   { "title": "Береговая улица, 222, садоводческое товарищество Калинка, Тюменский район",
+//     "coordinates": [ 65.729774, 57.146315 ],
+//     "entrance": null, "floor": null, "flat": null, "deliveryZonePrice": 450, "village": true },
+//   { "title": "товарищество собственников недвижимости Серебряный Бор, 1096, Тюменский район",
+//     "coordinates": [ 65.877817, 57.12047 ], "entrance": "12", "floor": "21", "flat": "32", "deliveryZonePrice": 1000, "village": false }
+// ]
+)
+const selectedAddrs = ref([])
+const addAddress = (address: {}) => {
+  console.log(address)
+  isOpen.value = false
+  // addresses.value = [
+  //   ...addresses.value,
+  //   address
+  // ]
+  addresses.value =
+    // ...addresses.value,
+    address
+
+
+}
+const delAddress = (address: {}) => {
+  console.log(address)
+  selectedAddrs.value = []
+  addresses.value = addresses.value.filter((el: {}) => el != address)
 }
 </script>
 
 <template>
-  <div class="container flex-row" style="margin-top: 24px; padding-bottom: 20px;">
-    <div class="flex-col gap-4" style="align-items: stretch; flex: 1 1; height: 2000px; width: 60%; padding-right: 32px">
-      <h1>Ваша корзина</h1>
-      <div class="flex-row gap-4" style="padding-bottom: 20px; border-bottom: 1px solid var(--mine-200);">
-        <UButton v-if="!different_address" size="xs">К определенному времени</UButton>
-        <label for="diffAddr" class="gap-2" style="display: flex; align-items: center">
-          <input v-model="different_address" id="diffAddr" type="checkbox">
-          Доставить на разные адреса
-        </label>
-      </div>
-
-      <div class="flex-col gap-1" style="width: 100%; border-bottom: 1px solid var(--mine-200); padding-bottom: 20px">
-        <div v-if="different_address" class="flex-row gap-4" style="margin-bottom: 10px">
-          <UButton size="xs">Выбрать адрес</UButton>
-          <UButton size="xs">К определенному времени</UButton>
-        </div>
-        <div class="flex-row gap-4" style="padding: 10px 0; flex: 1 1;">
-          <img style="object-fit: cover" src="https://www.odealarose.com/media/cache/720_960_webp/product/phpEZE3lX-64c3ddf515a1b.webp" width="100px" height="100px" alt="">
-          <div class="flex-col gap-3" style="padding: 5px 0">
-            <p>Романтический подарок</p>
-            <div class="flex-row gap-2" style="margin-top: auto;">
-              <IconButton>
-                <IconMinus color="#000" />
-              </IconButton>
-              <Input style="width: 80px" />
-              <IconButton>
-                <IconPlus color="#000" />
-              </IconButton>
-              <IconButton size="md" style="padding: 3px">
-                <IconTrash color="#00000050" />
-              </IconButton>
-            </div>
-          </div>
-          <div class="flex-col gap-1" style="margin-left: auto; margin-top: auto; align-items: flex-end;">
-            <p style="font-size: 16px; text-decoration: line-through">
-              {{
-                numberToRub(12256)
-              }}
-            </p>
-            <p style="font-size: 28px; color: var(--thunderbird-500); font-weight: 500">
-              {{ numberToRub(10256) }}
-            </p>
-          </div>
-        </div>
-        <div class="" style="padding: 5px 0">
-          <p class="order-mini-title" style="margin-top: 3px">
-            Дополнительно к букету
-          </p>
-          <div class="flex-col gap-4">
-            <p>Милые приятности:</p>
-            <Flicking :options="options">
-              <article  v-for="(link, i) in prezents" :key="link" class="panel">
-                <div class="flex-col" style="padding: 2px; flex: 1 1; position: relative">
-                  <img :src="link" alt="">
-                  <p style="font-size: 11px; padding: 3px 3px">Подарок № {{ i+1 }}</p>
-                  <UButton style="margin-top: auto" size="xs" color="orange">Убрать</UButton>
-                </div>
-
-              </article>
-            </Flicking>
-          </div>
-        </div>
-      </div>
-
+  {{addresses}}
+  <UContainer class="flex w-full flex-row">
+    <div class="flex flex-col w-4/6">
+      <h1 class="text-3xl mb-10">Ваша корзина</h1>
+      <OrderConsist :subSales="prezents" />
     </div>
     <div class="" style="width: 35%; height: calc(100vh - 250px); align-self: flex-start; position: sticky; top: 10px;">
       <div class="" style="background-color: var(--mine-50); border-radius: 10px; padding: 15px 20px">
         <h2>Ваш заказ</h2>
-        <p class="order-mini-title">Адрес заказа</p>
-        <UButton size="xs">Выбрать адрес</UButton>
+        <p class="order-mini-title">Адрес заказа <br> <span>{{addresses}}</span></p>
+        <UButton v-if="!addresses.length" @click="isOpen=true" size="xs">Выбрать адрес</UButton>
         <p class="order-mini-title">Состав заказа:</p>
         <hr style="margin: 20px 0">
         <p class="order-mini-title">Оплата</p>
@@ -110,21 +99,43 @@ const options = {
         <p>Итого</p>
       </div>
     </div>
-  </div>
+  </UContainer>
+  <UModal v-model="isOpen" prevent-close fullscreen>
+    <div class="w-full ">
+      <UContainer class="flex bg-gray-100 p-2 w-full h-full justify-end">
+        <UButton @click="isOpen=false" trailing size="xl" icon="i-solar-close-circle-linear" :ui="{rounded: 'rounded-full'}" color="black" variant="solid" label="Закрыть" />
+      </UContainer>
+    </div>
+    <UContainer class="w-full h-full p-4">
+      <div class="flex flex-col justify-center content-center gap-4">
+        <div v-for="address of addresses" :key="address.title" class="flex ring-1 p-0 ring-zinc-200 items-stretch">
+          <URadio :value="address.title"  v-model="selectedAddrs" :name="addAddress.title" v-bind="address">
+            <template #label>
+              <div :class="selectedAddrs === address ? 'bg-zinc-200' : ''" class="flex flex-1">
+                <p class="px-6 py-4 cursor-pointer">{{address.title.charAt(0).toUpperCase() + address.title.slice(1)}},
+                  <template v-if="!address.village">
+                    <br>
+                    <span>Подъезд: {{ address.entrance ? address.entrance : 'не указан' }},
+                    <span> этаж: {{ address.floor ? address.floor : 'не указан' }},</span>
+                    <span> квартира: {{ address.flat ? address.flat : 'не указан' }}</span>
+                  </span>
+                  </template>
+                  <template v-else>
+                    <span> частный дом</span>
+                  </template>
+                </p>
+              </div>
+            </template>
+          </URadio>
+          <UButton class="rounded-none p-4" icon="i-material-symbols-light-delete-outline" @click="delAddress(address)" />
+        </div>
+      </div>
+      <Map @addAddress="addAddress"/>
+    </UContainer>
+
+  </UModal>
 </template>
 
 <style scoped lang="scss">
-.order-mini-title {
-  color: var(--mine-300);
-  font-size: 13px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-.panel {
-  width: 100px;
-  border: 1px solid #ccc;
-  display: flex;
-  flex-direction: column;
-  margin-right: 11px;
-}
+
 </style>

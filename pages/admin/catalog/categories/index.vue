@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-
-
 import {useCategoryStore} from "../stores/category.store";
 import {useCartStore} from "../stores/cart.store";
 import {useAuthStore} from "../stores/auth.store";
@@ -93,24 +91,26 @@ const items = row => [
 
 <template>
   <section>
-    {{selected}}
-    <div class="flex-col gap-6" style="padding: 20px; align-items: flex-start;">
-      <h1 style="font-size: 44px">Категории</h1>
-      <UButton style="background-color: var(--mine-700)" rounded size="xs" @click="categoryStore.getCategory">Создать
-        категорию
-      </UButton>
-      <div class="flex-col gap-2" style="padding: 20px; background-color: var(--deep-100)">
-        {{ state.parent_id }}
-        <UForm :state="state" class="flex-col gap-3" @submit="onSubmit">
-          <UInput v-model="state.title"/>
-          <UTextarea v-model="state.description"/>
-          <UInput v-model="state.sort"/>
-          <div class="">
-            <UCheckbox v-model="is_parent"/>
-            <USelect v-model="state.parent_id" :disabled="!is_parent" :options="categoryStore.categories.rows"
-                     optionAttribute="title" valueAttribute="id"/>
+    <div class="flex flex-col max-w-8xl mx-auto items-start p-10">
+      <h1 class="text-5xl font-medium mb-10">Категории</h1>
+      <div class="flex w-full flex-col gap-2 mb-10">
+        {{ state }}
+        <UForm :state="state" class="flex flex-col gap-3" @submit="onSubmit">
+          <div class="flex flex-row gap-2">
+            <UInput placeholder="Название категории" class="w-3/6" v-model="state.title"/>
+            <UInput class="w-1/6" v-model="state.sort"/>
+            <div class="flex flex-row gap-2  items-center">
+              <UCheckbox label="Добавить в категорию"  v-model="is_parent"/>
+              <USelect v-model="state.parent_id" :disabled="!is_parent" :options="categoryStore.categories.rows"
+                       optionAttribute="title" valueAttribute="id"/>
+            </div>
           </div>
-          <button type="submit">12341234</button>
+
+          <UTextarea placeholder="Описание" v-model="state.description"/>
+
+          <UButton size="md" type="submit" class="self-start">
+            Создать категорию
+          </UButton>
         </UForm>
 
       </div>
@@ -121,9 +121,15 @@ const items = row => [
               v-model="selected"
               :sort-button="{ icon: 'i-heroicons-sparkles-20-solid', color: 'black', variant: 'solid', size: 'xs', square: false, ui: { rounded: 'rounded-full' } }"
               :rows="filteredRows" :columns="columns">
+        <template #title-data="{row}">
+          <div class="flex flex-row no-wrap gap-2">
+            <NuxtLink :to="`/admin/catalog/categories/${row.slug}`">{{row.title}}</NuxtLink>
+          </div>
+        </template>
         <template #sort-data="{row}">
-          <div class="flex-row">
-            <UInput class="flex gap-3" v-model="row.sort"></UInput><UButton @click="categoryStore.editCategory(row)">Изменить</UButton>
+          <div class="flex flex-row no-wrap gap-2">
+            <UInput v-model="row.sort" />
+            <UButton size="xs" @click="categoryStore.editCategory(row)">Изменить</UButton>
           </div>
         </template>
         <template #actions-data="{row}">

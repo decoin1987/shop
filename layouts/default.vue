@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {useCategoryStore} from "@/stores/category.store";
-
+import {useCartStore} from "~/stores/cart.store";
 // const links = ref([
 //   {link: 'showcase', name: 'Витрина'},
 //   {link: 'bouquets', name: 'Букеты'},
@@ -72,9 +72,8 @@ const button_ui = {
     soft: 'text-red-600 dark:text-red-400 bg-red-100 hover:bg-red-200 disabled:bg-{color}-100 aria-disabled:bg-{color}-100 dark:bg-{color}-950 dark:hover:bg-{color}-900 dark:disabled:bg-{color}-950 dark:aria-disabled:bg-{color}-950 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-{color}-500 dark:focus-visible:ring-{color}-400',
   },
 }
-
-
 const count = 0
+const cartStore = useCartStore()
 </script>
 
 <template>
@@ -111,7 +110,7 @@ const count = 0
         </li>
       </ul>
       <UChip
-          :show="true"
+          :show="!!cartStore.cart.length"
           size="md"
           inset
       >
@@ -123,7 +122,9 @@ const count = 0
             color="black"
             variant="solid"
             class="ml-auto"
-        >Корзина</UButton>
+        >
+          Корзина
+        </UButton>
       </UChip>
 
     </UContainer>

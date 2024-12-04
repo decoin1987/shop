@@ -55,7 +55,7 @@ const flowers = [
         "slug": "rozy",
     },
     {
-        "title": "Тульпаны",
+        "title": "Тюльпаны",
         "descriptions": null,
         "sort": 1000,
         "slug": "tulpany",
