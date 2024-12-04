@@ -6,7 +6,7 @@ import {CONFIG, IMAGES} from "../utils/helpers";
 
 
 export default defineNitroPlugin( async () => {
-    await start()
+    // await start()
 })
 
 const token:string | undefined = process.env.BOT_TOKEN;

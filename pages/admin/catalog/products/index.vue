@@ -4,9 +4,11 @@ import {object, string, type InferType, boolean, array, number} from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
 import {reactive} from "@vue/reactivity";
 import {ref} from "vue";
+import {useFetch} from "nuxt/app";
+import {v4 as uuid} from 'uuid'
 
 const schema = object({
-  name: string().required('Введите имя'),
+  title: string().required('Введите имя'),
   price:number().required('Цена обязательна для заполнения'),
   vendorCode:string().required('Введите артикул'),
   asConsist:boolean(),
@@ -18,14 +20,14 @@ const schema = object({
 type Schema = InferType<typeof schema>
 const form = ref()
 const state = reactive({
-  name: undefined,
-  price:undefined,
-  vendorCode:undefined,
-  asConsist:undefined,
+  title: '123',
+  price:123,
+  vendorCode:'12344',
+  asConsist:false,
   photos:[],
   category: undefined,
-  tag: undefined,
-  consist: undefined,
+  tag: [],
+  consist: [],
 })
 
 const categoryStore = useCategoryStore()
@@ -33,45 +35,63 @@ const categoryStore = useCategoryStore()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with event.data
   console.log(event.data)
-  console.log(form.value.clear)
+  // console.log(form.value.clear)
   // form.value.clear()
 }
 
-const doCreateProduct = async (copy = false) => {
+const getProducts = async () => await useFetch('http://localhost:3000/api/admin/products/?'+ doQuery(), {
+  onResponse({request, response, options}) {
+    pending.value = false
+    products.value = JSON.parse(JSON.stringify(response._data))
+  },
+  onRequest({request, options}) {
+    pending.value = true
+  },
+  onRequestError({request, options, error}) {
+    pending.value = false
+  },
+  onResponseError({request, response, options}) {
+    pending.value = false
+  },
+  method: 'GET',
+});
+
+const doCreateProduct = async (event, copy = false, ) => {
   const formData = new FormData()
-  for await (let img of Array.from(form.value.photos)) {
-    var filename = `${uuid()}.${img.name.split('.')[1]}`
-    const file = await new Blob([img], {type: img.type})
-    formData.append(filename, file);
-  }
-  formData.append('name', form.value.name)
-  formData.append('price', form.value.price)
-  formData.append('vendorCode', form.value.vendorCode)
-  formData.append('asConsist', form.value.asConsist)
-  formData.append('category', form.value.category)
-  formData.append('tag', form.value.tag)
-  formData.append('consist', form.value.consist)
-  await useFetch('http://localhost:3000/api/admin/products', {
+  console.log(event.data)
+  // for await (let img of Array.from(event.data.photos)) {
+  //
+  //   var filename = `${uuid()}.${img.name.split('.').pop()}`
+  //   const file = await new Blob([img], {type: img.type})
+  //   formData.append(filename, file);
+  // }
+  // formData.append('title', event.data.title)
+  // formData.append('price', event.data.price)
+  // formData.append('vendorCode', event.data.vendorCode)
+  // formData.append('asConsist', event.data.asConsist)
+  // formData.append('category', event.data.category)
+  // formData.append('tag', event.data.tag)
+  // formData.append('consist', event.data.consist)
+  await useFetch('/api/catalog/product', {
     onResponse({request, response, options}) {
-      pending.value = false
-      doResetForm()
+      console.log(response._data)
+      // doResetForm()
     },
     onRequest({request, options}) {
-      pending.value = true
+
     },
     onRequestError({request, options, error}) {
-      pending.value = false
+
     },
     onResponseError({request, response, options}) {
-      pending.value = false
+
     },
     method: 'POST',
-    body: formData,
+    body: event.data,
     headers: {
       // 'Content-Type': 'multipart/form-data; boundary=----buket----'
     }
   })
-  emits('submitted')
 }
 </script>
 
@@ -80,10 +100,10 @@ const doCreateProduct = async (copy = false) => {
   <div class="flex flex-col max-w-8xl mx-auto items-start p-10">
     <h1 class="text-5xl font-medium mb-10">Товары</h1>
     <div class="flex w-full flex-col gap-2 mb-10">
-      <UForm :schema="schema" :state="state" class="flex flex-row gap-10" @submit="onSubmit">
+      <UForm :schema="schema" :state="state" class="flex flex-row gap-10" @submit.prevent="doCreateProduct">
         <div class="flex flex-col gap-4">
-          <UFormGroup label="Название" name="name">
-            <UInput v-model="state.name" type="text" placeholder="Название" />
+          <UFormGroup label="Название" name="title">
+            <UInput v-model="state.title" type="text" placeholder="Название" />
           </UFormGroup>
 
           <UFormGroup label="Название" name="price">
@@ -113,7 +133,7 @@ const doCreateProduct = async (copy = false) => {
             <ImageLoader v-model="state.photos" />
           </UFormGroup>
 
-          <UButton class="submit-btn" type="submit" @click="console.log('1231432')">Создать</UButton>
+          <UButton class="submit-btn" type="submit">Создать</UButton>
           <!--                    <USelectMultiply v-model="form.tag" :items="tags.rows" multi valueName="id" itemName="title" label="Тег"  />-->
         </div>
 

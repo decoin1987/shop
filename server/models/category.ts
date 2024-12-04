@@ -35,3 +35,7 @@ Upsell.belongsToMany(Category, { through: 'category_upsells', as: 'upsells_categ
 
 
 
+
+
+
+

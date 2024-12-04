@@ -23,3 +23,5 @@ logs
 .env.*
 !.env.example
 /server/utils/config.json
+/log/log.txt
+/public/img/product/*

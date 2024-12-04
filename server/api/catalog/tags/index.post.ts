@@ -1,8 +1,8 @@
-import {Category} from "../../../models/category";
+import {Tag} from "../../../models/tag";
 import {createError, defineEventHandler, EventHandlerRequest, H3Event, readBody} from "h3";
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
-    const {title, description, sort, parent_id} = await readBody(event)
+    const {title, description, sort} = await readBody(event)
     // console.log({title, description, sort, parent_id})
     try {
         if (!/[^ ]/.test(title) || title.length < 1) {
@@ -11,8 +11,8 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
                 message: 'Введите название категории'
             })
         } else {
-            await Category.create({
-                title: title.trim(), description, sort, slug: title, parent_id
+            await Tag.create({
+                title: title.trim(), description, sort, slug: title,
             })
         }
     } catch (error) {
@@ -21,18 +21,8 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
             message: error.message
         })
     }
-    return await Category.findAndCountAll(
+    return await Tag.findAndCountAll(
         {
-            include: [
-                {
-                    model: Category,
-                    as: 'parent',
-                },
-                {
-                    model: Category,
-                    as: 'child',
-                },
-            ],
             distinct:true,
             // limit: 5,
             // offset:2,

@@ -30,6 +30,11 @@ const catalogLinks = [
     to: '/admin/catalog/attributes',
   },
   {
+    label: 'Теги',
+    icon: 'i-ph-flower-light',
+    to: '/admin/catalog/tags',
+  },
+  {
     label: 'Производители',
     icon: 'i-ph-flower-light',
     to: '/admin/catalog/vendors',
