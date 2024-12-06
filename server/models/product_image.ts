@@ -12,6 +12,7 @@ export const ProductImage = sequelize.define('product_image', {
         type: DataTypes.STRING,
         // required: true,
     },
+
 }, {
     timestamps: false,
 })

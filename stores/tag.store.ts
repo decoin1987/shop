@@ -17,7 +17,6 @@ export const useTagStore = defineStore('tag', () => {
     const getTags = async () => {
         useFetch('/api/catalog/tags', {
             onResponse({response}) {
-                console.dir(response._data)
                 return updateTag(response._data)
             },
             method: "GET"

@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api'
 import fs from "fs";
 import {CONFIG, IMAGES} from "../utils/helpers";
-// process.env.NTBA_FIX_350 = true; // fix telegram api
+process.env.NTBA_FIX_350 = true; // fix telegram api
 
 
 

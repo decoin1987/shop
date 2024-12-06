@@ -6,9 +6,6 @@ import {computed, ref, watch} from "vue";
 
 
 const tagStore = useTagStore()
-const authStore = useAuthStore()
-const cartStore = useCartStore()
-
 
 const state = ref({
   title: '',

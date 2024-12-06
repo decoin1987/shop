@@ -1,12 +1,80 @@
 // @ts-nocheck
 import {defineStore} from 'pinia'
 import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
+import {defineTask} from "nitropack/runtime";
+import {v4 as uuid} from "uuid";
 
 
 
 
 export const useProductStore = defineStore('product', () => {
-    const {data, refresh, error, pending} = useFetch('/api/product')
+    const updateProducts = (data) => {
+        if (data) {
+            products.value = data
+        }
+    }
+    const getProducts = async () => {
+        useFetch('/api/catalog/product', {
+            onResponse({response}) {
+                // console.dir(response._data)
+                return updateProducts(response._data)
+            },
+            method: "GET"
+        })
+        // return updateCategory(data.value)
+    }
+    const deleteProduct = async (product) => {
+        useFetch('/api/catalog/product', {
+            onResponse({response}) {
+                // console.dir(response._data)
+                return updateProducts(response._data)
+            },
+            method: "DELETE",
+            body: {
+                ...product
+            }
+        })
+        // return updateCategory(data.value)
+    }
 
+    const createProduct = async (event, copy = false, ) => {
+        const formData = new FormData()
+        console.log(event)
+        for await (let img of Array.from(event.photos)) {
 
+            var filename = `${uuid()}.${img.name.split('.').pop()}`
+            const file = await new Blob([img], {type: img.type})
+            formData.append(filename, file);
+        }
+        formData.append('title', event.title)
+        formData.append('price', event.price)
+        formData.append('vendorCode', event.vendorCode)
+        formData.append('asConsist', event.asConsist)
+        formData.append('category', event.category)
+        formData.append('tag', event.tag)
+        formData.append('consist', event.consist)
+        await useFetch('/api/catalog/product', {
+            onResponse({request, response, options}) {
+                console.log(response._data)
+                updateProducts(response._data)
+            },
+            onRequest({request, options}) {
+
+            },
+            onRequestError({request, options, error}) {
+
+            },
+            onResponseError({request, response, options}) {
+
+            },
+            method: 'POST',
+            body: formData,
+            headers: {
+                // 'Content-Type': 'multipart/form-data; boundary=----buket----'
+            }
+        })
+    }
+
+    const products = useState('products', async () => await getProducts())
+    return {getProducts, createProduct, deleteProduct, products}
 })

@@ -52,7 +52,7 @@ export const IMAGES = {
         return path
     },
     doDelImages: (item)=> {
-        const path = IMAGES.doCheckImages(item.product_images)
+        const path = IMAGES.doCheckImages(item.productImages)
         for (let url of path) {
             fs.unlink(CONFIG.filePath + '/' + url, (err) => {
                 if (err) {

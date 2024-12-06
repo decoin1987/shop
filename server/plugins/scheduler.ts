@@ -10,9 +10,9 @@ export default defineNitroPlugin(() => {
 
 function startScheduler() {
     // Слежение за статусами доставок
-    deliveryScheduler()
+    // deliveryScheduler()
     // Слежение за статусами заказов
-    orderScheduler()
+    // orderScheduler()
     // Слежение за днями рождения
-    userScheduler()
+    // userScheduler()
 }

@@ -94,7 +94,6 @@ const items = row => [
     <div class="flex flex-col max-w-8xl mx-auto items-start p-10">
       <h1 class="text-5xl font-medium mb-10">Категории</h1>
       <div class="flex w-full flex-col gap-2 mb-10">
-        {{ state }}
         <UForm :state="state" class="flex flex-col gap-3" @submit="onSubmit">
           <div class="flex flex-row gap-2">
             <UInput placeholder="Название категории" class="w-3/6" v-model="state.title"/>

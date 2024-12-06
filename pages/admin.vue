@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+
 definePageMeta({
   layout: false,
 });
-
 const catalogLinks = [
   {
     label: 'Категории',
@@ -131,73 +131,77 @@ const reportLinks = [
 </script>
 
 <template>
-  <section class="flex flex-row" style="min-height: 100vh;">
-    <nav class="flex-col gap-8" style="position:sticky; top: 0; padding: 20px; background-color: var(--mine-400); min-width: 320px; height: 100vh; overflow-y: scroll">
-      <img src="/icon/logo2.svg" width="200px" alt="">
-      <ul class="flex-col gap-4">
-        <li>
-          <NuxtLink to="/admin" class="menu-button">Панель управления</NuxtLink>
+  <section class="flex flex-row">
+    <nav class="aside-nav flex-col gap-8 h-svh bg-gray-500 pb-10" style="position:sticky; top: 0; min-width: 320px; overflow-y: scroll">
+      <div class="pt-3 pb-1 px-5 bg-gray-500 shadow-lg" style="height: 70px; position: sticky; top: 0; border-bottom: 1px #ffffff20 solid">
+        <NuxtLink to="/admin">
+          <Logo height="auto" />
+        </NuxtLink>
+      </div>
+      <ul class="flex flex-col w-full">
+        <li class="border-b border-gray-700 border-solid">
+          <NuxtLink to="/admin" class="flex text-gray-100 py-4 px-5">Панель управления</NuxtLink>
         </li>
         <li>
-          <span>Каталог</span>
-          <ul class="flex-col gap-1" style="margin-top: 8px">
-            <li v-for="link in catalogLinks" :key="link.label">
-              <NuxtLink :to="link.to" class="menu-button">{{ link.label }}</NuxtLink>
+          <p class="border-b border-gray-700 border-solid font-light text-xs py-1 px-5 text-gray-950">Каталог</p>
+          <ul class="flex flex-col">
+            <li class="border-b border-gray-700 border-solid" v-for="link in catalogLinks" :key="link.label">
+              <NuxtLink :to="link.to" class="flex font-medium text-gray-100 px-6 py-3">{{ link.label }}</NuxtLink>
             </li>
           </ul>
         </li>
         <li>
-          <span>Продажи</span>
-          <ul class="flex-col gap-1" style="margin-top: 8px">
-            <li v-for="link in salesLinks" :key="link.label">
-              <NuxtLink :to="link.to" class="menu-button">{{ link.label }}</NuxtLink>
+          <p class="border-b border-gray-700 border-solid font-light text-xs py-1 px-5 text-gray-950">Продажи</p>
+          <ul class="flex flex-col">
+            <li class="border-b border-gray-700 border-solid" v-for="link in salesLinks" :key="link.label">
+              <NuxtLink :to="link.to" class="flex font-medium text-gray-100 px-6 py-3">{{ link.label }}</NuxtLink>
             </li>
           </ul>
         </li>
         <li>
-          <span>Склад</span>
-          <ul class="flex-col gap-1" style="margin-top: 8px">
-            <li v-for="link in warehouseLinks" :key="link.label">
-              <NuxtLink :to="link.to" class="menu-button">{{ link.label }}</NuxtLink>
+          <p class="border-b border-gray-700 border-solid font-light text-xs py-1 px-5 text-gray-950">Склад</p>
+          <ul class="flex flex-col">
+            <li class="border-b border-gray-700 border-solid" v-for="link in warehouseLinks" :key="link.label">
+              <NuxtLink :to="link.to" class="flex font-medium text-gray-100 px-6 py-3">{{ link.label }}</NuxtLink>
             </li>
           </ul>
         </li>
         <li>
-          <span>Покупатели</span>
-          <ul class="flex-col gap-1" style="margin-top: 8px">
-            <li v-for="link in customersLinks" :key="link.label">
-              <NuxtLink :to="link.to" class="menu-button">{{ link.label }}</NuxtLink>
+          <p class="border-b border-gray-700 border-solid font-light text-xs py-1 px-5 text-gray-950">Покупатели</p>
+          <ul class="flex flex-col">
+            <li class="border-b border-gray-700 border-solid" v-for="link in customersLinks" :key="link.label">
+              <NuxtLink :to="link.to" class="flex font-medium text-gray-100 px-6 py-3">{{ link.label }}</NuxtLink>
             </li>
           </ul>
         </li>
         <li>
-          <span>Маркетинг</span>
-          <ul class="flex-col gap-1" style="margin-top: 8px">
-            <li v-for="link in marketingLinks" :key="link.label">
-              <NuxtLink :to="link.to" class="menu-button">{{ link.label }}</NuxtLink>
+          <p class="border-b border-gray-700 border-solid font-light text-xs py-1 px-5 text-gray-950">Маркетинг</p>
+          <ul class="flex flex-col">
+            <li class="border-b border-gray-700 border-solid" v-for="link in marketingLinks" :key="link.label">
+              <NuxtLink :to="link.to" class="flex font-medium text-gray-100 px-6 py-3">{{ link.label }}</NuxtLink>
             </li>
           </ul>
         </li>
         <li>
-          <span>Система</span>
-          <ul class="flex-col gap-1" style="margin-top: 8px">
-            <li v-for="link in systemLinks" :key="link.label">
-              <NuxtLink :to="link.to" class="menu-button">{{ link.label }}</NuxtLink>
+          <p class="border-b border-gray-700 border-solid font-light text-xs py-1 px-5 text-gray-950">Система</p>
+          <ul class="flex flex-col">
+            <li class="border-b border-gray-700 border-solid" v-for="link in systemLinks" :key="link.label">
+              <NuxtLink :to="link.to" class="flex font-medium text-gray-100 px-6 py-3">{{ link.label }}</NuxtLink>
             </li>
           </ul>
         </li>
         <li>
-          <span>Отчеты</span>
-          <ul class="flex-col gap-1" style="margin-top: 8px">
-            <li v-for="link in reportLinks" :key="link.label">
-              <NuxtLink :to="link.to" class="menu-button">{{ link.label }}</NuxtLink>
+          <p class="border-b border-gray-700 border-solid font-light text-xs py-1 px-5 text-gray-950">Отчеты</p>
+          <ul class="flex flex-col">
+            <li class="border-b border-gray-700 border-solid" v-for="link in reportLinks" :key="link.label">
+              <NuxtLink :to="link.to" class="flex font-medium text-gray-100 px-6 py-3">{{ link.label }}</NuxtLink>
             </li>
           </ul>
         </li>
       </ul>
     </nav>
-    <div class="flex-col" style="width: 100%">
-      <nav class="flex-row gap-2" style="z-index:1; background-color: var(--mine-300); padding: 20px; position: sticky; top: 0;">
+    <div class=" flex flex-col w-full bg-gray-100">
+      <nav class="pt-3 pb-4 px-5 bg-gray-500 shadow-lg" style="height: 70px; position: sticky; top: 0; z-index: 1">
         <NuxtLink to="/">На главную</NuxtLink>
       </nav>
       <ClientOnly>
@@ -211,15 +215,10 @@ const reportLinks = [
 </template>
 
 <style scoped lang="scss">
-.menu-button {
-  color: var(--mine-50);
-  font-size: 18px;
-  font-weight: 500;
-  padding: 12px 20px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  background-color: var(--mine-700);
-  flex: 1 1;
+.aside-nav {
+  border-right: 1px solid #00000030
+}
+.aside-nav::-webkit-scrollbar {
+  width: 3px;
 }
 </style>
