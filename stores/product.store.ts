@@ -3,6 +3,7 @@ import {defineStore} from 'pinia'
 import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
 import {defineTask} from "nitropack/runtime";
 import {v4 as uuid} from "uuid";
+import {ref, shallowRef} from "vue";
 
 
 
@@ -36,7 +37,6 @@ export const useProductStore = defineStore('product', () => {
         })
         // return updateCategory(data.value)
     }
-
     const createProduct = async (event, copy = false, ) => {
         const formData = new FormData()
         console.log(event)
@@ -75,6 +75,22 @@ export const useProductStore = defineStore('product', () => {
         })
     }
 
+
+    const getProduct = async (path) => {
+        useFetch(`/api/catalog/product/${path}`, {
+            onResponse({response}) {
+                // console.dir(response._data)
+                return response._data
+            },
+            method: "GET"
+        })
+    }
+
+
+
+
+
     const products = useState('products', async () => await getProducts())
-    return {getProducts, createProduct, deleteProduct, products}
+    const product = shallowRef({})
+    return {getProducts, createProduct, deleteProduct, getProduct, products}
 })

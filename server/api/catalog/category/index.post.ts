@@ -1,42 +1,64 @@
-import {Category} from "../../../models/category";
-import {createError, defineEventHandler, EventHandlerRequest, H3Event, readBody} from "h3";
+import Category from '../../../models/category';
+import { createError, defineEventHandler, H3Event, readBody } from 'h3';
 
-export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
-    const {title, description, sort, parent_id} = await readBody(event)
-    // console.log({title, description, sort, parent_id})
+export default defineEventHandler(async (event: H3Event) => {
+    const body = await readBody(event);
+    const {
+        title,
+        show_menu,
+        raw_tags,
+        html_meta,
+        html_keywords,
+        html_title,
+        description,
+        sort,
+        parent_id,
+    } = body;
+
     try {
-        if (!/[^ ]/.test(title) || title.length < 1) {
+        if (!title || !title.trim() || title.trim().length < 1) {
             throw createError({
                 statusCode: 400,
-                message: 'Введите название категории'
-            })
+                message: 'Введите название категории',
+            });
         } else {
-            await Category.create({
-                title: title.trim(), description, sort, slug: title, parent_id
-            })
+            const category = await Category.create({
+                title: title.trim(),
+                show_menu: !!show_menu,
+                raw_tags: JSON.parse(raw_tags),
+                html_meta,
+                html_keywords,
+                html_title,
+                description,
+                sort: Number(sort),
+                slug: title,
+            });
+
+            if (parent_id) {
+                await category.$set('parent', parent_id);
+            }
         }
     } catch (error) {
         throw createError({
             statusCode: error.statusCode || 500,
-            message: error.message
-        })
+            message: error.message,
+        });
     }
-    return await Category.findAndCountAll(
-        {
-            include: [
-                {
-                    model: Category,
-                    as: 'parent',
-                },
-                {
-                    model: Category,
-                    as: 'child',
-                },
-            ],
-            distinct:true,
-            // limit: 5,
-            // offset:2,
-            order: [['sort', 'ASC']],
-        }
-    )
+
+    const categories = await Category.findAndCountAll({
+        include: [
+            {
+                model: Category,
+                as: 'parent',
+            },
+            {
+                model: Category,
+                as: 'child',
+            },
+        ],
+        distinct: true,
+        order: [['created_at', 'DESC']],
+    });
+
+    return categories;
 });

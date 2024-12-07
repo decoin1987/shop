@@ -64,12 +64,11 @@ const props = defineProps({
             </p>
           </div>
         </div>
-        <div class="pt-1">
+        <div v-if="props.subSales.length" class="pt-1">
           <p class="text-sm mb-2" style="margin-top: 3px">
             Дополнительно к букету
           </p>
-          <div class="flex-col gap-4">
-            <Flicking class="rounded-tl-xl rounded-br-xl rounded-md" :options="options">
+          <div class="flex flex-row gap-4">
               <article v-for="(link, i) in props.subSales" :key="i"
                        class="panel bg-white rounded-md rounded-tl-xl rounded-br-xl">
                 <div class="flex-col p-0.5">
@@ -80,13 +79,11 @@ const props = defineProps({
                   </UButton>
                 </div>
               </article>
-            </Flicking>
           </div>
         </div>
       </div>
       <UDivider class="mt-2 mb-2"/>
     </template>
-
   </div>
 </template>
 

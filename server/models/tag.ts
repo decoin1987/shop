@@ -1,9 +1,32 @@
-import {DataTypes} from "sequelize";
-import {sequelize} from "../utils/db.connect";
-import {stringSlugify} from "../utils/helpers";
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../utils/db.connect';
+import { stringSlugify } from '../utils/helpers';
 
+interface TagAttributes {
+    id: string;
+    title: string;
+    descriptions: object[];
+    sort: number;
+    slug: string;
+}
 
-export const Tag = sequelize.define('tag', {
+// Тип для создания нового тега
+type TagCreationAttributes = Optional<TagAttributes, 'id' | 'sort'>;
+
+class Tag extends Model<TagAttributes, TagCreationAttributes> implements TagAttributes {
+    declare id: string; // primary key
+    declare title: string;
+    declare descriptions: object[];
+    declare sort: number;
+    declare slug: string;
+
+    // Метод для установки значения поля slug
+    public setSlug(value: string): void {
+        this.setDataValue('slug', stringSlugify(value));
+    }
+}
+
+Tag.init({
     id: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -17,16 +40,20 @@ export const Tag = sequelize.define('tag', {
     descriptions: {
         type: DataTypes.JSONB,
     },
-    sort: {type: DataTypes.STRING, defaultValue: 100},
+    sort: {
+        type: DataTypes.INTEGER,
+        defaultValue: 100,
+    },
     slug: {
         type: DataTypes.STRING,
-        async set(value: string) {
-            this.setDataValue('slug', stringSlugify(value))
+        set: function (value: string) {
+            this.setDataValue('slug', stringSlugify(value));
         }
     },
 }, {
-    timestamps: false
+    sequelize,
+    modelName: 'tag',
+    timestamps: false,
 });
 
-
-
+export default Tag;

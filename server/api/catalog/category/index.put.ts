@@ -1,4 +1,4 @@
-import {Category} from "../../../models/category";
+import Category from "../../../models/category";
 import {defineEventHandler, EventHandlerRequest, H3Event, readBody} from "h3";
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
                 },
             ],
             distinct:true,
-            order: [['sort', 'ASC']],
+            order: [['created_at', 'DESC']],
             // limit: 5,
             // offset:2,
         }

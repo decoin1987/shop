@@ -1,6 +1,6 @@
 import {createError, defineEventHandler, getQuery, getRouterParam} from "h3";
 import {Op} from "sequelize";
-import {Category} from "../../../models/category";
+import Category from "../../../models/category";
 
 
 export default defineEventHandler(async (event) => {
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
                 },
             ],
             distinct:true,
-            order: [['sort', 'ASC']],
+            order: [['created_at', 'DESC']],
             // limit: 5,
             // offset:2,
         }

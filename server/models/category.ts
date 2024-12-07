@@ -1,9 +1,42 @@
-import {DataTypes} from "sequelize";
-import {sequelize} from "../utils/db.connect";
-import {Upsell} from "./upsell";
-import {stringSlugify} from "../utils/helpers";
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../utils/db.connect';
+import { stringSlugify } from '../utils/helpers';
 
-export const Category = sequelize.define('category', {
+interface CategoryAttributes {
+    id: string;
+    title: string;
+    show_menu: boolean;
+    raw_tags: object[];
+    html_meta: string;
+    html_keywords: string;
+    html_title: string;
+    description: string;
+    sort: number;
+    slug: string;
+}
+
+// Описание типа для создания новой категории
+type CategoryCreationAttributes = Optional<CategoryAttributes, 'id' | 'show_menu' | 'sort'>; // Опциональными являются поля, у которых есть значения по умолчанию
+
+class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+    declare id: string; // primary key
+    declare title: string;
+    declare show_menu: boolean;
+    declare raw_tags: object[];
+    declare html_meta: string;
+    declare html_keywords: string;
+    declare html_title: string;
+    declare description: string;
+    declare sort: number;
+    declare slug: string;
+
+    // Определение метода для установки значения поля slug
+    public setSlug(value: string): void {
+        this.setDataValue('slug', stringSlugify(value));
+    }
+}
+
+Category.init({
     id: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -14,28 +47,43 @@ export const Category = sequelize.define('category', {
         allowNull: false,
         unique: true,
     },
-    descriptions: {
+    show_menu: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    },
+    raw_tags: {
         type: DataTypes.JSONB,
     },
-    sort: {type: DataTypes.STRING, defaultValue: 100},
+    html_meta: {
+        type: DataTypes.STRING,
+    },
+    html_keywords: {
+        type: DataTypes.STRING,
+    },
+    html_title: {
+        type: DataTypes.STRING,
+    },
+    description: {
+        type: DataTypes.STRING,
+    },
+    sort: {
+        type: DataTypes.INTEGER,
+        defaultValue: 500,
+    },
     slug: {
         type: DataTypes.STRING,
-        async set(value: string) {
-            this.setDataValue('slug', stringSlugify(value))
+        set: function (value: string) {
+            this.setDataValue('slug', stringSlugify(value));
         }
     },
 }, {
-    timestamps: false
+    sequelize,
+    modelName: 'category',
+    timestamps: true,
 });
 
-Category.hasMany(Category, { foreignKey: 'parent_id', as: 'child' })
-Category.belongsTo(Category, { foreignKey: 'parent_id', as: 'parent' })
-Category.belongsToMany(Upsell, { through: 'category_upsells', as: 'categories_upsells', timestamps: false })
-Upsell.belongsToMany(Category, { through: 'category_upsells', as: 'upsells_categories', timestamps: false })
+// Определение отношений между категориями
+Category.hasMany(Category, { foreignKey: 'parent_id', as: 'child' });
+Category.belongsTo(Category, { foreignKey: 'parent_id', as: 'parent' });
 
-
-
-
-
-
-
+export default Category;

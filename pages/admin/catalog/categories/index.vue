@@ -1,14 +1,9 @@
 <script lang="ts" setup>
-import {useCategoryStore} from "../stores/category.store";
-import {useCartStore} from "../stores/cart.store";
-import {useAuthStore} from "../stores/auth.store";
+import {useCategoryStore} from "../stores/category.store"
 import {computed, ref, watch} from "vue";
 
 
 const categoryStore = useCategoryStore()
-const authStore = useAuthStore()
-const cartStore = useCartStore()
-
 
 const state = ref({
   title: '',
@@ -20,7 +15,6 @@ const state = ref({
 const is_parent = ref(false)
 
 const onSubmit = async () => {
-  console.log(123123)
   await categoryStore.createCategory({
     title: state.value.title,
     description: state.value.description,
@@ -58,16 +52,31 @@ const columns = [
 
 const selected = ref([])
 const q = ref('')
+const p = ref(false)
 const filteredRows = computed(() => {
-  if (!q.value) {
-    return categoryStore.categories.rows
-  }
-
-  return categoryStore.categories.rows.filter((el) => {
-    return Object.values(el).some((el) => {
-      return String(el).toLowerCase().includes(q.value.toLowerCase())
+  if (!p.value) {
+    if (!q.value) {
+      return categoryStore.categories.rows
+    }
+    return categoryStore.categories.rows.filter((el) => {
+        return String(el.title).toLowerCase().includes(q.value.toLowerCase())
     })
-  })
+  } else {
+    if (!q.value) {
+      console.log(categoryStore.categories.rows[0])
+      return categoryStore.categories.rows.filter(el => !el.parent_id)
+    }
+    return categoryStore.categories.rows.filter(el => !el.parent_id).filter((el) => {
+        return String(el.title).toLowerCase().includes(q.value.toLowerCase())
+    })
+  }
+  // if (!q.value) {
+  //   return categoryStore.categories.rows
+  // }
+  //
+  // return categoryStore.categories.rows.filter((el) => {
+  //     return String(el.title).toLowerCase().includes(q.value.toLowerCase())
+  // })
 })
 const items = row => [
   [{
@@ -91,17 +100,30 @@ const items = row => [
 
 <template>
   <section>
-    <div class="flex flex-col max-w-8xl mx-auto items-start p-10">
-      <h1 class="text-5xl font-medium mb-10">Категории</h1>
-      <div class="flex w-full flex-col gap-2 mb-10">
-        <UForm :state="state" class="flex flex-col gap-3" @submit="onSubmit">
-          <div class="flex flex-row gap-2">
-            <UInput placeholder="Название категории" class="w-3/6" v-model="state.title"/>
-            <UInput class="w-1/6" v-model="state.sort"/>
-            <div class="flex flex-row gap-2  items-center">
-              <UCheckbox label="Добавить в категорию"  v-model="is_parent"/>
-              <USelect v-model="state.parent_id" :disabled="!is_parent" :options="categoryStore.categories.rows"
-                       optionAttribute="title" valueAttribute="id"/>
+    <div class="flex flex-col items-start py-4 px-10">
+      <h1 class="text-3xl mb-6 font-sans">Категории</h1>
+      <div class="flex w-full flex-row mb-10">
+        <UForm :state="state" class="flex w-5/6 flex-col gap-3 pr-7" @submit="onSubmit">
+          <div class="flex flex-row gap-2 items-end">
+            <UFormGroup class="w-3/6" label="Название категории" name="title">
+              <UInput placeholder="Название категории" type="text" v-model="state.title"/>
+            </UFormGroup>
+            <UFormGroup class="w-2/6" label="Сортировка" name="sort">
+              <UInput  v-model="state.sort"/>
+            </UFormGroup>
+            <div class="flex  flex-row items-end">
+
+<!--              <UFormGroup  name="is_parent">-->
+<!--                <UCheckbox class="flex p-1 bg-gray-300" label="Добавить в категорию" v-model="is_parent"/>-->
+<!--              </UFormGroup>-->
+              <UFormGroup class="w-full" label="Родительская категория" name="parent_id">
+                <div class="flex flex-row">
+                  <UButton icon="i-solar-add-folder-linear" size="sm" @click="is_parent = !is_parent" :ui="{rounded: 'rounded-l-md'}" :color="is_parent?'black':'white'" />
+                  <USelect :ui="{rounded: 'rounded-r-md'}" v-model="state.parent_id" :disabled="!is_parent" :options="categoryStore.categories.rows"
+                           optionAttribute="title" valueAttribute="id"/>
+                </div>
+
+              </UFormGroup>
             </div>
           </div>
 
@@ -111,9 +133,13 @@ const items = row => [
             Создать категорию
           </UButton>
         </UForm>
-
+        <div class="rounded-lg self-start w-1/6 bg-gray-200 p-5">
+          Всего категорий: {{categoryStore.categories.count}}
+        </div>
       </div>
-      <div class="w-full flex px-3 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
+      <div class="w-full items-center flex px-4 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
+        <UCheckbox v-model="p" label="Только&nbsp;родительские" />
+        <UDivider orientation="vertical" class="self-stretch mx-4"/>
         <UInput variant="none" class="w-full" v-model="q" placeholder="Поиск"/>
       </div>
       <UTable class="w-full"
@@ -127,8 +153,8 @@ const items = row => [
         </template>
         <template #sort-data="{row}">
           <div class="flex flex-row no-wrap gap-2">
-            <UInput v-model="row.sort" />
-            <UButton size="xs" @click="categoryStore.editCategory(row)">Изменить</UButton>
+            <UInput class="max-w-20" v-model="row.sort" />
+            <UButton size="xs" icon="i-lets-icons-check-fill" color="black" @click="categoryStore.editCategory(row)" />
           </div>
         </template>
         <template #actions-data="{row}">
@@ -136,7 +162,7 @@ const items = row => [
         </template>
         <template #edit-data="{row}">
           <UDropdown :items="items(row)">
-            <UButton color="black" rounded variant="solid">Редактировать</UButton>
+            <UButton color="black" size="sm" rounded variant="solid">Редактировать</UButton>
           </UDropdown>
         </template>
       </UTable>

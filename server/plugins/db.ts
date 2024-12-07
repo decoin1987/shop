@@ -1,7 +1,7 @@
 import {sequelize} from "../utils/db.connect"
-import {Category} from "../models/category";
-import {Tag} from "../models/tag";
-import {Product} from "../models/product";
+import Category from "../models/category";
+import Tag from "../models/tag";
+import Product from "../models/product";
 import {stringSlugify} from "../utils/helpers";
 import {elementNames} from "dom-serializer/lib/foreignNames";
 // import {User} from "@/server/models/user";
@@ -47,59 +47,59 @@ const cat = [
 const tags = [
     {
 
-    "title": "День рождения",
-    "descriptions": null,
-    "sort": "500",
-    "slug": "den_rozhdeniya"
-},
+        "title": "День рождения",
+        "descriptions": null,
+        "sort": "500",
+        "slug": "den_rozhdeniya"
+    },
     {
-    "title": "Поздравления",
-    "descriptions": null,
-    "sort": "500",
-    "slug": "pozdravleniya"
-},
-    {
-
-    "title": "Симпатия",
-    "descriptions": null,
-    "sort": "500",
-    "slug": "simpatiya"
-},
+        "title": "Поздравления",
+        "descriptions": null,
+        "sort": "500",
+        "slug": "pozdravleniya"
+    },
     {
 
-    "title": "Годовщина",
-    "descriptions": null,
-    "sort": "500",
-    "slug": "godovshchina"
-},
+        "title": "Симпатия",
+        "descriptions": null,
+        "sort": "500",
+        "slug": "simpatiya"
+    },
     {
 
-    "title": "Свадьба",
-    "descriptions": null,
-    "sort": "500",
-    "slug": "svadba"
-},
+        "title": "Годовщина",
+        "descriptions": null,
+        "sort": "500",
+        "slug": "godovshchina"
+    },
     {
 
-    "title": "Рождение ребенка",
-    "descriptions": null,
-    "sort": "500",
-    "slug": "rozhdenie_rebenka"
-},
+        "title": "Свадьба",
+        "descriptions": null,
+        "sort": "500",
+        "slug": "svadba"
+    },
     {
 
-    "title": "Поправляйся",
-    "descriptions": null,
-    "sort": "500",
-    "slug": "popravlyaysya"
-}]
+        "title": "Рождение ребенка",
+        "descriptions": null,
+        "sort": "500",
+        "slug": "rozhdenie_rebenka"
+    },
+    {
+
+        "title": "Поправляйся",
+        "descriptions": null,
+        "sort": "500",
+        "slug": "popravlyaysya"
+    }]
 
 const product = [
     {
 
         "title": "Букет",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "byket",
@@ -113,7 +113,7 @@ const product = [
 
         "title": "Букет2",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket2",
@@ -126,7 +126,7 @@ const product = [
     {
         "title": "Букет3",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket3",
@@ -139,7 +139,7 @@ const product = [
     {
         "title": "Букет4",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket4",
@@ -152,7 +152,7 @@ const product = [
     {
         "title": "Букет5",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket5",
@@ -165,7 +165,7 @@ const product = [
     {
         "title": "Букет6",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket6",
@@ -178,7 +178,7 @@ const product = [
     {
         "title": "Букет7",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket7",
@@ -191,7 +191,7 @@ const product = [
     {
         "title": "Букет8",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket8",
@@ -204,7 +204,7 @@ const product = [
     {
         "title": "Букет9",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket9",
@@ -217,7 +217,7 @@ const product = [
     {
         "title": "Букет10",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket10",
@@ -231,7 +231,7 @@ const product = [
     {
         "title": "Букет11",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket11",
@@ -245,7 +245,7 @@ const product = [
     {
         "title": "Букет12",
         "count": null,
-        "price": 123,
+        "price": Math.random()*20000,
         "descriptions": null,
         "raw_tag": null,
         "slug": "buket12",
@@ -308,9 +308,34 @@ const FlowersNames = [
     "Ятрышник"
 ]
 
-const flowersToSaveBase = FlowersNames.map(elementNames  => {
+const CategoryNames = [
+    "Монобукеты",
+    "Авторские букеты",
+    "Цветы в коробке",
+    "Цветы в корзине",
+    "Букеты из сухоцветов",
+    "Цветы для интерьера",
+    "Цветы в ящиках",
+    "Букеты невесты",
+    "Подарочные наборы",
+    "Мягкие игрушки",
+    "Вазы",
+    "Подарки и сувениры",
+    "Цветы по подписке",
+    "Цветы поштучно"
+]
+
+const categoryToSaveBase = CategoryNames.map((elementNames, index) => {
     return {
         title: elementNames,
+        sort: 100 + index,
+        slug: stringSlugify(elementNames)
+    }
+})
+const flowersToSaveBase = FlowersNames.map(elementNames => {
+    return {
+        title: elementNames,
+        sort: 500,
         slug: stringSlugify(elementNames)
     }
 })
@@ -318,21 +343,20 @@ const flowersToSaveBase = FlowersNames.map(elementNames  => {
 export default defineNitroPlugin(async () => {
     try {
         await sequelize.authenticate()
-        await sequelize.sync({force: true})
-//         await User.sync({force: true});
-        await Category.bulkCreate(cat)
-        const flower = await Category.findOne({where: {title: "Цветы"}})
-
-// Добавляем parent_id ко всем цветам
-        const flowersWithParent = flowersToSaveBase.map(item => ({
-            ...item,
-            parent_id: flower.id
-        }))
-
-// Создаем все подкатегории цветов одним запросом
-        await Category.bulkCreate(flowersWithParent)
-        await Tag.bulkCreate(tags)
-        await Product.bulkCreate(product)
+        await sequelize.sync({alter: true})
+        // await User.sync({force: true});
+        // await Category.bulkCreate(categoryToSaveBase)
+        // const flower = await Category.findOne({where: {title: "Цветы поштучно"}})
+        //
+        // // Добавляем parent_id ко всем цветам
+        // const flowersWithParent = flowersToSaveBase.map(item => ({
+        //     ...item,
+        //     parent_id: flower.id
+        // }))
+        //
+        // await Category.bulkCreate(flowersWithParent)
+        // await Tag.bulkCreate(tags)
+        // await Product.bulkCreate(product)
 
         console.log('Соединение с БД было успешно установлено')
     } catch (e) {

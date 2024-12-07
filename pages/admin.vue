@@ -135,7 +135,7 @@ const reportLinks = [
     <nav class="aside-nav flex-col gap-8 h-svh bg-gray-500 pb-10" style="position:sticky; top: 0; min-width: 320px; overflow-y: scroll">
       <div class="pt-3 pb-1 px-5 bg-gray-500 shadow-lg" style="height: 70px; position: sticky; top: 0; border-bottom: 1px #ffffff20 solid">
         <NuxtLink to="/admin">
-          <Logo height="auto" />
+          <Logo height="100%" />
         </NuxtLink>
       </div>
       <ul class="flex flex-col w-full">

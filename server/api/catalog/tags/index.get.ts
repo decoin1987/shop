@@ -1,6 +1,5 @@
 import {createError, defineEventHandler, getQuery, getRouterParam} from "h3";
-import {Op} from "sequelize";
-import {Tag} from "../../../models/tag";
+import Tag from "../../../models/tag";
 
 
 export default defineEventHandler(async (event) => {

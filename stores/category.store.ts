@@ -1,28 +1,36 @@
 // @ts-nocheck
 import {defineStore} from 'pinia'
-import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
+import {useCookie, useFetch, useRoute, useRouter, useState} from 'nuxt/app';
 
 
 
 
 export const useCategoryStore = defineStore('category', () => {
-
+    const route = useRoute()
     const token = useCookie('token')
-    const updateCategory = (data) => {
+    const updateCategories = (data) => {
         if (data) {
             categories.value = data
         }
     }
-
-    const getCategory = async () => {
-        useFetch('/api/catalog/category', {
+    const getCategory = async (slug) => {
+        useFetch(`/api/catalog/category/${slug}`, {
             onResponse({response}) {
                 // console.dir(response._data)
-                return updateCategory(response._data)
+                return response._data
             },
             method: "GET"
         })
-        // return updateCategory(data.value)
+    }
+    const getCategories = async () => {
+        useFetch('/api/catalog/category', {
+            onResponse({response}) {
+                // console.dir(response._data)
+                return updateCategories(response._data)
+            },
+            method: "GET"
+        })
+        // return updateCategories(data.value)
     }
 
     const editCategory = async (data) => {
@@ -36,7 +44,7 @@ export const useCategoryStore = defineStore('category', () => {
                     return console.error(response._data.message)
                 }
                 // console.log(response._data)
-                return updateCategory(response._data)
+                return updateCategories(response._data)
             },
             body: data
         })
@@ -45,7 +53,7 @@ export const useCategoryStore = defineStore('category', () => {
     const deleteCategory = async (id) => {
         useFetch('/api/catalog/category', {
             onResponse({response}) {
-                return updateCategory(response._data)
+                return updateCategories(response._data)
             },
             method: "DELETE",
             body: {
@@ -65,12 +73,12 @@ export const useCategoryStore = defineStore('category', () => {
                     return console.error(response._data.message)
                 }
                 console.log(response._data)
-                return updateCategory(response._data)
+                return updateCategories(response._data)
             },
             body: data
         })
     }
 
-    const categories = useState('categories', async () => await getCategory())
-    return {createCategory, getCategory, deleteCategory, editCategory, categories}
+    const categories = useState('categories', async () => await getCategories())
+    return {createCategory, getCategories, deleteCategory, editCategory, getCategory, categories}
 })

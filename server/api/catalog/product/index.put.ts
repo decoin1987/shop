@@ -1,8 +1,8 @@
-import {Category} from "../../../models/category";
+import Category from "../../../models/category";
 import {defineEventHandler, EventHandlerRequest, H3Event, readBody} from "h3";
-import {Product} from "../../../models/product";
-import {Tag} from "../../../models/tag";
-import {ProductImage} from "../../../models/product_image";
+import Product from "../../../models/product";
+import Tag from "../../../models/tag";
+import ProductImage from "../../../models/product_image";
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
     const {id, title, description, sort, parent_id} = await readBody(event)
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
             include: [
                 {
                     model: Tag,
-                    as: 'productTags',
+                    as: 'tags',
                 },
                 {
                     model: ProductImage,

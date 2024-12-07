@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {useCategoryStore} from "@/stores/category.store";
 import {useCartStore} from "~/stores/cart.store";
+import Flicking from "@egjs/vue3-flicking";
 // const links = ref([
 //   {link: 'showcase', name: 'Витрина'},
 //   {link: 'bouquets', name: 'Букеты'},
@@ -69,11 +70,25 @@ const categoryStore = useCategoryStore()
 const button_ui = {
   rounded: 'rounded-full',
   variant: {
-    soft: 'text-red-600 dark:text-red-400 bg-red-100 hover:bg-red-200 disabled:bg-{color}-100 aria-disabled:bg-{color}-100 dark:bg-{color}-950 dark:hover:bg-{color}-900 dark:disabled:bg-{color}-950 dark:aria-disabled:bg-{color}-950 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-{color}-500 dark:focus-visible:ring-{color}-400',
+    soft: 'text-gray-600 font-meduim text-sm hover:text-red-400  tracking-wide dark:text-red-400 bg-gray-200 hover:bg-white disabled:bg-{color}-100 aria-disabled:bg-{color}-100 dark:bg-{color}-950 dark:hover:bg-{color}-900 dark:disabled:bg-{color}-950 dark:aria-disabled:bg-{color}-950 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-{color}-500 dark:focus-visible:ring-{color}-400',
   },
 }
 const count = 0
 const cartStore = useCartStore()
+const options = {
+  preventClickOnDrag: true,
+  moveType: "freeScroll",
+  align: 0,
+  threshold: 10,
+  iOSEdgeSwipeThreshold: 10,
+  circular: false,
+  adaptive: false,
+  circularFallback: 'bound',
+  bound: true,
+  renderOnlyVisible: true,
+  preventDefaultOnDrag: true,
+}
+
 </script>
 
 <template>
@@ -99,16 +114,25 @@ const cartStore = useCartStore()
         <UButton rounded size="md"  type="button" @click="$router.push('/admin')">
           Админка
         </UButton>
+
       </div>
     </UContainer>
   </header>
-  <nav class="bg-gray-100 py-6 mb-10">
-    <UContainer class="w-full flex flex-row flex-wrap gap-5 items-center justify-between">
-      <ul class="flex flex-row flex-wrap gap-2">
-        <li v-for="link in categoryStore.categories.rows?.filter(el => !el.parent_id)">
-            <UButton  :ui="button_ui" :to="`/catalog/${link.slug}`" variant="soft" color="red">{{ link.title }}</UButton>
-        </li>
-      </ul>
+  <nav class="bg-gray-100 py-6 mb-10 border-b border-gray-300 shadow-sm">
+    <UContainer class="w-full flex items-center">
+      <div class=""><UIcon name="i-fluent-mdl2-location-dot" class="w-5 h-5 text-gray-700" /></div>
+      <div class="w-5/6 ml-5 mr-auto">
+        <Flicking ref="menuSlider" :options="options">
+          <div class="pr-3" v-for="(link, i) in categoryStore.categories.rows?.filter(el => !el.parent_id)" :key="i">
+
+            <UButton :ui="button_ui" :to="`/catalog/${link.slug}`" variant="soft" size="lg" color="gray">{{ link.title }}</UButton>
+          </div>
+          <!--      <template #viewport>-->
+          <!--        <span class="item-inside-viewport"></span>-->
+          <!--        <span class="item-inside-viewport"></span>-->
+          <!--      </template>-->
+        </Flicking>
+      </div>
       <UChip
           :show="!!cartStore.cart.length"
           size="md"
@@ -126,7 +150,6 @@ const cartStore = useCartStore()
           Корзина
         </UButton>
       </UChip>
-
     </UContainer>
   </nav>
   <slot/>

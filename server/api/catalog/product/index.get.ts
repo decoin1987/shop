@@ -1,9 +1,8 @@
 import {createError, defineEventHandler, getQuery, getRouterParam} from "h3";
-import {Op} from "sequelize";
-import {Category} from "../../../models/category";
-import {Product} from "../../../models/product";
-import {Tag} from "../../../models/tag";
-import {ProductImage} from "../../../models/product_image";
+import Category from "../../../models/category";
+import Product from "../../../models/product";
+import Tag from "../../../models/tag";
+import ProductImage from "../../../models/product_image";
 
 
 export default defineEventHandler(async (event) => {
@@ -12,7 +11,7 @@ export default defineEventHandler(async (event) => {
             include: [
                 {
                     model: Tag,
-                    as: 'productTags',
+                    as: 'tags',
                 },
                 {
                     model: ProductImage,

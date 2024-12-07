@@ -123,7 +123,6 @@ const filteredRows = computed(() => {
   })
 })
 const onSubmit = async () => {
-  console.log(123123)
   await productStore.createProduct({
     title: state.value.title,
     price: state.value.price,
@@ -190,7 +189,7 @@ const onSubmit = async () => {
           :rows="filteredRows" :columns="columns">
     <template #title-data="{row}">
       <div class="flex flex-row no-wrap gap-2">
-        <NuxtLink :to="`/admin/catalog/products/${row.slug}`">{{row.title}}</NuxtLink>
+        <NuxtLink :to="`/admin/catalog/products/${row.id}`">{{row.title}}</NuxtLink>
       </div>
     </template>
     <template #category-data="{row}">
