@@ -84,9 +84,9 @@ const delImg = async (itemId: string) => {
         </UFormGroup>
         <div class="flex  flex-row items-end">
 
-          <!--              <UFormGroup  name="is_parent">-->
-          <!--                <UCheckbox class="flex p-1 bg-gray-300" label="Добавить в категорию" v-model="is_parent"/>-->
-          <!--              </UFormGroup>-->
+          <!--<UFormGroup  name="is_parent">-->
+          <!--<UCheckbox class="flex p-1 bg-gray-300" label="Добавить в категорию" v-model="is_parent"/>-->
+          <!--</UFormGroup>-->
           <UFormGroup class="w-full" label="Родительская категория" name="parent_id">
             <div class="flex flex-row">
               <USelect :ui="{rounded: 'rounded-r-md'}" v-model="state.parent_id"
