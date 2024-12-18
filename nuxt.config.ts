@@ -1,6 +1,7 @@
 //@ts-nocheck
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import {resolve} from 'node:path'
+
+
 
 export default defineNuxtConfig({
     compatibilityDate: '2024-04-03',
@@ -9,11 +10,15 @@ export default defineNuxtConfig({
     app: {
         rootAttrs: {id: 'buket'},
     },
+
     vite: {
         css: {
             preprocessorOptions: {
                 sass: {
-                    additionalData: '@import "@/assets/styles/_variable.scss"'
+                    additionalData: '@use "@/assets/styles/_variable.scss"'
+                },
+                scss: {
+                    api: 'modern-compiler' // or "modern"
                 }
             }
         },

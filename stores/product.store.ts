@@ -24,6 +24,9 @@ export const useProductStore = defineStore('product', () => {
         })
         // return updateCategory(data.value)
     }
+
+
+
     const deleteProduct = async (product) => {
         useFetch('/api/catalog/product', {
             onResponse({response}) {
@@ -74,8 +77,6 @@ export const useProductStore = defineStore('product', () => {
             }
         })
     }
-
-
     const getProduct = async (path) => {
         useFetch(`/api/catalog/product/${path}`, {
             onResponse({response}) {
@@ -85,10 +86,6 @@ export const useProductStore = defineStore('product', () => {
             method: "GET"
         })
     }
-
-
-
-
 
     const products = useState('products', async () => await getProducts())
     const product = shallowRef({})

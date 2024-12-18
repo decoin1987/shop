@@ -1,5 +1,5 @@
-@import url("@egjs/vue3-flicking/dist/flicking.css");
-@import url("@egjs/flicking-plugins/dist/flicking-plugins.css");
+@use "@egjs/vue3-flicking/dist/flicking.css";
+@use "@egjs/flicking-plugins/dist/flicking-plugins.css";
 
 #buket {
   display: flex;

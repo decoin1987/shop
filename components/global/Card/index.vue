@@ -62,17 +62,17 @@ const cardStore = useCartStore()
     </div>
     <div class="flex gap-3 mb-2" style="align-items: baseline">
 
-      <p class="text-md" style="text-decoration: line-through" v-if="!!product.sale || !!product.club">
+      <p class="text-md" style="text-decoration: line-through">
         {{ numberToRub(product.price) }}
       </p>
-      <p class="text-2xl text-red-600" style="font-weight: 500">
-        {{ numberToRub(Math.round(product.price - product.price * (product.sale + product.club) / 100)) }}
-      </p>
+<!--      <p class="text-2xl text-red-600" style="font-weight: 500">-->
+<!--        {{ numberToRub(Math.round(product.price - product.price * (product.sale + product.club) / 100)) }}-->
+<!--      </p>-->
 
 
     </div>
     <template #footer>
-        <CardButton @click="cardStore.addToCart(product)">В корзину</CardButton>
+        <CardButton @click="$emit('addToCart', product)">В корзину</CardButton>
     </template>
   </UCard>
 </template>

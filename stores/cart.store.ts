@@ -106,7 +106,7 @@ export const useCartStore = defineStore('cart', () => {
         cart.value = []
     }
     const addToCart = (product):Array => {
-        console.log(cart.value)
+
         if(cart.value.find((el) => el.id === product.id)) {
             cart.value.find((el) => el.id === product.id).count += 1
         } else {
@@ -116,6 +116,7 @@ export const useCartStore = defineStore('cart', () => {
                 upSale: {},
             })
         }
+        console.log(cart.value)
     }
 
     return {clearCart, addToCart, cart}

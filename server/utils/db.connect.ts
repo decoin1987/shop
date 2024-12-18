@@ -1,8 +1,7 @@
+//@ts-nocheck
 import {Sequelize} from "sequelize";
 import configs from "../utils/config.json"
 const env: string = process.env.NODE_ENV;
-
-const config: config = configs[env];
 
 interface config {
     database: string,
@@ -11,6 +10,8 @@ interface config {
     dialect: string,
     host: string | number,
 }
+
+const config: config = configs[env];
 
 const doLog = (text: any) => {
     const date = new Date();
