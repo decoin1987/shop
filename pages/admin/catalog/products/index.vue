@@ -55,7 +55,7 @@ const columns = [
     sortable: true,
   },
   {
-    key: 'productImages',
+    key: 'product_images',
     label: 'Изображение',
   },
   {
@@ -126,8 +126,8 @@ const onSubmit = async () => {
   await productStore.createProduct({
     title: state.value.title,
     price: state.value.price,
-    vendorCode: state.value.vendorCode,
-    asConsist: state.value.asConsist,
+    vendor_code: state.value.vendor_code,
+    as_consist: state.value.as_consist,
     photos:state.value.photos,
     category: state.value.category,
     tag: state.value.tag,
@@ -137,36 +137,36 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col max-w-8xl mx-auto items-start p-10">
+  <div class="flex flex-col items-start p-10">
     <h1 class="text-5xl font-medium mb-10">Товары</h1>
     <div class="flex w-full flex-col gap-2 mb-10">
       <UForm :schema="schema" :state="state" class="flex flex-row gap-10" @submit="onSubmit">
         <div class="flex w-3/6 flex-col gap-4">
           <UFormGroup label="Название" name="title">
-            <UInput v-model="state.title" type="text" placeholder="Название" />
+            <UInput size="xl" v-model="state.title" type="text" placeholder="Название" />
           </UFormGroup>
 
-          <UFormGroup label="Название" name="price">
-            <UInput v-model="state.price" placeholder="Цена"/>
+          <UFormGroup label="Цена" name="price">
+            <UInput size="xl" v-model="state.price" placeholder="Цена"/>
           </UFormGroup>
 
-          <UFormGroup label="Название" name="vendorCode">
-            <UInput v-model="state.vendorCode" placeholder="Артикул" />
+          <UFormGroup label="Артикул" name="vendorCode">
+            <UInput size="xl" v-model="state.vendor_code" placeholder="Артикул" />
           </UFormGroup>
 
           <UFormGroup label="Категория" name="category">
-            <USelect placeholder="Категория" v-model="state.category" :options="categoryStore.categories.rows" valueAttribute="id" optionAttribute="title" />
+            <USelect size="xl" placeholder="Категория" v-model="state.category" :options="categoryStore.categories.rows" valueAttribute="id" optionAttribute="title" />
           </UFormGroup>
 
           <UFormGroup label="Теги" name="tag">
-            <USelectMenu placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple valueAttribute="id" optionAttribute="title" />
+            <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple valueAttribute="id" optionAttribute="title" />
           </UFormGroup>
           <UFormGroup label="Состав" name="consist">
-            <USelectMenu placeholder="Состав" v-model="state.consist" :options="categoryStore.categories.rows" multiple valueAttribute="id" optionAttribute="title" />
+            <USelectMenu size="xl" placeholder="Состав" v-model="state.consist" :options="categoryStore.categories.rows" multiple valueAttribute="id" optionAttribute="title" />
           </UFormGroup>
 
           <UFormGroup name="asConsist">
-            <UCheckbox v-model="state.asConsist" label="Может быть в составе товаров"/>
+            <UCheckbox v-model="state.as_consist" label="Может быть в составе товаров"/>
           </UFormGroup>
 
           <UButton class="submit-btn" type="submit">Создать</UButton>
@@ -179,46 +179,47 @@ const onSubmit = async () => {
         </div>
       </UForm>
     </div>
+    <div class="w-full flex px-3 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
+      <UInput variant="none" class="w-full" v-model="q" placeholder="Поиск"/>
+    </div>
+    <UTable class="w-full"
+            v-model="selected"
+            :sort-button="{ icon: 'i-heroicons-sparkles-20-solid', color: 'black', variant: 'solid', size: 'xs', square: false, ui: { rounded: 'rounded-full' } }"
+            :rows="filteredRows" :columns="columns">
+      <template #title-data="{row}">
+        <div class="flex flex-row no-wrap gap-2">
+          <NuxtLink :to="`/admin/catalog/products/${row.id}`">{{row.title}}</NuxtLink>
+        </div>
+      </template>
+      <template #category-data="{row}">
+        <div class="flex flex-row no-wrap gap-2">
+          <NuxtLink :to="`/admin/catalog/categories/${row.category?.slug}`">{{row.category?.title}}</NuxtLink>
+        </div>
+      </template>
+      <template #product_images-data="{row}">
+        <div class="flex flex-row no-wrap gap-2">
+          <template v-if="row.product_images.length">
+            <img height="100" width="100" style="object-fit: cover; aspect-ratio: 1/1" :src="`/img/product/${row.product_images[0].url}`" />
+          </template>
+        </div>
+      </template>
+      <template #sort-data="{row}">
+        <div class="flex flex-row no-wrap gap-2">
+          <UInput v-model="row.sort" />
+          <UButton size="xs" @click="categoryStore.editCategory(row)">Изменить</UButton>
+        </div>
+      </template>
+      <template #actions-data="{row}">
+        {{ row.parent?.title }}
+      </template>
+      <template #edit-data="{row}">
+        <UDropdown :items="actionMenu(row)">
+          <UButton color="black" rounded variant="solid">Редактировать</UButton>
+        </UDropdown>
+      </template>
+    </UTable>
   </div>
-  <div class="w-full max-w-8xl mx-auto flex px-3 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
-    <UInput variant="none" class="w-full" v-model="q" placeholder="Поиск"/>
-  </div>
-  <UTable class="w-full  max-w-8xl mx-auto"
-          v-model="selected"
-          :sort-button="{ icon: 'i-heroicons-sparkles-20-solid', color: 'black', variant: 'solid', size: 'xs', square: false, ui: { rounded: 'rounded-full' } }"
-          :rows="filteredRows" :columns="columns">
-    <template #title-data="{row}">
-      <div class="flex flex-row no-wrap gap-2">
-        <NuxtLink :to="`/admin/catalog/products/${row.id}`">{{row.title}}</NuxtLink>
-      </div>
-    </template>
-    <template #category-data="{row}">
-      <div class="flex flex-row no-wrap gap-2">
-        <NuxtLink :to="`/admin/catalog/categories/${row.category?.slug}`">{{row.category?.title}}</NuxtLink>
-      </div>
-    </template>
-    <template #productImages-data="{row}">
-      <div class="flex flex-row no-wrap gap-2">
-        <template v-if="row.productImages.length">
-          <img height="100" width="100" style="object-fit: cover; aspect-ratio: 1/1" :src="`/img/product/${row.productImages[0].url}`" />
-        </template>
-      </div>
-    </template>
-    <template #sort-data="{row}">
-      <div class="flex flex-row no-wrap gap-2">
-        <UInput v-model="row.sort" />
-        <UButton size="xs" @click="categoryStore.editCategory(row)">Изменить</UButton>
-      </div>
-    </template>
-    <template #actions-data="{row}">
-      {{ row.parent?.title }}
-    </template>
-    <template #edit-data="{row}">
-      <UDropdown :items="actionMenu(row)">
-        <UButton color="black" rounded variant="solid">Редактировать</UButton>
-      </UDropdown>
-    </template>
-  </UTable>
+
 </template>
 
 <style scoped lang="scss">

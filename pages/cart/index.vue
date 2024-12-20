@@ -24,7 +24,7 @@ const orderDTO = [
     payment_method: ''
   }
 ]
-const different_address = ref(false)
+
 const prezents = [
   'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpcgUNUF-659eed4ee1d9d.webp',
   'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpg8eC2M-6737a561c86d0.webp',
@@ -38,8 +38,6 @@ const prezents = [
   // 'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpG2BRDY-646d270811add.webp',
 ]
 
-
-const count = ref(1)
 const isOpen = ref(false)
 const addresses = ref({}
 //     [
@@ -82,7 +80,7 @@ const delAddress = (address: {}) => {
   <UContainer class="flex w-full flex-row">
     <div class="flex flex-col w-4/6">
       <h1 class="text-3xl mb-10">Ваша корзина</h1>
-      <OrderDetails :subSales="prezents" />
+      <OrderDetails :sub_sales="prezents" />
     </div>
     <div class="" style="width: 35%; height: calc(100vh - 250px); align-self: flex-start; position: sticky; top: 10px;">
       <div class="" style="background-color: var(--mine-50); border-radius: 10px; padding: 15px 20px">

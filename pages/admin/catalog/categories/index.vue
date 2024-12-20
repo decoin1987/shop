@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {useCategoryStore} from "../stores/category.store"
+//@ts-nocheck
+import {useCategoryStore} from "~/stores/category.store"
 import {computed, ref, watch} from "vue";
 
 
@@ -36,6 +37,10 @@ const columns = [
     key: 'sort',
     label: 'Сортировка',
   },
+  {
+      key: 'is_upsale',
+      label: 'Категория для допродаж',
+    },
   {
     key: 'slug',
     label: 'Ссылка',

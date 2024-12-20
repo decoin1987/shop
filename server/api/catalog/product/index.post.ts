@@ -9,7 +9,6 @@ import Category from '../../../models/category';
 const filePath = CONFIG.filePath;
 const logPath = CONFIG.logPath;
 let product: Record<string, unknown> = {};
-
 export default defineEventHandler(async (event) => {
     let formData = await readMultipartFormData(event);
     try {
@@ -20,14 +19,21 @@ export default defineEventHandler(async (event) => {
             }
         }
         const productItem: ProductAttributes = await Product.create({
+            active: !!product.active || true,
+            count: parseInt(product.count as string) || 0,
+            decrease_stock: !!product.decrease_stock || false,
+            descriptions: product.descriptions as string || "",
+            raw_tag: [],
+            showcase: !!product.showcase || false,
             title: product.title as string,
             price: parseInt(product.price as string),
-            vendor_code: product.vendorCode as string,
-            as_consist: !!product.asConsist,
-            slug: product.title as string,
+            vendor_code: product.vendor_code as string,
+            as_consist: !!product.as_consist,
+            slug: product.title as string
         });
         console.log(product.tag)
         if (product.category) await productItem.setCategory(product.category);
+        if (product.category) await productItem.addUpsale_categories(product.category);
         if (product.tag) await productItem.addTags((product.tag as string).split(','));
 
         for (const value of formData.values()) {
@@ -49,7 +55,7 @@ export default defineEventHandler(async (event) => {
                 },
                 {
                     model: ProductImage,
-                    as: 'productImages',
+                    as: 'product_images',
                 },
                 {
                     model: Category,

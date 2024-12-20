@@ -1,15 +1,10 @@
 <script lang="ts" setup>
 import {useCategoryStore} from "@/stores/category.store";
 import {useCartStore} from "~/stores/cart.store";
+import {useLocalStorage} from '@vueuse/core';
+import {ref} from "@vue/reactivity";
 import Flicking from "@egjs/vue3-flicking";
-// const links = ref([
-//   {link: 'showcase', name: 'Витрина'},
-//   {link: 'bouquets', name: 'Букеты'},
-//   {link: 'flowers', name: 'Цветы'},
-//   {link: 'presents', name: 'Подарки'},
-//   {link: 'souvenirs', name: 'Сувениры'},
-// ])
-const toast = useToast()
+
 const menu = [
   {
     name: 'Информация',
@@ -65,16 +60,13 @@ const menu = [
     }]
   }
 ]
-const categoryStore = useCategoryStore()
-// const links =
 const button_ui = {
   rounded: 'rounded-full',
   variant: {
     soft: 'text-gray-600 font-meduim text-sm hover:text-red-400  tracking-wide dark:text-red-400 bg-gray-200 hover:bg-white disabled:bg-{color}-100 aria-disabled:bg-{color}-100 dark:bg-{color}-950 dark:hover:bg-{color}-900 dark:disabled:bg-{color}-950 dark:aria-disabled:bg-{color}-950 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-{color}-500 dark:focus-visible:ring-{color}-400',
   },
 }
-const count = 0
-const cartStore = useCartStore()
+
 const options = {
   preventClickOnDrag: true,
   moveType: "freeScroll",
@@ -88,6 +80,17 @@ const options = {
   renderOnlyVisible: true,
   preventDefaultOnDrag: true,
 }
+
+const categoryStore = useCategoryStore()
+
+
+const cartStore = useCartStore()
+const cart = useLocalStorage('cart', [])
+const countCart = ref(cart.value.length > 0)
+watch(cart, () => {
+  return countCart.value = cart.value.length > 0;
+})
+
 
 </script>
 
@@ -133,23 +136,25 @@ const options = {
           <!--      </template>-->
         </Flicking>
       </div>
-      <UChip
-          :show="!!cartStore.cart.length"
-          size="md"
-          inset
-      >
-        <UButton
-            :ui="{rounded: 'rounded-full',}"
-            to="/cart"
-            icon="i-solar-bag-heart-linear"
-            size="xl"
-            color="black"
-            variant="solid"
-            class="ml-auto"
+      <ClientOnly>
+        <UChip
+            :show="countCart"
+            size="md"
+            inset
         >
-          Корзина
-        </UButton>
-      </UChip>
+          <UButton
+              :ui="{rounded: 'rounded-full',}"
+              to="/cart"
+              icon="i-solar-bag-heart-linear"
+              size="xl"
+              color="black"
+              variant="solid"
+              class="ml-auto"
+          >
+            Корзина
+          </UButton>
+        </UChip>
+      </ClientOnly>
     </UContainer>
   </nav>
   <slot/>

@@ -1,12 +1,9 @@
 import Category from "../../../models/category";
 import {defineEventHandler, EventHandlerRequest, H3Event, readBody} from "h3";
-import Product from "../../../models/product";
-import Tag from "../../../models/tag";
-import ProductImage from "../../../models/product_image";
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
     const {id, title, description, sort, parent_id} = await readBody(event)
-    const category: any  = await Product.findOne({
+    const category: any  = await Category.findOne({
         where: {
             id: id,
         }
@@ -14,18 +11,20 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
     if (category) {
         category.title = title
         category.description = description
+        category.sort = sort
+        category.parent_id = parent_id
         await category.save()
     }
-    return await Product.findAndCountAll(
+    return await Category.findAndCountAll(
         {
             include: [
                 {
-                    model: Tag,
-                    as: 'tags',
+                    model: Category,
+                    as: 'parent',
                 },
                 {
-                    model: ProductImage,
-                    as: 'product_images',
+                    model: Category,
+                    as: 'child',
                 },
             ],
             distinct:true,

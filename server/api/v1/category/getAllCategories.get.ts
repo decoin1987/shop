@@ -1,26 +1,20 @@
 import {createError, defineEventHandler, getQuery, getRouterParam} from "h3";
+import {Op} from "sequelize";
 import Category from "../../../models/category";
-import Product from "../../../models/product";
-import Tag from "../../../models/tag";
-import ProductImage from "../../../models/product_image";
 
 
 export default defineEventHandler(async (event) => {
-    return await Product.findAndCountAll(
+    return await Category.findAndCountAll(
         {
             include: [
                 {
-                    model: Tag,
-                    as: 'tags',
-                },
-                {
-                    model: ProductImage,
-                    as: 'product_images',
+                    model: Category,
+                    as: 'parent',
                 },
                 {
                     model: Category,
-                    as: 'category'
-                }
+                    as: 'child',
+                },
             ],
             distinct:true,
             order: [['created_at', 'DESC']],

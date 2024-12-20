@@ -144,7 +144,7 @@ const options = {
 </script>
 
 <template>
-  <UContainer>
+  <UContainer class="w-full">
     <Stories class="mb-14"/>
 
     <section class="mb-14">

@@ -4,6 +4,7 @@ import Product from "../../../../models/product";
 import Tag from "../../../../models/tag";
 import ProductImage from "../../../../models/product_image";
 import Category from "../../../../models/category";
+import UpsaleCategory from "../../../../models/upsale_category";
 
 
 
@@ -19,7 +20,16 @@ export default defineEventHandler(async (event) => {
             },
             {
                 model: ProductImage,
-                as: 'productImages',
+                as: 'product_images',
+            },
+            {
+                model: Category,
+                as: 'upsale_categories',
+                include:[
+                    {
+                        model: Product,
+                        as: 'upsale_products'
+                    }]
             },
             {
                 model: Category,

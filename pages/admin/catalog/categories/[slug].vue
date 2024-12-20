@@ -1,20 +1,21 @@
 <script lang="ts" setup>
+//@ts-nocheck
 import {useAsyncData, useFetch, useState} from "nuxt/app";
 import {ref} from "vue";
-import {useCategoryStore} from "../stores/category.store"
+import {useCategoryStore} from "~/stores/category.store"
 
 const slug = ref('')
 
 const state = ref({
   title: '',
-  description: null,
-  sort: null,
-  parent_id: null,
+  description: '',
+  sort: 500,
+  parent_id: undefined,
 
 })
 const route = useRoute()
 const categoryStore = useCategoryStore()
-const { data:category, status, error, pending, refresh, clear } = useFetch(`/api/catalog/category/${route.params.slug}`)
+const { data:category, status, refresh, clear } = useFetch(`/api/catalog/category/${route.params.slug}`)
 const onSubmit = async () => {
   console.log(123)
   // await categoryStore.updateCategory({
@@ -28,7 +29,7 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <div v-if="!pending" class="flex flex-col items-start py-4 px-10">
+  <div v-if="status === 'success'" class="flex flex-col items-start py-4 px-10">
       <h1 class="text-3xl mb-6 font-sans">{{ route.params.slug }}</h1>
       <h1 class="text-3xl mb-6 font-sans">{{ category.title }}</h1>
       <p class="text-sm mb-6 font-sans">{{ category }}</p>

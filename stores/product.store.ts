@@ -51,8 +51,8 @@ export const useProductStore = defineStore('product', () => {
         }
         formData.append('title', event.title)
         formData.append('price', event.price)
-        formData.append('vendorCode', event.vendorCode)
-        formData.append('asConsist', event.asConsist)
+        formData.append('vendor_code', event.vendor_code)
+        formData.append('as_consist', event.as_consist)
         formData.append('category', event.category)
         formData.append('tag', event.tag)
         formData.append('consist', event.consist)

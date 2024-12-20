@@ -6,6 +6,7 @@ import Category from './category';
 import ProductImage from './product_image';
 import {sequelize} from "../utils/db.connect";
 import ProductTag from "./product_tag";
+import UpsaleCategory from "./upsale_category";
 
 export interface ProductAttributes {
     id: string;
@@ -111,13 +112,13 @@ Product.init({
                 where: { id: product.id },
                 include: [{
                     model: ProductImage,
-                    as: 'productImages'
+                    as: 'product_images'
                 }]
-            }) as Product & { productImages: ProductImage[] };
+            }) as Product & { product_images: ProductImage[] };
 
             console.log('Удаление продукта');
             try {
-                IMAGES.doDelImages(deletedProduct.productImages);
+                IMAGES.doDelImages(deletedProduct.product_images);
                 console.log('Картинки удалены');
             } catch (e) {
                 console.error(e);
@@ -156,8 +157,8 @@ Product.belongsToMany(Product, {
     timestamps: false
 });
 
-Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'product_id', as: 'productConsists' });
-Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'consist_id', as: 'consistProducts' });
+Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'product_id', as: 'product_consists' });
+Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'consist_id', as: 'consist_products' });
 
 Product.belongsToMany(Tag, { through: { model: ProductTag }, as: 'tags', onDelete: 'CASCADE', timestamps: false });
 Tag.belongsToMany(Product, { through: { model: ProductTag }, as: 'products', onDelete: 'CASCADE', timestamps: false });
@@ -166,10 +167,12 @@ ProductTag.belongsTo(Product);
 Tag.hasMany(ProductTag);
 ProductTag.belongsTo(Tag);
 
-Category.hasMany(Product, { as: 'products', foreignKey: 'category_id' });
+Product.belongsToMany(Category, { through: { model: UpsaleCategory }, as: 'upsale_categories'});
+Category.belongsToMany(Product, { through: { model: UpsaleCategory }, as: 'upsale_products'});
+
+Category.hasMany(Product, { as: 'products', foreignKey: 'category_id' }, );
 Product.belongsTo(Category, { as: 'category', foreignKey: 'category_id' });
 
-Product.hasMany(ProductImage, { foreignKey: 'product_id', as: 'productImages', onDelete: 'CASCADE', hooks: true });
-ProductImage.hasOne(Product, { foreignKey: 'product_id', as: 'productsImage', onDelete: 'SET NULL', hooks: true });
+Product.hasMany(ProductImage, { as: 'product_images', foreignKey: 'product_id', onDelete: 'CASCADE', hooks: true });
 
 export default Product;

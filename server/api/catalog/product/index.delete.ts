@@ -20,7 +20,7 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
                 },
                 {
                     model: ProductImage,
-                    as: 'productImages',
+                    as: 'product_images',
                 },
                 {
                     model: Category,

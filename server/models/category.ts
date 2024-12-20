@@ -5,6 +5,7 @@ import { stringSlugify } from '../utils/helpers';
 interface CategoryAttributes {
     id: string;
     title: string;
+    is_upsale: boolean;
     show_menu: boolean;
     raw_tags: object[];
     html_meta: string;
@@ -21,6 +22,7 @@ type CategoryCreationAttributes = Optional<CategoryAttributes, 'id' | 'show_menu
 class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
     declare id: string; // primary key
     declare title: string;
+    declare is_upsale: boolean;
     declare show_menu: boolean;
     declare raw_tags: object[];
     declare html_meta: string;
@@ -50,6 +52,10 @@ Category.init({
     show_menu: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
+    },
+    is_upsale: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     raw_tags: {
         type: DataTypes.JSONB,

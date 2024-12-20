@@ -3,7 +3,7 @@ import CardButton from "../CardButton.vue";
 import {useCartStore} from "~/stores/cart.store";
 
 
-defineProps({
+const props = defineProps({
   product: Object,
   bg: Object,
 })
@@ -32,6 +32,9 @@ const card_ui = {
   }
 }
 const cardStore = useCartStore()
+const image = computed(() => {
+  return !!props.product.product_images ? props.product?.product_images[0]?.url : false
+})
 </script>
 
 <template>
@@ -39,34 +42,35 @@ const cardStore = useCartStore()
     <template #header>
       <div class="relative">
         <div class="flex flex-wrap absolute gap-2" style="right: 10px; top: 10px;">
-          <UBadge size="xs" color="primary" :ui="{ rounded: 'rounded-full'}" class="line-clamp-1" v-if="parseInt(product.price - product.price * (product.sale + product.club) / 100) % 2 >= 1">НОВИНКА</UBadge>
-          <UBadge size="xs" color="malibu" :ui="{ rounded: 'rounded-full' }" v-if="parseInt(product.price - product.price * (product.sale + product.club) / 100) > 4000">БЕСПЛАТНАЯ ДОСТАВКА</UBadge>
+          <UBadge size="xs" color="primary" :ui="{ rounded: 'rounded-full'}" class="line-clamp-1" v-if="parseInt(props.product.price - props.product.price * (props.product.sale + props.product.club) / 100) % 2 >= 1">НОВИНКА</UBadge>
+          <UBadge size="xs" color="malibu" :ui="{ rounded: 'rounded-full' }" v-if="parseInt(props.product.price - props.product.price * (props.product.sale + props.product.club) / 100) > 4000">БЕСПЛАТНАЯ ДОСТАВКА</UBadge>
         </div>
-        <NuxtImg class="rounded-sm rounded-tl-card w-full" style="aspect-ratio: 3/4; object-fit: cover" :src="product?.url" alt=""></NuxtImg>
+        <img class="rounded-sm rounded-tl-card w-full" style="aspect-ratio: 3/4; object-fit: cover" :src="`${image ? '/img/product/' + image : props.product.url}`" alt="">
+
       </div>
     </template>
     <NuxtLink :to="'/product/'+product?.id">
-      <h1 class="text-xl lg:text-2xl" style="font-weight: 600">{{ product.title }}</h1>
+      <h1 class="text-xl lg:text-2xl" style="font-weight: 600">{{ props.product.title }}</h1>
     </NuxtLink>
     <div class="flex gap-3" style="align-items: center;"
          @click="$emit('showSaleDescription')">
       <p class="text-xs" v-if="!!product?.sale">
-        Скидка -{{ product.sale }}&nbsp;%
+        Скидка -{{ props.product.sale }}&nbsp;%
       </p>
       <p class="text-xs" v-if="!!product?.sale && !!product?.club">
         |
       </p>
       <p class="text-xs" v-if="!!product?.club">
-        Клуб -{{ product.club }}&nbsp;%
+        Клуб -{{ props.product.club }}&nbsp;%
       </p>
     </div>
     <div class="flex gap-3 mb-2" style="align-items: baseline">
 
       <p class="text-md" style="text-decoration: line-through">
-        {{ numberToRub(product.price) }}
+        {{ numberToRub(props.product.price) }}
       </p>
 <!--      <p class="text-2xl text-red-600" style="font-weight: 500">-->
-<!--        {{ numberToRub(Math.round(product.price - product.price * (product.sale + product.club) / 100)) }}-->
+<!--        {{ numberToRub(Math.round(props.product.price - props.product.price * (props.product.sale + props.props.product.club) / 100)) }}-->
 <!--      </p>-->
 
 

@@ -51,7 +51,7 @@ const delImg = async (itemId: string) => {
 
 <template>
   <!--  {{data}}-->
-
+    <pre lang="json"><small>{{product}}</small></pre>
   <div class="flex flex-col items-start py-4 px-10">
     {{ route.params.id }}
     <h1 class="text-3xl mb-6 font-sans">{{ product?.title }}</h1>
