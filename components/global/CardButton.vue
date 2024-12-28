@@ -4,8 +4,8 @@ const UiButton = {
   font: 'font-medium',
   rounded: 'rounded-md rounded-br-card rounded-tl-card',
   truncate: 'text-left break-all line-clamp-1',
-  block: 'w-full flex justify-center items-center',
-  inline: 'inline-flex items-center',
+  block: 'w-full flex text-center justify-center items-center',
+  inline: 'inline-flex text-center justify-center items-center',
   size: {
     '2xs': 'text-xs',
     xs: 'text-xs',
@@ -62,7 +62,7 @@ const UiButton = {
 </script>
 
 <template>
-  <UButton :ui="UiButton" color="black" size="xl">
+  <UButton :ui="UiButton" class="bg-red-700 hover:bg-gray-800" size="xl">
     <slot />
   </UButton>
 </template>

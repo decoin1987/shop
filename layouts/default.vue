@@ -126,7 +126,7 @@ watch(cart, () => {
       <div class=""><UIcon name="i-fluent-mdl2-location-dot" class="w-5 h-5 text-gray-700" /></div>
       <div class="w-5/6 ml-5 mr-auto">
         <Flicking ref="menuSlider" :options="options">
-          <div class="pr-3" v-for="(link, i) in categoryStore.categories.rows?.filter(el => !el.parent_id)" :key="i">
+          <div class="pr-3" v-for="(link, i) in categoryStore.categories.rows?.filter(el => el.show_menu)" :key="i">
 
             <UButton :ui="button_ui" :to="`/catalog/${link.slug}`" variant="soft" size="lg" color="gray">{{ link.title }}</UButton>
           </div>

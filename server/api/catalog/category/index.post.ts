@@ -25,7 +25,7 @@ export default defineEventHandler(async (event: H3Event) => {
             const category = await Category.create({
                 title: title.trim(),
                 show_menu: !!show_menu,
-                raw_tags: JSON.parse(raw_tags),
+                raw_tags,
                 html_meta,
                 html_keywords,
                 html_title,
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event: H3Event) => {
             });
 
             if (parent_id) {
-                await category.$set('parent', parent_id);
+                await category.setParent(parent_id);
             }
         }
     } catch (error) {

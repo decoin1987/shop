@@ -121,6 +121,9 @@ const bouquetNameMap = () => {
 
 bouquetNameMap()
 
+const cartStore = useCartStore()
+const productStore = useProductStore()
+
 const LOCATION = ref<YMapLocationRequest>({
   center: [65.578139, 57.106595],
   zoom: 19,
@@ -151,10 +154,11 @@ const options = {
       <h1 class="p-0 m-0 text-5xl mb-6">Витрина</h1>
       <div class="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-3">
         <Card
-            v-for="p in products.slice(0, 8)"
-            :key="p.id"
+            v-for="product in productStore.products.rows"
+            :key="product.id"
             @showSaleDescription="showSaleDescription"
-            :product="p"
+            :product="product"
+            @addToCart="cartStore.addToCart"
         />
       </div>
       <UButton>Смотреть всё</UButton>

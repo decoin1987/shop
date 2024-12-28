@@ -5,33 +5,25 @@ import Tag from "../../../models/tag";
 import ProductImage from "../../../models/product_image";
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
-    const {id, title, description, sort, parent_id} = await readBody(event)
-    const category: any  = await Product.findOne({
+    const product = await readBody(event)
+    var productToChange: any = await Product.findOne({
         where: {
-            id: id,
+            id: product.id,
         }
     })
-    if (category) {
-        category.title = title
-        category.description = description
-        await category.save()
+    if (productToChange) {
+        productToChange.title = product.title
+        productToChange.count = product.count
+        productToChange.price = product.price
+        productToChange.descriptions = product.descriptions
+        productToChange.raw_tag = product.raw_tag
+        productToChange.slug = product.title
+        productToChange.as_consist = product.as_consist
+        productToChange.showcase = product.showcase
+        productToChange.active = product.active
+        productToChange.vendor_code = product.vendor_code
+        productToChange.category_id = product.category_id
+        await productToChange.save()
     }
-    return await Product.findAndCountAll(
-        {
-            include: [
-                {
-                    model: Tag,
-                    as: 'tags',
-                },
-                {
-                    model: ProductImage,
-                    as: 'product_images',
-                },
-            ],
-            distinct:true,
-            order: [['created_at', 'DESC']],
-            // limit: 5,
-            // offset:2,
-        }
-    )
+    return productToChange
 });

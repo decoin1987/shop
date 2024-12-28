@@ -1,7 +1,7 @@
 import {
     createError,
     defineEventHandler,
-    getRequestHeader,
+    getRequestHeader, getRouterParam,
     MultiPartData,
     readMultipartFormData,
 } from 'h3';
@@ -14,9 +14,10 @@ const filePath = CONFIG.filePath;
 const logPath = CONFIG.logPath;
 
 export default defineEventHandler(async (event) => {
-    let payload:MultiPartData[] = await readMultipartFormData(event);
-    const product_id  = getRequestHeader(event, 'product_id')
+    let payload:MultiPartData[] | undefined = await readMultipartFormData(event);
+    const product_id  = await getRouterParam(event, 'id')
     console.log(product_id)
+    console.log(payload)
     try {
         await IMAGES.doDirSync(filePath);
         // @ts-ignore

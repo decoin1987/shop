@@ -14,27 +14,27 @@ export default defineEventHandler(async (event) => {
     return await Product.findOne({
         where: {id},
         include: [
-            {
-                model: Tag,
-                as: 'tags',
-            },
-            {
-                model: ProductImage,
-                as: 'product_images',
-            },
-            {
-                model: Category,
-                as: 'upsale_categories',
-                include:[
-                    {
-                        model: Product,
-                        as: 'upsale_products'
-                    }]
-            },
-            {
-                model: Category,
-                as: 'category',
-            },
+            // {
+            //     model: Tag,
+            //     as: 'tags',
+            // },
+            // {
+            //     model: ProductImage,
+            //     as: 'product_images',
+            // },
+            // {
+            //     model: Category,
+            //     as: 'upsale_categories',
+            //     include:[
+            //         {
+            //             model: Product,
+            //             as: 'upsale_products'
+            //         }]
+            // },
+            // {
+            //     model: Category,
+            //     as: 'category',
+            // },
         ],
     })
 })

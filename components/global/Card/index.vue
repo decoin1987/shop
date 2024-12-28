@@ -35,6 +35,20 @@ const cardStore = useCartStore()
 const image = computed(() => {
   return !!props.product.product_images ? props.product?.product_images[0]?.url : false
 })
+const cart = useLocalStorage('cart', [])
+const delItem = (product) => {
+  cart.value = cart.value.filter(el => el.id !== product.id)
+}
+const orderItemDel = (product) => {
+  const order_item = cart.value.find(el => el.id === product.id)
+  if (order_item.count <= 1) order_item.count = 1
+  else order_item.count--
+}
+const orderItemAdd = (product) => {
+  const order_item = cart.value.find(el => el.id === product.id)
+  if (order_item.count >= 10) order_item.count = 10
+  else order_item.count++
+}
 </script>
 
 <template>
@@ -75,8 +89,37 @@ const image = computed(() => {
 
 
     </div>
+
     <template #footer>
-        <CardButton @click="$emit('addToCart', product)">В корзину</CardButton>
+      <ClientOnly>
+        <template v-if="!cart.find(el => el.id === product?.id)">
+          <CardButton class="w-full" @click="$emit('addToCart', product)">В корзину</CardButton>
+<!--          <UButton @click="cartStore.addToCart(product)" :ui="{ rounded: 'rounded-full' }" color="black">Добавить в корзину</UButton>-->
+        </template>
+        <template  v-if="cart.find(el => el.id === product?.id)">
+          <div class="flex w-full mr-3 items-center gap-2  h-12 rounded-md rounded-br-card rounded-tl-card bg-gray-200">
+            <UButton class="h-12 rounded-md rounded-br-card rounded-tl-card" @click="orderItemDel(product)" :ui="{ rounded: 'rounded-full' }" icon="i-solar-minus-circle-linear" variant="ghost" color="primary" />
+            <p style="line-height: 100%;" class="text-xl bg-white h-10 mx-auto w-20 text-center justify-center px-3 flex items-center rounded-full text-center">
+              {{ cart.find(el => el.id === product?.id).count }}
+            </p>
+            <UButton class="h-12 rounded-md rounded-br-card rounded-tl-card" @click="orderItemAdd(product)" :ui="{ rounded: 'rounded-full' }" icon="i-solar-add-circle-linear" variant="ghost" color="primary" />
+          </div>
+            <UButton class="rounded-md rounded-br-card rounded-tl-card h-12 px-4 ml-auto text-white bg-red-600 hover:bg-gray-900" @click="delItem(product)" :ui="{ rounded: 'rounded-full' }" icon="i-solar-trash-bin-trash-line-duotone" variant="ghost" color="white" />
+            <!--          <IconButton>-->
+            <!--            <IconMinus color="#000" />-->
+            <!--          </IconButton>-->
+            <!--          <Input style="width: 80px" />-->
+            <!--          <IconButton>-->
+            <!--            <IconPlus color="#000" />-->
+            <!--          </IconButton>-->
+            <!--          <IconButton @click="show = true" size="md" style="padding: 3px">-->
+            <!--            <IconTrash color="#00000050" />-->
+            <!--          </IconButton>-->
+
+
+        </template>
+      </ClientOnly>
+
     </template>
   </UCard>
 </template>

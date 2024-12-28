@@ -499,14 +499,14 @@ const categoryToSaveBase = CategoryNames.map((elementNames, index) => {
     return {
         title: elementNames,
         sort: 100 + index,
-        slug: stringSlugify(elementNames)
+        slug: elementNames
     }
 })
 const flowersToSaveBase = FlowersNames.map(elementNames => {
     return {
         title: elementNames,
         sort: 500,
-        slug: stringSlugify(elementNames)
+        slug: elementNames
     }
 })
 
@@ -527,7 +527,7 @@ export default defineNitroPlugin(async () => {
         //
         // await Category.bulkCreate(flowersWithParent)
         // await Tag.bulkCreate(tags)
-        // await Product.bulkCreate(product)
+        // await Product.bulkCreate(product.map(el => el = {...el, slug: el.title}))
 
         console.log('Соединение с БД было успешно установлено')
     } catch (e) {

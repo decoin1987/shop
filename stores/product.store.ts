@@ -44,7 +44,6 @@ export const useProductStore = defineStore('product', () => {
         const formData = new FormData()
         console.log(event)
         for await (let img of Array.from(event.photos)) {
-
             var filename = `${uuid()}.${img.name.split('.').pop()}`
             const file = await new Blob([img], {type: img.type})
             formData.append(filename, file);

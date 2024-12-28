@@ -14,10 +14,11 @@ interface CategoryAttributes {
     description: string;
     sort: number;
     slug: string;
+    parent_id?: string;
 }
 
 // Описание типа для создания новой категории
-type CategoryCreationAttributes = Optional<CategoryAttributes, 'id' | 'show_menu' | 'sort'>; // Опциональными являются поля, у которых есть значения по умолчанию
+type CategoryCreationAttributes = Optional<CategoryAttributes, 'id' | 'show_menu' | 'sort' | 'parent_id'>; // Опциональными являются поля, у которых есть значения по умолчанию
 
 class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
     declare id: string; // primary key
@@ -31,6 +32,7 @@ class Category extends Model<CategoryAttributes, CategoryCreationAttributes> imp
     declare description: string;
     declare sort: number;
     declare slug: string;
+    declare parent_id: string;
 
     // Определение метода для установки значения поля slug
     public setSlug(value: string): void {
@@ -76,8 +78,13 @@ Category.init({
         type: DataTypes.INTEGER,
         defaultValue: 500,
     },
+    parent_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+    },
     slug: {
         type: DataTypes.STRING,
+        unique: true,
         set: function (value: string) {
             this.setDataValue('slug', stringSlugify(value));
         }

@@ -34,10 +34,12 @@ export const useCategoryStore = defineStore('category', () => {
     }
 
     const editCategory = async (data) => {
+        // console.log(data)
         useFetch('/api/catalog/category', {
             headers: {
                 authorization: !!token.value ? token.value : '',
             },
+
             method: "PUT",
             onResponse({request, response, options}) {
                 if (response._data.statusCode) {
@@ -47,6 +49,30 @@ export const useCategoryStore = defineStore('category', () => {
                 return updateCategories(response._data)
             },
             body: data
+        })
+    }
+
+    const updateCategoryBulk = async (data) => {
+        useFetch('/api/catalog/category/bulk', {
+            onResponse({request, response, options}) {
+                if (response._data.statusCode) {
+                    return console.error(response._data.message)
+                }
+                return updateCategories(response._data)
+            },
+            method: "PUT",
+            body: data
+        })
+    }
+    const copyCategory = async (id) => {
+        useFetch('/api/catalog/category/copy', {
+            onResponse({response}) {
+                return updateCategories(response._data)
+            },
+            method: "POST",
+            body: {
+                id: id
+            }
         })
     }
 
@@ -80,5 +106,5 @@ export const useCategoryStore = defineStore('category', () => {
     }
 
     const categories = useState('categories', async () => await getCategories())
-    return {createCategory, getCategories, deleteCategory, editCategory, getCategory, categories}
+    return {createCategory, updateCategoryBulk, copyCategory, getCategories, deleteCategory, editCategory, getCategory, categories}
 })
