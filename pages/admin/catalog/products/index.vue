@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {useCategoryStore} from "../stores/category.store";
-import {useTagStore} from "../stores/tag.store";
-import {useProductStore} from "../stores/product.store";
+import {useCategoryStore} from "~/stores/category.store";
+import {useTagStore} from "~/stores/tag.store";
+import {useProductStore} from "~/stores/product.store";
 import {object, string, type InferType, boolean, array, number} from 'yup'
 import {computed, ref} from "vue";
 
@@ -31,7 +31,7 @@ const state = ref({
 const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
 const productStore = useProductStore()
-const actionMenu = row => [
+const actionMenu = (row:any) => [
   [{
     label: 'Изменить',
     icon: 'i-heroicons-pencil-square-20-solid',

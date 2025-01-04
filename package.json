@@ -14,6 +14,7 @@
     "@egjs/vue3-flicking": "^4.11.4",
     "@nuxt/image": "^1.8.1",
     "@pinia/nuxt": "^0.7.0",
+    "@vuepic/vue-datepicker": "^10.0.0",
     "@vueuse/core": "^11.2.0",
     "@vueuse/nuxt": "^11.2.0",
     "bcrypt": "^5.1.1",

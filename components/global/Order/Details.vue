@@ -62,8 +62,11 @@ const delUpSale = (order_item, link) => {
           <UButton :ui="{rounded:'rounded-full'}" size="xs">К определенному времени</UButton>
         </div>
         <div class="flex flex-row gap-4">
-          <img class="rounded-lg rounded-tl-2xl rounded-br-2xl" style="object-fit: cover; aspect-ratio: 1/1"
-               src="https://www.odealarose.com/media/cache/720_960_webp/product/phpEZE3lX-64c3ddf515a1b.webp"
+          <img v-if="order_item?.product_images.length" class="rounded-lg rounded-tl-2xl rounded-br-2xl" style="object-fit: cover; aspect-ratio: 1/1"
+               :src="`img/product/${order_item?.product_images[0].url}`"
+               width="100" height="100" alt="">
+          <img v-else class="rounded-lg rounded-tl-2xl rounded-br-2xl" style="object-fit: cover; aspect-ratio: 1/1"
+               src="public/img/common/nophoto.png"
                width="100" height="100" alt="">
           <div class="flex flex-col gap-3 p-1">
             <p class="font-medium text-lg">{{ order_item.title }}</p>

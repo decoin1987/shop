@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../utils/db.connect';
 import {IMAGES} from "../utils/helpers";
 import Product from "./product";
+import Category from "./category";
 
 export interface ProductImageAttributes {
     id: string;

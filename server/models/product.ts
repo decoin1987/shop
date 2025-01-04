@@ -7,6 +7,7 @@ import ProductImage from './product_image';
 import {sequelize} from "../utils/db.connect";
 import ProductTag from "./product_tag";
 import UpsaleCategory from "./upsale_category";
+import Tax from "./tax";
 
 export interface ProductAttributes {
     id: string;
@@ -17,10 +18,18 @@ export interface ProductAttributes {
     raw_tag: object[];
     slug: string;
     as_consist: boolean;
+    vendor_code: string;
     showcase: boolean;
     active: boolean;
     decrease_stock: boolean;
-    vendor_code: string;
+    weight: number;
+    size: string;
+    sort: number;
+    html_title: string;
+    html_h1: string;
+    html_tags: string;
+    meta_keywords: string;
+    meta_description: string;
 }
 
 // Тип для создания нового продукта
@@ -39,6 +48,14 @@ class Product extends Model<ProductAttributes, ProductCreationAttributes> implem
     declare active: boolean;
     declare decrease_stock: boolean;
     declare vendor_code: string;
+    declare weight: number;
+    declare size: string;
+    declare sort: number;
+    declare html_title: string;
+    declare html_h1: string;
+    declare html_tags: string;
+    declare meta_keywords: string;
+    declare meta_description: string;
 
     // Метод для установки значения поля slug
     public setSlug(value: string): void {
@@ -93,6 +110,31 @@ Product.init({
         defaultValue: false
     },
     vendor_code: {
+        type: DataTypes.STRING,
+    },
+    weight: {
+        type: DataTypes.INTEGER,
+    },
+    size: {
+        type: DataTypes.STRING,
+    },
+    sort: {
+        type: DataTypes.INTEGER,
+        defaultValue: 100
+    },
+    html_title: {
+        type: DataTypes.STRING,
+    },
+    html_h1: {
+        type: DataTypes.STRING,
+    },
+    html_tags: {
+        type: DataTypes.STRING,
+    },
+    meta_keywords: {
+        type: DataTypes.STRING,
+    },
+    meta_description: {
         type: DataTypes.STRING,
     },
 }, {
@@ -173,6 +215,9 @@ Category.belongsToMany(Product, { through: { model: UpsaleCategory }, as: 'upsal
 Category.hasMany(Product, { as: 'products', foreignKey: 'category_id' }, );
 Product.belongsTo(Category, { as: 'category', foreignKey: 'category_id' });
 
-Product.hasMany(ProductImage, { as: 'product_images', foreignKey: 'product_id', onDelete: 'CASCADE', hooks: true });
+Tax.hasMany(Product, { as: 'products', foreignKey: 'tax_id' }, );
+Product.belongsTo(Tax, { as: 'tax', foreignKey: 'category_id' });
 
+Product.hasMany(ProductImage, { as: 'product_images', foreignKey: 'product_id', onDelete: 'CASCADE', hooks: true });
+ProductImage.belongsTo(Product, { as: 'product', foreignKey: 'product_id' });
 export default Product;

@@ -516,7 +516,6 @@ export default defineNitroPlugin(async () => {
         await sequelize.sync({alter: true})
         // await User.sync({force: true});
 
-        // await Category.bulkCreate(categoryToSaveBase)
         // const flower = await Category.findOne({where: {title: "Цветы поштучно"}})
         //
         // // Добавляем parent_id ко всем цветам
@@ -526,6 +525,7 @@ export default defineNitroPlugin(async () => {
         // }))
         //
         // await Category.bulkCreate(flowersWithParent)
+        // await Category.bulkCreate(categoryToSaveBase)
         // await Tag.bulkCreate(tags)
         // await Product.bulkCreate(product.map(el => el = {...el, slug: el.title}))
 

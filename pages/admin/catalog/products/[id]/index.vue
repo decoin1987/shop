@@ -169,6 +169,7 @@ const deleteRawTag = (item: any) => {
 </script>
 
 <template>
+  {{product}}
   <div v-if="productStatus === 'success'" class="flex flex-col items-start py-8 px-10">
     <Breadcrumbs v-if="product?.title" :links="links" :lastLink="{
   label: product.title,
@@ -178,31 +179,11 @@ const deleteRawTag = (item: any) => {
     <UHorizontalNavigation size="" :links="nav" class="w-full border-b border-gray-500 dark:border-gray-800"/>
     <template v-if="route.query.tab === 'main' || route.query.tab === undefined">
       <UDivider class="my-6" label="Общее"/>
-
       <ProductUpdateCommonInfo :product="product" @submit="onSubmit" />
     </template>
     <template v-if="route.query.tab === 'data'">
       <UDivider class="my-6" label="Данные"/>
-      <UForm :state="state" class="flex f-full flex-col gap-3" @submit="onSubmit">
-        <UInput size="xl" placeholder="Модель"></UInput>
-        <UInput size="xl" placeholder="Артикул"></UInput>
-        <UInput size="xl" placeholder="Расположение"></UInput>
-        <UInput size="xl" placeholder="Цена"></UInput>
-        <UInput size="xl" placeholder="Налог"></UInput>
-        <UInput size="xl" placeholder="Количество"></UInput>
-        <UInput size="xl" placeholder="Максималььное количество"></UInput>
-        <UInput size="xl" placeholder="Вычитать со склада"></UInput>
-        <UInput size="xl" placeholder="Отсутсвие на складе"></UInput>
-        <UInput size="xl" placeholder="Необходима доставка"></UInput>
-        <UInput size="xl" placeholder="SEO-URL"></UInput>
-        <UInput size="xl" placeholder="Дата поступления"></UInput>
-        <UInput size="xl" placeholder="Размеры (Д x Ш x В)"></UInput>
-        <UInput size="xl" placeholder="Единица длины"></UInput>
-        <UInput size="xl" placeholder="Вес"></UInput>
-        <UInput size="xl" placeholder="Единица веса"></UInput>
-        <UInput size="xl" placeholder="Статус"></UInput>
-        <UInput size="xl" placeholder="Порядок сортировки"></UInput>
-      </UForm>
+      <ProductUpdateDataInfo :product="product" @submit="onSubmit" />
     </template>
     <template v-if="route.query.tab === 'links'">
       <UDivider class="my-6" label="Связи"/>
@@ -246,7 +227,7 @@ const deleteRawTag = (item: any) => {
         <UInput v-model="state_raw.value" size="xl" placeholder="Значение"/>
         <UButton size="xl" label="Добавить" @click="addRawTag"></UButton>
       </div>
-      <UButton size="xl" @click="onSubmit(product)" label="Сохранить все"/>
+      <UButton size="xl" @click="onSubmit" label="Сохранить все"/>
     </template>
     <template v-if="route.query.tab === 'options'">
       <UDivider class="my-6" label="Опции"></UDivider>
