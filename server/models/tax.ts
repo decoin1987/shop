@@ -7,7 +7,6 @@ class Tax extends Model {
     declare title: string;
     declare descriptions: string;
     declare value: string;
-    declare api: string;
 }
 
 Tax.init({
@@ -27,10 +26,6 @@ Tax.init({
     value: {
         type: DataTypes.STRING,
     },
-    payment_integration_tag: {
-        type: DataTypes.STRING,
-    },
-
 }, {
     sequelize,
     modelName: 'tax',

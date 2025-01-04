@@ -76,7 +76,7 @@ const customersLinks = [
     to: '/admin/customers/groups',
   },
   {
-    label: 'Клубы',
+    label: 'Клуб',
     icon: 'i-ph-flower-light',
     to: '/admin/customers/clubs',
   },

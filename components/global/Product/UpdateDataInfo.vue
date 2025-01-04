@@ -44,6 +44,9 @@ const date = ref();
       <UFormGroup label="Вычитать со склада">
         <UToggle v-model="props.product.decrease_stock" size="xl" placeholder="Вычитать со склада"/>
       </UFormGroup>
+      <UFormGroup label="Может быть в составе">
+        <UToggle v-model="props.product.as_consist" size="xl" placeholder="Может быть в составе"/>
+      </UFormGroup>
     </div>
     <UDivider />
     <div class="flex frex-row w-full gap-4">
