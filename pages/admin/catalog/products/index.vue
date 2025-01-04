@@ -17,20 +17,21 @@ const schema = object({
 })
 type Schema = InferType<typeof schema>
 
+
+
+const categoryStore = useCategoryStore()
+const tagStore = useTagStore()
+const productStore = useProductStore()
 const state = ref({
-  title: '123',
-  price: 123,
-  vendorCode: '12344',
+  title: '',
+  price: 0,
+  vendorCode: '',
   asConsist: false,
   photos: [],
   category: undefined,
   tag: [],
   consist: [],
 })
-
-const categoryStore = useCategoryStore()
-const tagStore = useTagStore()
-const productStore = useProductStore()
 const actionMenu = (row:any) => [
   [{
     label: 'Изменить',
@@ -137,11 +138,12 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-start p-10">
-    <h1 class="text-5xl font-medium mb-10">Товары</h1>
-    <div class="flex w-full flex-col gap-2 mb-10">
-      <UForm :schema="schema" :state="state" class="flex flex-row gap-10" @submit="onSubmit">
-        <div class="flex w-3/6 flex-col gap-4">
+  {{productStore.products}}
+  <section class="flex flex-col items-start py-8 px-10" style="position: relative">
+    <h1 class="text-3xl mb-6 font-sans">Товары</h1>
+    <UForm :state="state" class="p-4 ring-2 ring-gray-300 rounded-lg mt-1 flex w-full flex-col gap-3 mb-10"
+           @submit="onSubmit">
+        <div class="flex w-full flex-col gap-4">
           <UFormGroup label="Название" name="title">
             <UInput size="xl" v-model="state.title" type="text" placeholder="Название"/>
           </UFormGroup>
@@ -181,7 +183,6 @@ const onSubmit = async () => {
           </UFormGroup>
         </div>
       </UForm>
-    </div>
     <div class="w-full flex px-3 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
       <UInput variant="none" class="w-full" v-model="q" placeholder="Поиск"/>
     </div>
@@ -222,7 +223,7 @@ const onSubmit = async () => {
         </UDropdown>
       </template>
     </UTable>
-  </div>
+  </section>
 
 </template>
 
