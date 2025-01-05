@@ -138,7 +138,7 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  {{productStore.products}}
+<!--  {{productStore.products}}-->
   <section class="flex flex-col items-start py-8 px-10" style="position: relative">
     <h1 class="text-3xl mb-6 font-sans">Товары</h1>
     <UForm :state="state" class="p-4 ring-2 ring-gray-300 rounded-lg mt-1 flex w-full flex-col gap-3 mb-10"
@@ -160,7 +160,10 @@ const onSubmit = async () => {
             <USelect size="xl" placeholder="Категория" v-model="state.category" :options="categoryStore.categories.rows"
                      valueAttribute="id" optionAttribute="title"/>
           </UFormGroup>
-
+          <UFormGroup label="Цвета" name="tag">
+            <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple
+                         valueAttribute="id" optionAttribute="title"/>
+          </UFormGroup>
           <UFormGroup label="Теги" name="tag">
             <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple
                          valueAttribute="id" optionAttribute="title"/>

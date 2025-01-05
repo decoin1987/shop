@@ -8,6 +8,7 @@ import {sequelize} from "../utils/db.connect";
 import ProductTag from "./product_tag";
 import UpsaleCategory from "./upsale_category";
 import Tax from "./tax";
+import Color from "./colors";
 
 export interface ProductAttributes {
     id: string;
@@ -203,11 +204,14 @@ Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'produ
 Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'consist_id', as: 'consist_products' });
 
 Product.belongsToMany(Tag, { through: { model: ProductTag }, as: 'tags', onDelete: 'CASCADE', timestamps: false });
-Tag.belongsToMany(Product, { through: { model: ProductTag }, as: 'products', onDelete: 'CASCADE', timestamps: false });
+Tag.belongsToMany(Product, { through: { model: ProductTag }, as: 'products', timestamps: false });
 Product.hasMany(ProductTag);
 ProductTag.belongsTo(Product);
 Tag.hasMany(ProductTag);
 ProductTag.belongsTo(Tag);
+
+Product.belongsToMany(Color, { through: 'product_colors', foreignKey: 'product_id', as: 'colors', onDelete: 'CASCADE', timestamps: false });
+Color.belongsToMany(Product, { through: 'product_colors', foreignKey: 'color_id', onDelete: 'CASCADE', timestamps: false });
 
 Product.belongsToMany(Category, { through: { model: UpsaleCategory }, as: 'upsale_categories'});
 Category.belongsToMany(Product, { through: { model: UpsaleCategory }, as: 'upsale_products'});
