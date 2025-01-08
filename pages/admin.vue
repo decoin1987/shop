@@ -125,17 +125,17 @@ const systemLinks = [
     to: '/admin/settings',
   },
 ]
-const reportLinks = [
-
-]
+const reportLinks = []
 </script>
 
 <template>
   <section class="flex flex-row">
-    <nav class="aside-nav flex-col gap-8 h-svh bg-gray-500 pb-10" style="position:sticky; top: 0; min-width: 320px; overflow-y: scroll">
-      <div class="pt-3 pb-1 px-5 bg-gray-500 shadow-lg" style="height: 70px; position: sticky; top: 0; border-bottom: 1px #ffffff20 solid">
+    <nav class="aside-nav flex-col gap-8 h-svh bg-gray-500 pb-10"
+         style="position:sticky; top: 0; min-width: 320px; overflow-y: scroll">
+      <div class="pt-3 pb-1 px-5 bg-gray-500 shadow-lg"
+           style="height: 70px; position: sticky; top: 0; border-bottom: 1px #ffffff20 solid">
         <NuxtLink to="/admin">
-          <Logo height="100%" />
+          <Logo height="100%"/>
         </NuxtLink>
       </div>
       <ul class="flex flex-col w-full">
@@ -204,9 +204,11 @@ const reportLinks = [
       <nav class="pt-3 pb-4 px-5 bg-gray-500 shadow-lg" style="height: 70px; position: sticky; top: 0; z-index: 1">
         <NuxtLink to="/">На главную</NuxtLink>
       </nav>
-      <ClientOnly>
-        <NuxtPage/>
-      </ClientOnly>
+      <Suspense>
+        <ClientOnly>
+          <NuxtPage/>
+        </ClientOnly>
+      </Suspense>
     </div>
 
   </section>
@@ -218,6 +220,7 @@ const reportLinks = [
 .aside-nav {
   border-right: 1px solid #00000030
 }
+
 .aside-nav::-webkit-scrollbar {
   width: 3px;
 }

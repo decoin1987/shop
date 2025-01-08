@@ -219,8 +219,8 @@ Category.belongsToMany(Product, { through: { model: UpsaleCategory }, as: 'upsal
 Category.hasMany(Product, { as: 'products', foreignKey: 'category_id' }, );
 Product.belongsTo(Category, { as: 'category', foreignKey: 'category_id' });
 
-Tax.hasMany(Product, { as: 'products', foreignKey: 'tax_id' }, );
-Product.belongsTo(Tax, { as: 'tax', foreignKey: 'category_id' });
+Tax.hasMany(Product, { as: 'product', foreignKey: 'tax_id' }, );
+Product.belongsTo(Tax, { as: 'tax', foreignKey: 'tax_id' });
 
 Product.hasMany(ProductImage, { as: 'product_images', foreignKey: 'product_id', onDelete: 'CASCADE', hooks: true });
 ProductImage.belongsTo(Product, { as: 'product', foreignKey: 'product_id' });

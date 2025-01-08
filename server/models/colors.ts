@@ -29,17 +29,26 @@ Color.init({
     rgb: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     hsl: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     hwb: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+    },
+    lab: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    xyz: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    hsv: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
 }, {
     sequelize,

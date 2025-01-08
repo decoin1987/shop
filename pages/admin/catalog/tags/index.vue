@@ -26,6 +26,10 @@ const onSubmit = async () => {
 }
 const columns = [
   {
+    key: 'id',
+    label: '',
+  },
+  {
     key: 'title',
     label: 'Название',
     sortable: true,

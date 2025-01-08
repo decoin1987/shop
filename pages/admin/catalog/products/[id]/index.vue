@@ -90,55 +90,46 @@ const nav = [
     label: 'Данные',
     icon: 'i-heroicons-home',
     click: () => router.replace({query: {tab: 'data'}}),
-
   },
   {
     label: 'Связи',
     icon: 'i-heroicons-chart-bar',
     click: () => router.replace({query: {tab: 'links'}}),
-
   },
   {
     label: 'Атрибуты',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'attr'}}),
-
   },
   {
     label: 'Опции',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'options'}}),
-
   },
   {
     label: 'Регулярные платежи',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'payments'}}),
-
   },
   {
     label: 'Скидки',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'sales'}}),
-
   },
   {
     label: 'Акции',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'offers'}}),
-
   },
   {
     label: 'Изображения',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'images'}}),
-
   },
   {
     label: 'Бонусы',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'bonuses'}}),
-
   },
   ]
 

@@ -157,7 +157,9 @@ watch(cart, () => {
       </ClientOnly>
     </UContainer>
   </nav>
+  <Suspense>
   <slot/>
+  </Suspense>
   <UNotifications color="green" />
   <footer class="bg-gray-900">
       <UContainer class="w-full flex py-14 flex-col gap-6">
@@ -204,6 +206,7 @@ watch(cart, () => {
           </div>
       </UContainer>
   </footer>
+
 </template>
 
 <style scoped lang="scss">

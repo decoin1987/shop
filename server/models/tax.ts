@@ -20,7 +20,7 @@ Tax.init({
         allowNull: false,
         unique: true,
     },
-    descriptions: {
+    description: {
         type: DataTypes.STRING,
     },
     value: {

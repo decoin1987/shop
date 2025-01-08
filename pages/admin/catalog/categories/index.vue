@@ -104,6 +104,10 @@ const items = (row) => [
 ]
 const columns = [
   {
+    key: 'id',
+    label: '#',
+  },
+  {
     key: 'title',
     label: 'Название',
     sortable: true,

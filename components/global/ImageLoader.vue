@@ -99,7 +99,7 @@ onChange((files) => {
   text-align: center;
   justify-content: center;
   position: absolute;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
 }
 .del-btn:hover {
   opacity: 1;

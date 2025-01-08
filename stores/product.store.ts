@@ -24,9 +24,6 @@ export const useProductStore = defineStore('product', () => {
         })
         // return updateCategory(data.value)
     }
-
-
-
     const deleteProduct = async (product) => {
         useFetch('/api/catalog/product', {
             onResponse({response}) {
@@ -42,19 +39,17 @@ export const useProductStore = defineStore('product', () => {
     }
     const createProduct = async (event, copy = false, ) => {
         const formData = new FormData()
-        console.log(event)
-        for await (let img of Array.from(event.photos)) {
-            var filename = `${uuid()}.${img.name.split('.').pop()}`
-            const file = await new Blob([img], {type: img.type})
-            formData.append(filename, file);
+        for await (let field of Object.keys(event)) {
+            if (field === 'photos') {
+                for await (let img of event[field]) {
+                    var filename = `${uuid()}.${img.name.split('.').pop()}`
+                    const file = await new Blob([img], {type: img.type})
+                    formData.append(filename, file);
+                }
+            }
+            formData.append(field, event[field])
         }
-        formData.append('title', event.title)
-        formData.append('price', event.price)
-        formData.append('vendor_code', event.vendor_code)
-        formData.append('as_consist', event.as_consist)
-        formData.append('category', event.category)
-        formData.append('tag', event.tag)
-        formData.append('consist', event.consist)
+
         await useFetch('/api/catalog/product', {
             onResponse({request, response, options}) {
                 console.log(response._data)

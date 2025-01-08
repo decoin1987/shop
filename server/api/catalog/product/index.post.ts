@@ -18,7 +18,16 @@ export default defineEventHandler(async (event) => {
                 product[value.name] = value.data.toString('utf-8');
             }
         }
+        console.log(product)
         const productItem: ProductAttributes = await Product.create({
+            html_h1: product.html_h1 as string || '',
+            html_tags: product.html_tags as string || '',
+            html_title: product.html_title as string || '',
+            meta_description: product.meta_description as string || '',
+            meta_keywords: product.meta_keywords as string || '',
+            size: product.size as string || '',
+            sort: parseInt(product.sort as string) || 500,
+            weight: parseInt(product.weight as string) || 0,
             active: !!product.active || true,
             count: parseInt(product.count as string) || 0,
             decrease_stock: !!product.decrease_stock || false,
@@ -31,10 +40,12 @@ export default defineEventHandler(async (event) => {
             as_consist: !!product.as_consist,
             slug: product.title as string
         });
-        console.log(product.tag)
         if (product.category) await productItem.setCategory(product.category);
-        if (product.category) await productItem.addUpsale_categories(product.category);
+        // if (product.category) await productItem.addUpsale_categories(product.category) TODO функция работает доделать фронт и модельки
+        if (product.consist) await productItem.addProduct_consists((product.consist as string).split(','));
+        if (product.colors) await productItem.addColors((product.colors as string).split(','));
         if (product.tag) await productItem.addTags((product.tag as string).split(','));
+        if (product.tax) await productItem.setTax(product.tax);
 
         for (const value of formData.values()) {
             if (value?.type?.includes('image')) {

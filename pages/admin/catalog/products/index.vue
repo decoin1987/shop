@@ -4,12 +4,16 @@ import {useTagStore} from "~/stores/tag.store";
 import {useProductStore} from "~/stores/product.store";
 import {object, string, type InferType, boolean, array, number} from 'yup'
 import {computed, ref} from "vue";
+import {useFetch} from "nuxt/app";
 
 const schema = object({
   title: string().required('Введите имя'),
   price: number().required('Цена обязательна для заполнения'),
   vendorCode: string().required('Введите артикул'),
-  asConsist: boolean(),
+  as_consist: boolean(),
+  showcase: boolean(),
+  active: boolean(),
+  decrease_stock: boolean(),
   photos: array(),
   category: string(),
   tag: array(),
@@ -18,6 +22,8 @@ const schema = object({
 type Schema = InferType<typeof schema>
 
 
+const {data: colors, status: colorStatus, refresh: colorRefresh} = useFetch(`/api/utils/colors`)
+const {data: tax, status: taxStatus, refresh: taxRefresh} = useFetch(`/api/utils/taxes`)
 
 const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
@@ -26,13 +32,18 @@ const state = ref({
   title: '',
   price: 0,
   vendorCode: '',
-  asConsist: false,
+  as_consist: false,
+  showcase: false,
+  active: true,
+  decrease_stock: false,
   photos: [],
   category: undefined,
   tag: [],
+  tax: undefined,
+  colors: [],
   consist: [],
 })
-const actionMenu = (row:any) => [
+const actionMenu = (row: any) => [
   [{
     label: 'Изменить',
     icon: 'i-heroicons-pencil-square-20-solid',
@@ -50,6 +61,10 @@ const actionMenu = (row:any) => [
   }]
 ]
 const columns = [
+  {
+    key: 'id',
+    label: '#',
+  },
   {
     key: 'title',
     label: 'Название',
@@ -112,7 +127,7 @@ const columns = [
 ]
 const selected = ref([])
 const q = ref('')
-const filteredRows = computed(() => {
+const filteredRows = await computed(() => {
   if (!q.value) {
     return productStore.products.rows
   }
@@ -129,63 +144,94 @@ const onSubmit = async () => {
     price: state.value.price,
     vendor_code: state.value.vendor_code,
     as_consist: state.value.as_consist,
+    showcase: state.value.showcase,
+    active: state.value.active,
+    decrease_stock: state.value.decrease_stock,
     photos: state.value.photos,
     category: state.value.category,
     tag: state.value.tag,
+    tax: state.value.tax,
+    colors: state.value.colors,
     consist: state.value.consist,
   })
 }
 </script>
 
 <template>
-<!--  {{productStore.products}}-->
+  <!--  {{productStore.products}}-->
   <section class="flex flex-col items-start py-8 px-10" style="position: relative">
     <h1 class="text-3xl mb-6 font-sans">Товары</h1>
     <UForm :state="state" class="p-4 ring-2 ring-gray-300 rounded-lg mt-1 flex w-full flex-col gap-3 mb-10"
            @submit="onSubmit">
-        <div class="flex w-full flex-col gap-4">
-          <UFormGroup label="Название" name="title">
-            <UInput size="xl" v-model="state.title" type="text" placeholder="Название"/>
-          </UFormGroup>
+      <div class="flex w-full flex-row gap-4">
+        <UFormGroup class="w-full" label="Название" name="title">
+          <UInput size="xl" v-model="state.title" type="text" placeholder="Название"/>
+        </UFormGroup>
+        <UFormGroup class="w-full" label="Цена" name="price">
+          <UInput type="number" size="xl" v-model="state.price" placeholder="Цена"/>
+        </UFormGroup>
+        <UFormGroup class="w-full" label="Артикул" name="vendorCode">
+          <UInput size="xl" v-model="state.vendor_code" placeholder="Артикул"/>
+        </UFormGroup>
+        <UFormGroup class="w-full" label="Налог" name="tax">
+          <USelect size="xl" placeholder="Налог" v-model="state.tax" :options="tax?.rows"
+                   valueAttribute="id" optionAttribute="title"/>
+        </UFormGroup>
+      </div>
+      <div class="flex flex-row gap-4">
+        <UFormGroup class="w-full" label="Категория" name="category">
+          <USelect size="xl" placeholder="Категория" v-model="state.category" :options="categoryStore.categories.rows"
+                   valueAttribute="id" optionAttribute="title"/>
+        </UFormGroup>
+        <UFormGroup class="w-full" v-if="colorStatus==='success'" label="Цвет" name="tag">
+          <USelectMenu size="xl" placeholder="Цвет" v-model="state.colors" :options="colors.rows" multiple
+                       valueAttribute="id" optionAttribute="title"/>
+        </UFormGroup>
+        <UFormGroup class="w-full" label="Теги" name="tag">
+          <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple
+                       valueAttribute="id" optionAttribute="title"/>
+        </UFormGroup>
+        <UFormGroup class="w-full" label="Состав" name="consist">
+          <USelectMenu size="xl" placeholder="Состав" v-model="state.consist" :options="productStore.products.rows"
+                       multiple valueAttribute="id" optionAttribute="title"/>
+        </UFormGroup>
+      </div>
+      <div class="flex gap-4">
 
-          <UFormGroup label="Цена" name="price">
-            <UInput size="xl" v-model="state.price" placeholder="Цена"/>
-          </UFormGroup>
+        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+                    name="as_consist"
+                    label="Может быть в составе товаров"
+        >
+          <UToggle v-model="state.as_consist" />
+        </UFormGroup>
+        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+                    name="showcase"
+                    label="Показывать на витрине"
+        >
+          <UToggle v-model="state.showcase" />
+        </UFormGroup>
+        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+                    name="active"
+                    label="Доступен к покупке"
+        >
+          <UToggle v-model="state.active" />
+        </UFormGroup>
+        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+                    name="decrease_stock"
+                    label="Вычитать со склада"
+        >
+          <UToggle v-model="state.decrease_stock" />
+        </UFormGroup>
+        <!-- <USelectMultiply v-model="form.tag" :items="tags.rows" multi valueName="id" itemName="title" label="Тег"  />-->
+      </div>
+      <div class="flex w-full flex-col gap-4 p-4 bg-white ring-1 ring-gray-300 rounded-md">
+        <UFormGroup label="Фото" name="photos">
+          <ImageLoader v-model="state.photos"/>
+        </UFormGroup>
+      </div>
 
-          <UFormGroup label="Артикул" name="vendorCode">
-            <UInput size="xl" v-model="state.vendor_code" placeholder="Артикул"/>
-          </UFormGroup>
-
-          <UFormGroup label="Категория" name="category">
-            <USelect size="xl" placeholder="Категория" v-model="state.category" :options="categoryStore.categories.rows"
-                     valueAttribute="id" optionAttribute="title"/>
-          </UFormGroup>
-          <UFormGroup label="Цвета" name="tag">
-            <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple
-                         valueAttribute="id" optionAttribute="title"/>
-          </UFormGroup>
-          <UFormGroup label="Теги" name="tag">
-            <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple
-                         valueAttribute="id" optionAttribute="title"/>
-          </UFormGroup>
-          <UFormGroup label="Состав" name="consist">
-            <USelectMenu size="xl" placeholder="Состав" v-model="state.consist" :options="categoryStore.categories.rows"
-                         multiple valueAttribute="id" optionAttribute="title"/>
-          </UFormGroup>
-
-          <UFormGroup name="asConsist">
-            <UCheckbox v-model="state.as_consist" label="Может быть в составе товаров"/>
-          </UFormGroup>
-
-          <UButton class="submit-btn" type="submit">Создать</UButton>
-          <!--                    <USelectMultiply v-model="form.tag" :items="tags.rows" multi valueName="id" itemName="title" label="Тег"  />-->
-        </div>
-        <div class="flex w-3/6 flex-col gap-4">
-          <UFormGroup label="Фото" name="photos">
-            <ImageLoader v-model="state.photos"/>
-          </UFormGroup>
-        </div>
-      </UForm>
+      <UButton class="submit-btn mt-10 self-start" type="submit">Создать</UButton>
+    </UForm>
     <div class="w-full flex px-3 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
       <UInput variant="none" class="w-full" v-model="q" placeholder="Поиск"/>
     </div>

@@ -2,7 +2,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 
-
 export default defineNuxtConfig({
     compatibilityDate: '2024-04-03',
     devtools: {enabled: false},
@@ -24,10 +23,10 @@ export default defineNuxtConfig({
         },
     },
     modules: ['nuxt-scheduler', ['dayjs-nuxt', {
-    locales: ['ru'],
-    plugins: ['relativeTime', 'utc', 'timezone', 'duration'],
-    defaultTimezone: 'Asia/Yekaterinburg',
-    defaultLocale: 'ru'
+        locales: ['ru'],
+        plugins: ['relativeTime', 'utc', 'timezone', 'duration'],
+        defaultTimezone: 'Asia/Yekaterinburg',
+        defaultLocale: 'ru'
     }], ['vue-yandex-maps', {
         strictMode: true,
         apikey: '0ad0d51c-6191-457e-92fb-b8225caac0d5',
@@ -40,9 +39,7 @@ export default defineNuxtConfig({
                 wght: [400, 500, 600, 700, 900],
             },
         }
-    }],
-    '@pinia/nuxt',
-    '@vueuse/nuxt', "@nuxt/image", 'dayjs-nuxt', '@nuxt/ui',],
+    }], '@pinia/nuxt', '@vueuse/nuxt', "@nuxt/image", 'dayjs-nuxt', '@nuxt/ui'],
     ui: {
         global: true,
         safelistColors: ['cool', 'primary', 'green', 'red', 'malibu']
