@@ -9,6 +9,7 @@ import ProductTag from "./product_tag";
 import UpsaleCategory from "./upsale_category";
 import Tax from "./tax";
 import Color from "./colors";
+import ProductColor from "./product_color";
 
 export interface ProductAttributes {
     id: string;
@@ -210,8 +211,8 @@ ProductTag.belongsTo(Product);
 Tag.hasMany(ProductTag);
 ProductTag.belongsTo(Tag);
 
-Product.belongsToMany(Color, { through: 'product_colors', foreignKey: 'product_id', as: 'colors', onDelete: 'CASCADE', timestamps: false });
-Color.belongsToMany(Product, { through: 'product_colors', foreignKey: 'color_id', onDelete: 'CASCADE', timestamps: false });
+Product.belongsToMany(Color, { through: { model: ProductColor }, foreignKey: 'product_id', as: 'colors', onDelete: 'CASCADE', timestamps: false });
+Color.belongsToMany(Product, { through: { model: ProductColor }, foreignKey: 'color_id', onDelete: 'CASCADE', timestamps: false });
 
 Product.belongsToMany(Category, { through: { model: UpsaleCategory }, as: 'upsale_categories'});
 Category.belongsToMany(Product, { through: { model: UpsaleCategory }, as: 'upsale_products'});

@@ -26,6 +26,10 @@ const {data: images, pending: imagePending, refresh: imageRefresh} = useFetch(`/
 
 const {data: tags, pending: tagPending, refresh: tagRefresh} = useFetch(`/api/catalog/product/${route.params.id}/tags`)
 
+const {data: colors, status: colorStatus, refresh: colorRefresh} = useFetch(`/api/utils/colors`)
+
+const {data: tax, status: taxStatus, refresh: taxRefresh} = useFetch(`/api/utils/taxes`)
+
 const delImg = async (itemId: string) => {
   console.log(itemId)
   await $fetch(`/api/catalog/product/${route.params.id}/images`, {
@@ -92,29 +96,14 @@ const nav = [
     click: () => router.replace({query: {tab: 'data'}}),
   },
   {
+    label: 'Изображения',
+    icon: 'i-heroicons-command-line',
+    click: () => router.replace({query: {tab: 'images'}}),
+  },
+  {
     label: 'Связи',
     icon: 'i-heroicons-chart-bar',
     click: () => router.replace({query: {tab: 'links'}}),
-  },
-  {
-    label: 'Атрибуты',
-    icon: 'i-heroicons-command-line',
-    click: () => router.replace({query: {tab: 'attr'}}),
-  },
-  {
-    label: 'Опции',
-    icon: 'i-heroicons-command-line',
-    click: () => router.replace({query: {tab: 'options'}}),
-  },
-  {
-    label: 'Регулярные платежи',
-    icon: 'i-heroicons-command-line',
-    click: () => router.replace({query: {tab: 'payments'}}),
-  },
-  {
-    label: 'Скидки',
-    icon: 'i-heroicons-command-line',
-    click: () => router.replace({query: {tab: 'sales'}}),
   },
   {
     label: 'Акции',
@@ -122,16 +111,31 @@ const nav = [
     click: () => router.replace({query: {tab: 'offers'}}),
   },
   {
-    label: 'Изображения',
+    label: 'Опции',
     icon: 'i-heroicons-command-line',
-    click: () => router.replace({query: {tab: 'images'}}),
+    click: () => router.replace({query: {tab: 'options'}}),
+  },
+  {
+    label: 'Атрибуты',
+    icon: 'i-heroicons-command-line',
+    click: () => router.replace({query: {tab: 'attr'}}),
+  },
+  {
+    label: 'Скидки',
+    icon: 'i-heroicons-command-line',
+    click: () => router.replace({query: {tab: 'sales'}}),
   },
   {
     label: 'Бонусы',
     icon: 'i-heroicons-command-line',
     click: () => router.replace({query: {tab: 'bonuses'}}),
   },
-  ]
+  {
+    label: 'Регулярные платежи',
+    icon: 'i-heroicons-command-line',
+    click: () => router.replace({query: {tab: 'payments'}}),
+  },
+]
 
 const raw_tag = ref([])
 const state_raw = ref({
@@ -174,7 +178,24 @@ const deleteRawTag = (item: any) => {
     </template>
     <template v-if="route.query.tab === 'data'">
       <UDivider class="my-6" label="Данные"/>
-      <ProductUpdateDataInfo :product="product" @submit="onSubmit" />
+      <ProductUpdateDataInfo :product="product" :tag="tags" :tax="tax" :productColors="colors" @submit="onSubmit"/>
+    </template>
+    <template v-if="route.query.tab === 'images'">
+      <UDivider class="my-6" label="Изображения"></UDivider>
+      <div class="bg-white p-6 w-full">
+        <ImageLoader v-model="photos" ref="imageLoader" />
+        <div v-if="!!photos.length" class="flex mt-4 gap-4">
+          <UButton color="black" @click="image_loader?.clearAllPhoto">Удалить всё</UButton>
+          <UButton type="button" @click="addImg">Сохранить</UButton>
+        </div>
+      </div>
+
+      <div class="mt-10 flex flex-row gap-5 flex-wrap">
+        <div class="flex flex-col w-1/6" v-for="img in images">
+          <img style="aspect-ratio: 1; object-fit: cover" :src="`/img/product/${img.url}`" alt="">
+          <UButton size="sm" label="удалить" @click="delImg(img.id)"></UButton>
+        </div>
+      </div>
     </template>
     <template v-if="route.query.tab === 'links'">
       <UDivider class="my-6" label="Связи"/>
@@ -187,6 +208,12 @@ const deleteRawTag = (item: any) => {
         <UInput size="xl" placeholder="Загрузки"></UInput>
         <UInput size="xl" placeholder="Сопутствующие товары"></UInput>
       </UForm>
+    </template>
+    <template v-if="route.query.tab === 'offers'">
+      <UDivider class="my-6" label="Акции"></UDivider>
+    </template>
+    <template v-if="route.query.tab === 'options'">
+      <UDivider class="my-6" label="Опции"></UDivider>
     </template>
     <template v-if="route.query.tab === 'attr'">
       <UDivider class="my-6" label="Атрибуты"/>
@@ -220,37 +247,14 @@ const deleteRawTag = (item: any) => {
       </div>
       <UButton size="xl" @click="onSubmit" label="Сохранить все"/>
     </template>
-    <template v-if="route.query.tab === 'options'">
-      <UDivider class="my-6" label="Опции"></UDivider>
-    </template>
-    <template v-if="route.query.tab === 'payments'">
-      <UDivider class="my-6" label="Регулярные платежи"></UDivider>
-    </template>
     <template v-if="route.query.tab === 'sales'">
       <UDivider class="my-6" label="Скидки"></UDivider>
     </template>
-    <template v-if="route.query.tab === 'offers'">
-      <UDivider class="my-6" label="Акции"></UDivider>
-    </template>
-    <template v-if="route.query.tab === 'images'">
-      <UDivider class="my-6" label="Изображения"></UDivider>
-      <div class="bg-white p-6 w-full">
-        <ImageLoader v-model="photos" ref="imageLoader" />
-        <div v-if="!!photos.length" class="flex mt-4 gap-4">
-          <UButton color="black" @click="image_loader?.clearAllPhoto">Удалить всё</UButton>
-          <UButton type="button" @click="addImg">Сохранить</UButton>
-        </div>
-      </div>
-
-      <div class="mt-10 flex flex-row gap-5 flex-wrap">
-        <div class="flex flex-col w-1/6" v-for="img in images">
-          <img style="aspect-ratio: 1; object-fit: cover" :src="`/img/product/${img.url}`" alt="">
-          <UButton size="sm" label="удалить" @click="delImg(img.id)"></UButton>
-        </div>
-      </div>
-    </template>
     <template v-if="route.query.tab === 'bonuses'">
       <UDivider class="my-6" label="Бонусы"></UDivider>
+    </template>
+    <template v-if="route.query.tab === 'payments'">
+      <UDivider class="my-6" label="Регулярные платежи"></UDivider>
     </template>
   </div>
 

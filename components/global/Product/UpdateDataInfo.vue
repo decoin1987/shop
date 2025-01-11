@@ -1,15 +1,27 @@
-
-<script lang="ts" setup>
+<script lang="js" setup>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-const props = defineProps({
-  product: Object
-})
+import {computed, ref} from "vue";
+import {useAsyncData, useFetch} from "nuxt/app";
+import useProductColor from "../../../composables/useProductColors.js";
 
-const date = ref();
+
+const route = useRoute()
+const router = useRouter()
+const props = defineProps({
+  product: Object,
+  productColors: Object,
+  tag: Object,
+  tax: Object,
+})
+const { colors, fetchProductColor, mapColors } = useProductColor()
+await fetchProductColor(route.params.id);
+
+
 </script>
 
 <template>
+  {{colors}}
   <UForm :state="props.product" class="flex w-full flex-col gap-3">
     <div class="flex frex-row w-full gap-4">
       <UFormGroup class="w-full" label="Артикул">
@@ -64,6 +76,11 @@ const date = ref();
       </UFormGroup>
       <UFormGroup label="Порядок сортировки">
         <UInput v-model="props.product.sort" size="xl" placeholder="Порядок сортировки"/>
+      </UFormGroup>
+      {{props.productColors?.rows.map(el => el.id)}}
+      <UFormGroup label="Цвета">
+        <USelectMenu multiple size="xl" placeholder="Цвета" v-model="colors"
+                 :options="props.productColors?.rows" valueAttribute="id" optionAttribute="title"/>
       </UFormGroup>
     </div>
     <UButton class="self-start" type="submit" label="Сохранить"/>
