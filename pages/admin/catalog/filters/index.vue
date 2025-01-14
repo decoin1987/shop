@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {computed, ref} from "vue";
-import {useFetch} from 'nuxt/app';
 
 const columns = [
   {

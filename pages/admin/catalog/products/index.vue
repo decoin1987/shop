@@ -4,7 +4,6 @@ import {useTagStore} from "~/stores/tag.store";
 import {useProductStore} from "~/stores/product.store";
 import {object, string, type InferType, boolean, array, number} from 'yup'
 import {computed, ref} from "vue";
-import {useFetch} from "nuxt/app";
 
 const schema = object({
   title: string().required('Введите имя'),

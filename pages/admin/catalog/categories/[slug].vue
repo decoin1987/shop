@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 //@ts-nocheck
-import {useAsyncData, useFetch, useState} from "nuxt/app";
+import {useAsyncData, useState} from "nuxt/app";
 import {ref} from "vue";
 import {useCategoryStore} from "~/stores/category.store"
 

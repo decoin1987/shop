@@ -6,6 +6,7 @@ import ProductImage from "../../../models/product_image";
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
     const product = await readBody(event)
+    console.log(product)
     var productToChange: any = await Product.findOne({
         where: {
             id: product.id,
@@ -31,6 +32,7 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
         productToChange.html_tags = product.html_tags
         productToChange.meta_keywords = product.meta_keywords
         productToChange.meta_description = product.meta_description
+        productToChange.tax_id = product.tax_id
         await productToChange.save()
     }
     return productToChange

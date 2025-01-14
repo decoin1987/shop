@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {useAsyncData, useFetch, useRequestHeaders, useState} from "nuxt/app";
+import {useAsyncData, useRequestHeaders, useState} from "nuxt/app";
 import {computed, ref, shallowRef} from "vue";
 import {useCategoryStore} from "~/stores/category.store"
 import {v4 as uuid} from "uuid";
@@ -164,7 +164,6 @@ const deleteRawTag = (item: any) => {
 </script>
 
 <template>
-  {{product}}
   <div v-if="productStatus === 'success'" class="flex flex-col items-start py-8 px-10">
     <Breadcrumbs v-if="product?.title" :links="links" :lastLink="{
   label: product.title,
@@ -178,7 +177,7 @@ const deleteRawTag = (item: any) => {
     </template>
     <template v-if="route.query.tab === 'data'">
       <UDivider class="my-6" label="Данные"/>
-      <ProductUpdateDataInfo :product="product" :tag="tags" :tax="tax" :productColors="colors" @submit="onSubmit"/>
+      <ProductUpdateDataInfo :product="product" :tag="tags?.rows" :tax="tax?.rows" :productColors="colors" @submit="onSubmit"/>
     </template>
     <template v-if="route.query.tab === 'images'">
       <UDivider class="my-6" label="Изображения"></UDivider>
@@ -257,7 +256,6 @@ const deleteRawTag = (item: any) => {
       <UDivider class="my-6" label="Регулярные платежи"></UDivider>
     </template>
   </div>
-
 </template>
 
 <style scoped lang="scss">

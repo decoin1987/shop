@@ -1,6 +1,6 @@
 // @ts-nocheck
 import {defineStore} from 'pinia'
-import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
+import {useCookie, useRouter, useState} from 'nuxt/app';
 
 
 

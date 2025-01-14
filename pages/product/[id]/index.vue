@@ -2,7 +2,6 @@
 //@ts-nocheck
 import Flicking from "@egjs/vue3-flicking";
 import {ref} from "@vue/reactivity";
-import {useFetch} from "nuxt/app";
 import {useCartStore} from "~/stores/cart.store";
 import order from "~/pages/cart/order.vue";
 

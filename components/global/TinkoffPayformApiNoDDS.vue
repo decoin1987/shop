@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {useHead} from "@unhead/vue";
-import {navigateTo, useAsyncData, useCookie, useFetch, useRouter} from "nuxt/app";
+import {navigateTo, useAsyncData, useCookie, useRouter} from "nuxt/app";
 
 
 const router = useRouter()

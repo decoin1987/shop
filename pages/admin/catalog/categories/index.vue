@@ -2,7 +2,7 @@
 //@ts-nocheck
 import {useCategoryStore} from "~/stores/category.store"
 import {computed, ref, watch} from "vue";
-import {useFetch} from "nuxt/app";
+
 
 
 const categoryStore = useCategoryStore()

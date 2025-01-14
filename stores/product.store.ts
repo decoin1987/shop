@@ -1,11 +1,9 @@
 // @ts-nocheck
 import {defineStore} from 'pinia'
-import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
+import {useCookie, useRouter, useState} from 'nuxt/app';
 import {defineTask} from "nitropack/runtime";
 import {v4 as uuid} from "uuid";
 import {ref, shallowRef} from "vue";
-
-
 
 
 export const useProductStore = defineStore('product', () => {

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import {useFetch} from "nuxt/app";
 
 const columns = [
   {
