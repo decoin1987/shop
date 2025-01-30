@@ -34,7 +34,7 @@ const props = defineProps({
         <UInput class="w-full" size="md" placeholder="HTML-Tags"/>
       </UFormGroup>
     </div>
-    <UButton class="self-start" type="submit" label="Сохранить"/>
+    <UButton class="self-start" @click="$emit('saveProduct')" label="Сохранить"/>
   </UForm>
 </template>
 

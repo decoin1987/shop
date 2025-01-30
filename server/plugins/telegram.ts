@@ -10,7 +10,7 @@ export default defineNitroPlugin( async () => {
 })
 
 const token:string | undefined = process.env.BOT_TOKEN;
-export const bot = new TelegramBot(token, { polling: true });
+export const bot = new TelegramBot('5818648107:AAHyd39O4bd9C0_eb_MfGfyuZe2-Nr4hYB4', { polling: true });
 IMAGES.doDirSync(CONFIG.filePath)
 
 const start = async () => {

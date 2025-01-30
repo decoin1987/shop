@@ -148,7 +148,10 @@ Product.init({
         },
         active: {
             where: { active: true }
-        }
+        },
+        as_consist: {
+            where: { as_consist: true }
+        },
     },
     hooks: {
         beforeDestroy: async function (product) {
@@ -204,12 +207,12 @@ Product.belongsToMany(Product, {
 Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'product_id', as: 'product_consists' });
 Product.belongsToMany(Product, { through: { model: Consist }, foreignKey: 'consist_id', as: 'consist_products' });
 
-Product.belongsToMany(Tag, { through: { model: ProductTag }, as: 'tags', onDelete: 'CASCADE', timestamps: false });
-Tag.belongsToMany(Product, { through: { model: ProductTag }, as: 'products', timestamps: false });
-Product.hasMany(ProductTag);
-ProductTag.belongsTo(Product);
-Tag.hasMany(ProductTag);
-ProductTag.belongsTo(Tag);
+Product.belongsToMany(Tag, { through: { model: ProductTag }, as: 'tags', foreignKey: 'product_id', onDelete: 'CASCADE', timestamps: false });
+Tag.belongsToMany(Product, { through: { model: ProductTag }, as: 'products', foreignKey: 'tag_id', onDelete: 'CASCADE', timestamps: false });
+Product.hasMany(ProductTag,  { foreignKey: 'product_id', onDelete: 'CASCADE', });
+ProductTag.belongsTo(Product,  { foreignKey: 'product_id', onDelete: 'CASCADE', });
+Tag.hasMany(ProductTag,  { foreignKey: 'tag_id', onDelete: 'CASCADE', });
+ProductTag.belongsTo(Tag,  { foreignKey: 'tag_id', onDelete: 'CASCADE', });
 
 Product.belongsToMany(Color, { through: { model: ProductColor }, foreignKey: 'product_id', as: 'colors', onDelete: 'CASCADE', timestamps: false });
 Color.belongsToMany(Product, { through: { model: ProductColor }, foreignKey: 'color_id', onDelete: 'CASCADE', timestamps: false });

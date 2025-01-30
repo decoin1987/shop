@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
         });
         if (product.category) await productItem.setCategory(product.category);
         // if (product.category) await productItem.addUpsale_categories(product.category) TODO функция работает доделать фронт и модельки
-        if (product.consist) await productItem.addProduct_consists((product.consist as string).split(','));
+        // if (product.consist) await productItem.addProduct_consists((product.consist as string).split(','));
         if (product.colors) await productItem.addColors((product.colors as string).split(','));
         if (product.tag) await productItem.addTags((product.tag as string).split(','));
         if (product.tax) await productItem.setTax(product.tax);

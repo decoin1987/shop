@@ -3,7 +3,6 @@ import {useCategoryStore} from "~/stores/category.store";
 import {useTagStore} from "~/stores/tag.store";
 import {useProductStore} from "~/stores/product.store";
 import {object, string, type InferType, boolean, array, number} from 'yup'
-import {computed, ref} from "vue";
 
 const schema = object({
   title: string().required('Введите имя'),
@@ -87,38 +86,10 @@ const columns = [
     label: 'Остаток',
     sortable: true,
   },
-  // {
-  //   key: 'raw_tag',
-  //   label: 'Теги для SEO',
-  // },
-  // {
-  //   key: 'as_consist',
-  //   label: 'в составе',
-  //   sortable: true,
-  // },
-  // {
-  //   key: 'showcase',
-  //   label: 'На витрине',
-  //   sortable: true,
-  // },
-  // {
-  //   key: 'active',
-  //   label: 'Показывать на сайте',
-  //   sortable: true,
-  // },
-  // {
-  //   key: 'decrease_stock',
-  //   label: 'Вычитать со склада',
-  //   sortable: true,
-  // },
   {
     key: 'vendor_code',
     label: 'Артикул',
   },
-  // {
-  //   key: 'slug',
-  //   label: 'Ссылка',
-  // },
   {
     key: 'edit',
     label: 'Редактирование',
@@ -163,62 +134,77 @@ const onSubmit = async () => {
     <UForm :state="state" class="p-4 ring-2 ring-gray-300 rounded-lg mt-1 flex w-full flex-col gap-3 mb-10"
            @submit="onSubmit">
       <div class="flex w-full flex-row gap-4">
-        <UFormGroup class="w-full" label="Название" name="title">
+        <UFormGroup label="Название"  class="w-full" name="title">
           <UInput size="xl" v-model="state.title" type="text" placeholder="Название"/>
         </UFormGroup>
-        <UFormGroup class="w-full" label="Цена" name="price">
+        <UFormGroup label="Цена"      class="w-full" name="price">
           <UInput type="number" size="xl" v-model="state.price" placeholder="Цена"/>
         </UFormGroup>
-        <UFormGroup class="w-full" label="Артикул" name="vendorCode">
+        <UFormGroup label="Артикул"   class="w-full" name="vendorCode">
           <UInput size="xl" v-model="state.vendor_code" placeholder="Артикул"/>
         </UFormGroup>
-        <UFormGroup class="w-full" label="Налог" name="tax">
-          <USelect size="xl" placeholder="Налог" v-model="state.tax" :options="tax?.rows"
+        <UFormGroup label="Налог"     class="w-full" name="tax">
+          <USelect v-if="taxStatus === 'success'" size="xl" placeholder="Налог" v-model="state.tax" :options="tax"
                    valueAttribute="id" optionAttribute="title"/>
         </UFormGroup>
       </div>
       <div class="flex flex-row gap-4">
-        <UFormGroup class="w-full" label="Категория" name="category">
+        <UFormGroup label="Категория" class="w-full" name="category">
           <USelect size="xl" placeholder="Категория" v-model="state.category" :options="categoryStore.categories.rows"
                    valueAttribute="id" optionAttribute="title"/>
         </UFormGroup>
-        <UFormGroup class="w-full" v-if="colorStatus==='success'" label="Цвет" name="tag">
+        <UFormGroup label="Цвет"      class="w-full" v-if="colorStatus==='success'"  name="tag">
           <USelectMenu size="xl" placeholder="Цвет" v-model="state.colors" :options="colors.rows" multiple
+                       valueAttribute="id" optionAttribute="title">
+            <template #label>
+              <div v-if="state.colors.length" class="truncate flex h-6 items-center gap-1">
+                <div v-for="color in state.colors"
+                     :style="`background-color:`+ colors.rows.find(el => el.id === color).hex"
+                     :class="['inline-block h-5 w-5 flex-shrink-0 rounded-full ring-1 ring-gray-200']">
+                </div>
+              </div>
+              <span v-else>Выбрать цвет</span>
+            </template>
+            <template #option="{ option: color }">
+            <span :style="`background-color:`+ color.hex"
+                  :class="['inline-block h-2 w-2 flex-shrink-0 rounded-full ring-1 ring-gray-200']" aria-hidden="true" />
+              <span class="truncate">{{ color.title }}</span>
+            </template>
+          </USelectMenu>
+        </UFormGroup>
+        <UFormGroup label="Теги"      class="w-full" name="tag">
+          <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags" multiple
                        valueAttribute="id" optionAttribute="title"/>
         </UFormGroup>
-        <UFormGroup class="w-full" label="Теги" name="tag">
-          <USelectMenu size="xl" placeholder="Теги" v-model="state.tag" :options="tagStore.tags.rows" multiple
-                       valueAttribute="id" optionAttribute="title"/>
-        </UFormGroup>
-        <UFormGroup class="w-full" label="Состав" name="consist">
+        <UFormGroup label="Состав"    class="w-full" name="consist">
           <USelectMenu size="xl" placeholder="Состав" v-model="state.consist" :options="productStore.products.rows"
                        multiple valueAttribute="id" optionAttribute="title"/>
         </UFormGroup>
       </div>
       <div class="flex gap-4">
 
-        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+        <UFormGroup label="Может быть в составе товаров"
+                    class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
                     name="as_consist"
-                    label="Может быть в составе товаров"
         >
           <UToggle v-model="state.as_consist" />
         </UFormGroup>
-        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+        <UFormGroup label="Показывать на витрине"
+                    class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
                     name="showcase"
-                    label="Показывать на витрине"
-        >
+                    >
           <UToggle v-model="state.showcase" />
         </UFormGroup>
-        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+        <UFormGroup label="Доступен к покупке"
+                    class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
                     name="active"
-                    label="Доступен к покупке"
-        >
+                    >
           <UToggle v-model="state.active" />
         </UFormGroup>
-        <UFormGroup class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
+        <UFormGroup label="Вычитать со склада"
+                    class="items-center flex gap-2 ring-1 p-2 rounded-md bg-white ring-gray-300 shadow"
                     name="decrease_stock"
-                    label="Вычитать со склада"
-        >
+                    >
           <UToggle v-model="state.decrease_stock" />
         </UFormGroup>
         <!-- <USelectMultiply v-model="form.tag" :items="tags.rows" multi valueName="id" itemName="title" label="Тег"  />-->
@@ -251,8 +237,8 @@ const onSubmit = async () => {
       <template #product_images-data="{row}">
         <div class="flex flex-row no-wrap gap-2">
           <template v-if="row.product_images.length">
-            <img height="100" width="100" style="object-fit: cover; aspect-ratio: 1/1"
-                 :src="`/img/product/${row.product_images[0].url}`"/>
+            <NuxtImg  height="100" width="100" style="object-fit: cover; aspect-ratio: 1/1"
+                 :src="`/img/product/${row.product_images[0].url}`" />
           </template>
         </div>
       </template>

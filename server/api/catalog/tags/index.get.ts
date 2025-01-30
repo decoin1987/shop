@@ -3,7 +3,7 @@ import Tag from "../../../models/tag";
 
 
 export default defineEventHandler(async (event) => {
-    return await Tag.findAndCountAll(
+    return await Tag.findAll(
         {
             order: [['sort', 'ASC']],
             // limit: 5,

@@ -153,7 +153,7 @@ const modalConfig = {
           <template v-if="products.length">
             <div v-for="(product, index) in products" class="">
               <div class="flex gap-3">
-                <img class="w-[120px]" style="aspect-ratio: 3/3; object-fit: cover" :src="product.url" alt="" />
+                <NuxtImg class="w-[120px]" style="aspect-ratio: 3/3; object-fit: cover" :src="product.url" alt="" />
                 <div class="flex flex-1 justify-between flex-col gap-3">
                   <h1 class="font-serif text-zinc-950 text-2xl font-semibold">{{ product.title }}</h1>
                   <div class="flex items-center gap-1">

@@ -1,33 +1,18 @@
 <script lang="ts" setup>
-import {useTagStore} from "../stores/tag.store";
-import {useCartStore} from "../stores/cart.store";
-import {useAuthStore} from "../stores/auth.store";
+import {useTagStore} from "~/stores/tag.store";
 import {computed, ref, watch} from "vue";
-
-
-const tagStore = useTagStore()
 
 const state = ref({
   title: '',
   description: null,
   sort: null,
-  parent_id: null,
-
 })
-const is_parent = ref(false)
 
-const onSubmit = async () => {
-  await tagStore.createTag({
-    title: state.value.title,
-    description: state.value.description,
-    sort: state.value.sort,
-    parent_id: is_parent.value ? state.value.parent_id : null,
-  })
-}
+
+
 const columns = [
   {
     key: 'id',
-    label: '',
   },
   {
     key: 'title',
@@ -35,36 +20,29 @@ const columns = [
     sortable: true,
   },
   {
-    key: 'descriptions',
+    key: 'description',
     label: 'Описание',
+    sortable: true,
   },
   {
     key: 'sort',
     label: 'Сортировка',
+    sortable: true,
   },
-  {
-    key: 'slug',
-    label: 'Ссылка',
-  },
+  // {
+  //   key: 'slug',
+  //   label: 'Ссылка',
+  //   sortable: true,
+  // },
   {
     key: 'edit',
-    label: 'Редактирование',
+    label: 'Редактировать',
+  },
+  {
+    key: 'delete',
+    label: 'Удалить',
   },
 ]
-
-const selected = ref([])
-const q = ref('')
-const filteredRows = computed(() => {
-  if (!q.value) {
-    return tagStore.tags.rows
-  }
-
-  return tagStore.tags.rows.filter((el) => {
-    return Object.values(el).some((el) => {
-      return String(el).toLowerCase().includes(q.value.toLowerCase())
-    })
-  })
-})
 const items = row => [
   [{
     label: 'Изменить',
@@ -79,57 +57,133 @@ const items = row => [
   }], [{
     label: 'Удалить',
     icon: 'i-heroicons-trash-20-solid',
-    click: () => tagStore.deleteTag(row.id)
+    click: () => deleteTag(row.id)
   }]
 ]
+
+const newTag = ref({})
+const selected = ref([])
+const isEdit = ref(false)
+const q = ref('')
+
+
+const {data: tags, status: tagStatus, refresh: tagRefresh} = useFetch(`/api/catalog/tags`)
+const createTag = async () => {
+  useFetch('/api/catalog/tags', {
+    method: "POST",
+    onResponse({request, response, options}) {
+      state.value = {
+        title: '',
+        description: '',
+        value: '',
+      }
+      tagRefresh()
+      if (response._data.statusCode) {
+        return console.log(response._data.message)
+      }
+      return console.log(response._data)
+    },
+    body: {...state.value}
+  })
+}
+const deleteTag = async (data) => {
+  useFetch('/api/catalog/tags', {
+    method: "DELETE",
+    onResponse({request, response, options}) {
+      tagRefresh()
+      if (response._data.statusCode) {
+        return console.log(response._data.message)
+      }
+    },
+    body: {id: data.id}
+  })
+}
+const editTag = (row) => {
+  isEdit.value = row.id
+  newTag.value.title = row.title
+  newTag.value.description = row.description
+  newTag.value.sort = row.sort
+}
+const updateTag = async (row) => {
+  useFetch('/api/catalog/tags', {
+    method: "PUT",
+    onResponse({request, response, options}) {
+      isEdit.value = false
+      tagRefresh()
+      if (response._data.statusCode) {
+        return console.log(response._data.message)
+      }
+      return console.log(response._data)
+    },
+    body: {
+      id: row.id,
+      ...newTag.value
+    }
+  })
+}
 
 </script>
 
 <template>
   <section>
-    <div class="flex flex-col max-w-8xl mx-auto items-start p-10">
+    <div class="flex flex-col items-start p-10">
       <h1 class="text-5xl font-medium mb-10">Теги</h1>
       <div class="flex w-full flex-col gap-2 mb-10">
-        <UForm :state="state" class="flex flex-col gap-3" @submit="onSubmit">
-          <div class="flex flex-row gap-2">
-            <UInput placeholder="Название категории" class="w-3/6" v-model="state.title"/>
-            <UInput class="w-1/6" v-model="state.sort"/>
+        <UForm :state="state" class="flex flex-col gap-4 p-4 bg-white w-full" @submit="createTag">
+          <div class="flex gap-4">
+            <UFormGroup size="xs" class="w-2/6 items-center" label="Название" name="title">
+              <UInput v-model="state.title" size="lg"/>
+            </UFormGroup>
+            <UFormGroup size="xs" class="w-2/6 items-center" label="Описание" name="description">
+              <UInput v-model="state.description" size="lg"/>
+            </UFormGroup>
+            <UFormGroup size="xs" class="w-2/6 items-center" label="Сортировка" name="sort">
+              <UInput v-model="state.sort" size="lg"/>
+            </UFormGroup>
+            <UButton type="submit" class="self-end" size="lg" label="Добавить"/>
           </div>
-
-          <UTextarea placeholder="Описание" v-model="state.description"/>
-
-          <UButton size="md" type="submit" class="self-start">
-            Создать категорию
-          </UButton>
         </UForm>
-
       </div>
       <div class="w-full flex px-3 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
         <UInput variant="none" class="w-full" v-model="q" placeholder="Поиск"/>
       </div>
       <UTable class="w-full"
+              v-if="tagStatus === 'success'"
               v-model="selected"
-              :sort-button="{ icon: 'i-heroicons-sparkles-20-solid', color: 'black', variant: 'solid', size: 'xs', square: false, ui: { rounded: 'rounded-full' } }"
-              :rows="filteredRows" :columns="columns">
+              :sort-button="{ icon: 'i-heroicons-sparkles-20-solid', color: 'white', variant: 'ghost', size: 'sm', square: false, ui: { rounded: 'rounded-full' } }"
+              :rows="tags" :columns="columns">
         <template #title-data="{row}">
-          <div class="flex flex-row no-wrap gap-2">
-            <NuxtLink :to="`/admin/catalog/categories/${row.slug}`">{{row.title}}</NuxtLink>
-          </div>
+          <UInput v-model="newTag.title" v-if="isEdit === row.id"/>
+          <p v-else>{{ row.title }}</p>
+        </template>
+        <template #description-data="{row}">
+          <UInput v-model="newTag.description" v-if="isEdit === row.id"/>
+          <p v-else>{{ row.description }}</p>
         </template>
         <template #sort-data="{row}">
-          <div class="flex flex-row no-wrap gap-2">
-            <UInput v-model="row.sort" />
-            <UButton size="xs" @click="tagStore.editTag(row)">Изменить</UButton>
-          </div>
+          <UInput v-model="newTag.sort" v-if="isEdit === row.id"/>
+          <p v-else>{{ row.sort }}</p>
         </template>
         <template #edit-data="{row}">
-          <UDropdown :items="items(row)">
-            <UButton color="black" rounded variant="solid">Редактировать</UButton>
-          </UDropdown>
+          <div class="flex gap-4">
+            <UButton class="bg-malibu-600 hover:bg-malibu-800" size="sm"
+                     @click="isEdit !== row.id ? editTag(row) : updateTag(row)">
+              {{ isEdit !== row.id ? 'Редактировать' : 'Сохранить' }}
+            </UButton>
+            <UButton v-if="isEdit === row.id" @click="isEdit = false" class="bg-malibu-600 hover:bg-malibu-800" size="sm"
+                     rounded variant="solid">
+              Отменить
+            </UButton>
+          </div>
+
+        </template>
+        <template #delete-data="{row}">
+          <UButton @click="deleteTag(row)" class="bg-malibu-600 hover:bg-malibu-800" size="sm" rounded variant="solid">
+            Удалить
+          </UButton>
         </template>
       </UTable>
     </div>
-
   </section>
 </template>
 

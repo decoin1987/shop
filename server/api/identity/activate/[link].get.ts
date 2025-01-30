@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     }
     else {
         user.activationLink = ''
-        user.isActivated = true
+        user.activated = true
         user.save()
         await sendRedirect(event, '/account', 302)
     }

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import jwt from 'jsonwebtoken'
+import * as jose from "jose";
 import {Token} from '../../models/token';
 
 
@@ -9,8 +10,8 @@ export default new class TokenService {
   generateTokens (payload: any) {
     let accessToken:string;
     let refreshToken:string;
-    accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET as unknown as string, { expiresIn: '24h' })
-    refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as unknown as string, { expiresIn: '30d' })
+    accessToken = jwt.sign(payload, process.env.NUXT_API_JWT_ACCESS_SECRET as unknown as string)
+    refreshToken = jwt.sign(payload, process.env.NUXT_API_JWT_REFRESH_SECRET as unknown as string)
     return {
       accessToken,
       refreshToken
@@ -27,5 +28,5 @@ export default new class TokenService {
       return
     } else return await Token.create({id: userId, refreshToken})
   }
-}()
+}
 

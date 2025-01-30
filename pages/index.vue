@@ -273,7 +273,7 @@ const options = {
               <div
                   class="flex items-center justify-center bg-white ring-1 ring-primary-700 rounded-full relative w-10 h-10 -mt-7 -ml-5"
               >
-                <img src="/icon/logoicon.svg" width="30px" height="30px" alt="">
+                <NuxtImg src="/icon/logoicon.svg" width="30px" height="30px" alt="" />
               </div>
             </YandexMapMarker>
           </YandexMap>

@@ -19,9 +19,21 @@ const nav = [
     exact: true
   },
   {
-    label: 'Контакты',
+    label: 'Статус заказа',
     icon: 'i-heroicons-home',
-    to: '/admin/settings/contacts',
+    to: '/admin/settings/order_statuses',
+    exact: true
+  },
+  {
+    label: 'Статус оплаты',
+    icon: 'i-heroicons-home',
+    to: '/admin/settings/transaction_statuses',
+    exact: true
+  },
+  {
+    label: 'Роли',
+    icon: 'i-heroicons-home',
+    to: '/admin/settings/roles',
     exact: true
   },
   {

@@ -49,7 +49,7 @@ const sliderOptions = {
     <UButton v-if="images.length > 1" :ui="{ rounded: 'rounded-full' }" size="xl" @click="next" icon="i-solar-alt-arrow-right-line-duotone" color="black" variant="solid" style="position: absolute; top: calc(50% - 22px); right: 15px; z-index: 5" />
     <Flicking ref="flickSlider" :options="sliderOptions">
       <article @click="console.log('click')" v-for="(image, i) in images" :key="i" style="width: 100%">
-        <img :style="`aspect-ratio: ${aspect}`" style="object-fit: cover; width: 100%;" :src="`/img/product/${image.url}`" alt="">
+        <NuxtImg  :style="`aspect-ratio: ${aspect}`" style="object-fit: cover; width: 100%;" :src="`/img/product/${image.url}`" alt="" />
       </article>
     </Flicking>
   </div>

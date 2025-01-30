@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {useRouter} from "nuxt/app";
-
 const router = useRouter()
 
 const goToBack = () => {

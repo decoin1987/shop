@@ -8,9 +8,9 @@ interface event {
   data: {}
 }
 
-export const useAuthStore = defineStore('auth', async () => {
+export const useAuthStore = defineStore('auth', () => {
 
-  const token = useCookie('token', {maxAge: 15 * 60, secure: true, sameSite: true})
+  const token = useCookie('token', {maxAge: 5, secure: true, sameSite: true})
   const router = useRouter()
 
   const isAuth = ref(false)
@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', async () => {
 
   const useSignUp = async (event: event) => {
     const requestOptions: {} = {
-      body: JSON.stringify(event.data)
+      body: event
     };
     // @ts-ignore-all
     await useFetch('api/identity/registration', {
@@ -43,8 +43,9 @@ export const useAuthStore = defineStore('auth', async () => {
   }
   const useSignIn = async (event: event) => {
     const requestOptions: {} = {
-      body: JSON.stringify(event.data)
+      ...event
     };
+    const token = useCookie('token', {maxAge: 15*60*60})
     console.log(JSON.stringify(event.data))
     await useFetch('api/identity/login', {
       onRequest({request, options}: { request: any, options: any }) {
@@ -65,7 +66,7 @@ export const useAuthStore = defineStore('auth', async () => {
       onResponseError({request, response, options}) {
 
       },
-      ...requestOptions
+      body: {...requestOptions}
     })
   }
   const useLogout = async (no_message:boolean) => {
@@ -79,6 +80,7 @@ export const useAuthStore = defineStore('auth', async () => {
       },
       onResponse({request, response, options}) {
         if (response?._data?.status === 200) {
+
           isUser.value = null
           isAuth.value = false
           router.push({ path: "/" })

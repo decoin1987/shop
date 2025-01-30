@@ -112,7 +112,7 @@ const stories = ref([
       <article v-for="(store, index) in stories" :key="store.id + index" class="panel w-4/6 sm:w-3/6 md:w-2/6 lg:w-1/4" style="position: relative">
         <div class="story-card" style="position: relative">
           <h1>{{ store.label }}</h1>
-          <img style="object-fit: cover; position: absolute; top: 0; bottom: 0; right: 0; left: 0;" :src="`/images/${store.link}`" alt="">
+          <NuxtImg  style="object-fit: cover; position: absolute; top: 0; bottom: 0; right: 0; left: 0;" :src="`/images/${store.link}`" alt="" />
         </div>
       </article>
 <!--      <template #viewport>-->

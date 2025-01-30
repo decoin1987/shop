@@ -78,7 +78,7 @@ onChange((files) => {
           <UButton color="white" variant="ghost" :ui="{ rounded: 'rounded-md'}" class="del-btn" type="button" @click="delPhoto(index, photo)">
             Удалить
           </UButton>
-          <img class="rounded-md" style="height: 110px; width: 110px; object-fit: cover;" :src="pathPhotos[index]"
+          <NuxtImg class="rounded-md" style="height: 110px; width: 110px; object-fit: cover;" :src="pathPhotos[index]"
                alt=""/>
         </div>
       </template>

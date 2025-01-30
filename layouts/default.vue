@@ -4,6 +4,10 @@ import {useCartStore} from "~/stores/cart.store";
 import {useLocalStorage} from '@vueuse/core';
 import {ref} from "@vue/reactivity";
 import Flicking from "@egjs/vue3-flicking";
+import {useCookie, useRuntimeConfig} from "nuxt/app";
+import { jwtDecode } from "jwt-decode";
+
+const token = useLocalStorage('token')
 
 const menu = [
   {
@@ -82,7 +86,7 @@ const options = {
 }
 
 const categoryStore = useCategoryStore()
-
+const runtimeConfig = useRuntimeConfig();
 
 const cartStore = useCartStore()
 const cart = useLocalStorage('cart', [])
@@ -91,7 +95,7 @@ watch(cart, () => {
   return countCart.value = cart.value.length > 0;
 })
 
-
+const logout = () => $fetch('/api/identity/logout').then(r => console.log(r))
 </script>
 
 <template>
@@ -99,7 +103,7 @@ watch(cart, () => {
     <UContainer class="w-full flex flex-wrap flex-row items-center gap-10">
       <div class="flex flex-wrap">
         <NuxtLink to="/">
-          <img style="height: 65px; width: auto;" alt="букет72.рф логотип" src="/icon/logo1.svg"/>
+          <img style="height: 65px; width: auto;" alt="букет72.рф логотип" src="/icon/logo1.svg" />
         </NuxtLink>
         <UDivider orientation="vertical" class="my-3 mx-6" />
         <p class="self-center">Доставка свежих цветов</p>
@@ -113,6 +117,9 @@ watch(cart, () => {
         </UButton>
         <UButton rounded size="md" type="button" @click="$router.push('/account')">
           ЛК
+        </UButton>
+        <UButton rounded size="md" type="button" @click="logout">
+          Выйти
         </UButton>
         <UButton rounded size="md"  type="button" @click="$router.push('/admin')">
           Админка

@@ -1,28 +1,37 @@
 <script lang="js" setup>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import {computed, ref} from "vue";
-import {useAsyncData} from "nuxt/app";
 import useProductColor from "../../../composables/useProductColors.js";
-
+import useProductTags from "../../../composables/useProductTags.js";
 
 const route = useRoute()
 const router = useRouter()
 const props = defineProps({
   product: Object,
-  productColors: Object,
-  tag: Object,
+  colors: Object,
   tax: Object,
+  tagStore: Object,
+  categoryStore: Object,
 })
-const { colors, fetchProductColor, mapColors } = useProductColor()  
-await fetchProductColor(route.params.id);
 
+const { colorsInProduct, fetchProductColor } = useProductColor()
+await fetchProductColor(route.params.id);
+const { tagsInProduct, fetchProductTags } = useProductTags()
+await fetchProductTags(route.params.id);
+
+props.product.colors = []
+props.product.colors = [...colorsInProduct.value]
+props.product.consist = []
+props.product.tags = tagsInProduct.value.map(el => el.tag_id)
 
 </script>
 
+
 <template>
+  <UDivider />
+
   <UForm :state="props.product" class="flex w-full flex-col gap-3">
-    <div class="flex frex-row w-full gap-4">
+    <div class="flex flex-row w-full gap-4">
       <UFormGroup class="w-full" label="Артикул">
         <UInput v-model="props.product.vendor_code" size="xl" placeholder="Артикул"/>
       </UFormGroup>
@@ -36,16 +45,29 @@ await fetchProductColor(route.params.id);
         <USelectMenu v-model="props.product.tax_id" size="xl" placeholder="Налог" :options="props.tax" valueAttribute="id" optionAttribute="title"/>
       </UFormGroup>
     </div>
-    <div class="flex frex-row w-full gap-4">
-      <UFormGroup class="w-full" label="Собран">
-        <VueDatePicker v-model="props.product.created_at" readonly  model-type="iso" timezone="Asia/Tashkent"></VueDatePicker>
+    <div class="flex flex-row w-full gap-4">
+      <UFormGroup label="Теги" class="w-full" name="tag" v-if="tagStore">
+        <USelectMenu placeholder="Теги" size="xl" v-model="product.tags" :options="tagStore" multiple
+                     valueAttribute="id" optionAttribute="title">
+          <template #label>
+            <div v-if="props.product.tags?.length" class="truncate flex h-6 items-center gap-1">
+              <UBadge v-for="tag in props.product?.tags">
+                {{
+                  tagStore.find(el => el.id === tag).title
+                }}
+              </UBadge>
+            </div>
+            <span v-else>Выбрать тег</span>
+          </template>
+        </USelectMenu>
       </UFormGroup>
-      <UFormGroup class="w-full" label="Изменен">
-        <VueDatePicker v-model="props.product.updated_at" readonly  model-type="iso" timezone="Asia/Tashkent"></VueDatePicker>
+      <UFormGroup label="Категория" class="w-full" name="category">
+        <USelectMenu size="xl" placeholder="Теги" v-model="product.category_id" :options="categoryStore.rows"
+                     valueAttribute="id" optionAttribute="title"/>
       </UFormGroup>
     </div>
     <UDivider />
-    <div class="flex frex-row w-full gap-4">
+    <div class="flex flex-row w-full gap-4">
       <UFormGroup label="Показывать на сайте">
         <UToggle v-model="props.product.active" size="xl" placeholder="Показывать на сайте"/>
       </UFormGroup>
@@ -60,7 +82,7 @@ await fetchProductColor(route.params.id);
       </UFormGroup>
     </div>
     <UDivider />
-    <div class="flex frex-row w-full gap-4">
+    <div class="flex flex-row w-full gap-4">
       <UFormGroup class="w-full" label="Размеры (Д x Ш x В)">
         <UInput v-model="props.product.size" size="xl" placeholder="Размеры (Д x Ш x В)"/>
       </UFormGroup>
@@ -77,12 +99,12 @@ await fetchProductColor(route.params.id);
         <UInput v-model="props.product.sort" size="xl" placeholder="Порядок сортировки"/>
       </UFormGroup>
       <UFormGroup class="w-full" label="Цвета">
-        <USelectMenu multiple size="xl" placeholder="Цвета" v-model="colors"
-                     :options="props.productColors?.rows" valueAttribute="id" optionAttribute="title">
+        <USelectMenu multiple size="xl" placeholder="Цвета" v-model="props.product.colors"
+                     :options="props.colors?.rows" valueAttribute="id" optionAttribute="title">
           <template #label>
-            <div v-if="colors.length" class="truncate flex h-6 items-center gap-1">
-              <div v-for="color in colors"
-                   :style="`background-color:`+ props.productColors?.rows.find(el => el.id === color).hex"
+            <div v-if="props.product.colors?.length" class="truncate flex h-6 items-center gap-1">
+              <div v-for="color in props.product.colors"
+                   :style="`background-color:`+ props.colors?.rows.find(el => el.id === color).hex"
                    :class="['inline-block h-5 w-5 flex-shrink-0 rounded-full ring-1 ring-gray-200']">
               </div>
             </div>
@@ -96,7 +118,15 @@ await fetchProductColor(route.params.id);
         </USelectMenu>
       </UFormGroup>
     </div>
-    <UButton class="self-start" type="submit" label="Сохранить"/>
+    <div class="flex flex-row w-full gap-4">
+      <UFormGroup class="w-full" label="Собран">
+        <VueDatePicker v-model="props.product.created_at" readonly  model-type="iso" timezone="Asia/Tashkent"></VueDatePicker>
+      </UFormGroup>
+      <UFormGroup class="w-full" label="Изменен">
+        <VueDatePicker v-model="props.product.updated_at" readonly  model-type="iso" timezone="Asia/Tashkent"></VueDatePicker>
+      </UFormGroup>
+    </div>
+    <UButton class="self-start" type="submit" label="Сохранить" @click="$emit('saveProduct')"/>
   </UForm>
 </template>
 

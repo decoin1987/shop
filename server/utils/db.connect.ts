@@ -1,18 +1,8 @@
 //@ts-nocheck
 import {Sequelize} from "sequelize";
-import configs from "../utils/config.json"
-const env: string = process.env.NODE_ENV;
 
-interface config {
-    database: string,
-    username: string,
-    password: string,
-    dialect: string,
-    host: string | number,
-}
 
-const config: config = configs[env];
-
+console.log(process.env)
 const doLog = (text: any) => {
     const date = new Date();
     console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`)
@@ -38,12 +28,12 @@ const doLog = (text: any) => {
 // });
 
 export const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
+    process.env.NUXT_API_DB,
+    process.env.NUXT_API_DB_USERNAME,
+    process.env.NUXT_API_DB_PASSWORD,
     {
-        dialect: config.dialect,
-        host: config.host,
+        dialect: process.env.NUXT_API_DB_DIALECT,
+        host: process.env.NUXT_API_DB_HOST,
         define: {
             hooks: {
                 beforeCreate() {

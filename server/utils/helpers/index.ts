@@ -6,9 +6,12 @@ import {createError} from "h3";
 import {v4 as uuid} from "uuid";
 
 export const CONFIG = {
-    filePath: path.resolve('.', 'public/img/product'),
-    logPath: path.resolve('.', 'log')
+    filePath: process.env.NODE_ENV === 'development' ? path.resolve(process.cwd(), 'public/img/product') : path.resolve(process.cwd(), '.output/public/img/product'),
+    logPath: path.resolve(process.cwd(), 'log')
 }
+
+console.log(process.cwd())
+console.log(CONFIG)
 
 export const IMAGES = {
     doDirSync: (filePath: string) => {
@@ -126,8 +129,19 @@ export const stringSlugify = (str: String) => {
     // return newStr
 }
 
+export function removedItems (currentValue:[], newValue:[]) {
+    console.log(currentValue.filter(id => !newValue?.includes(id)))
+    return currentValue.filter(id => !newValue?.includes(id));
+}
+export function addedItems (currentValue:[], newValue:[]) {
+    console.log(newValue.filter(id => !currentValue?.includes(id)))
+    return newValue.filter(id => !currentValue?.includes(id));
+}
+
 export default {
     CONFIG,
     IMAGES,
     stringSlugify,
+    removedItems,
+    addedItems,
 }

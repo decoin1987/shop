@@ -145,7 +145,7 @@ const orderUpSaleAdd = (product, up_sale) => {
             <Flicking :options="options">
               <article  v-for="(link, i) in vazes" :key="i" class="panel rounded-md rounded-tl-xl rounded-br-xl">
                 <div class="flex-col" style="padding: 2px; flex: 1 1; position: relative">
-                  <img class="rounded-md" :src="link" alt="">
+                  <NuxtImg class="rounded-md" :src="link" alt="" />
                   <p style="font-size: 13px; padding: 3px 3px">Ваза для ваших цветов № {{ i+1 }}</p>
                   <ClientOnly>
                     <UButton @click="orderUpSaleAdd(product, link)" :ui="{rounded: 'rounded-md rounded-tl-xl rounded-br-xl'}" size="xs" color="black" block>
@@ -164,7 +164,7 @@ const orderUpSaleAdd = (product, up_sale) => {
           <Flicking :options="options">
             <article  v-for="(link, i) in prezents" :key="link" class="panel rounded-md rounded-tl-xl rounded-br-xl">
               <div class="flex-col" style="padding: 2px; flex: 1 1; position: relative">
-                <img class="rounded-md" :src="link" alt="">
+                <NuxtImg class="rounded-md" :src="link" alt="" />
                 <p style="font-size: 13px; padding: 3px 3px">Подарок № {{ i+1 }}</p>
                 <ClientOnly>
                   <UButton @click="orderUpSaleAdd(product, link)" :ui="{rounded: 'rounded-md rounded-tl-xl rounded-br-xl'}" size="xs" color="black" block>

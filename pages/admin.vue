@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-
 definePageMeta({
   layout: false,
+  middleware: 'auth',
+  roles: ['admin'],
 });
+
 const catalogLinks = [
   {
     label: 'Категории',
@@ -71,6 +73,11 @@ const customersLinks = [
     to: '/admin/customers/customers',
   },
   {
+    label: 'Зарегистрированные пользователи',
+    icon: 'i-material-symbols-light-folder-copy-outline',
+    to: '/admin/customers/users',
+  },
+  {
     label: 'Группы',
     icon: 'i-ph-flower-light',
     to: '/admin/customers/groups',
@@ -126,6 +133,7 @@ const systemLinks = [
   },
 ]
 const reportLinks = []
+
 </script>
 
 <template>

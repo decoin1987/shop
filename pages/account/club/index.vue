@@ -20,7 +20,7 @@ const goToBack = () => {
       <div class="flex-col gap-3">
         <h2>Клубная карта</h2>
         <div class="club-cart">
-          <img src="/icon/logo1.svg" width="150px" height="60px" alt="">
+          <img src="/icon/logo1.svg" width="150px" height="60px" alt="" />
           <div class="offer_wrapper flex-col gap-2" style="color: white">
             <p>Ваша скидка: <span style="font-size: 44px">13%</span></p>
             <p>Кешбек: <span style="font-size: 44px">2%</span></p>

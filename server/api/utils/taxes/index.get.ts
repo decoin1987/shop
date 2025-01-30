@@ -3,7 +3,7 @@ import Tax from "../../../models/tax";
 
 
 export default defineEventHandler(async (event) => {
-    return await Tax.findAndCountAll(
+    return await Tax.findAll(
         {
             order: [['title', 'ASC']],
         }

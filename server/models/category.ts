@@ -93,6 +93,14 @@ Category.init({
     sequelize,
     modelName: 'category',
     timestamps: true,
+    scopes: {
+        is_upsale: {
+            where: { is_upsale: true }
+        },
+        show_menu: {
+            where: { show_menu: true }
+        },
+    },
 });
 
 // Определение отношений между категориями

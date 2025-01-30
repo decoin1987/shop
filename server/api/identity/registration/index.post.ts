@@ -14,6 +14,8 @@ import {User} from "../../../models/user";
 import UserDto, {userModel} from "../../../dtos/user-dto";
 import MailService from "../../../utils/identity-service/mail-service";
 import TokenService from "../../../utils/identity-service/token-service";
+import Role from "../../../models/role";
+import {Customer} from "../../../models/customers";
 
 
 class userValidate {
@@ -47,16 +49,29 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
         })
     }
 
-    const hashPassword = await bcrypt.hash(password, 3)
+    const hashPassword = await bcrypt.hash(password, 10)
     const activationLink = uuid()
 
-    const user = await User.create({ email, password: hashPassword, activationLink, role: 'user' })
+    let role = await Role.findOne({where: {
+            create: false,
+            change: false,
+        }})
+    if (!role) {
+       role = await Role.create({
+           change: false, create: false, read: true, role: [true, false, false],
+           title: 'systemCreatedUser'
+
+       })
+    }
+    const user = await User.create({ email, password: hashPassword, activationLink, role_id:role.id})
+    const customer = await Customer.create( {user_id: user.id})
     if (!user) {
         throw createError({
             status: 404,
             message: 'Ошибка'
         })
     }
+
 
     // await MailService.sendActivationMail(email, `${process.env.API_URL}/api/identity/activate/${activationLink}`)
     const userDto = new UserDto(user as unknown as userModel)

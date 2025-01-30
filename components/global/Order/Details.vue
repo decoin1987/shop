@@ -18,10 +18,11 @@ const props = defineProps({
   sub_sales: Array
 })
 const different_address = ref(false)
-const order = useLocalStorage('cart', [])
+
+const order_items = useLocalStorage('cart', [])
 
 const delItem = (order_item) => {
-  order.value = order.value.filter(el => el.id !== order_item.id)
+  order_items.value = order_items.value.filter(el => el.id !== order_item.id)
 }
 const orderItemDel = (order_item) => {
   if (order_item.count <= 1) order_item.count = 1
@@ -55,19 +56,19 @@ const delUpSale = (order_item, link) => {
   </div>
   <UDivider class="mt-2 mb-2"/>
   <div class="flex-col gap-1">
-    <template v-for="order_item in order">
+    <template v-for="order_item in order_items">
       <div class="product-card rounded-lg rounded-tl-3xl rounded-br-2xl p-2 bg-gray-50">
         <div v-if="different_address" class="flex flex-row gap-4 mb-2">
           <UButton :ui="{rounded:'rounded-full'}" size="xs">Выбрать адрес</UButton>
           <UButton :ui="{rounded:'rounded-full'}" size="xs">К определенному времени</UButton>
         </div>
         <div class="flex flex-row gap-4">
-          <img v-if="order_item?.product_images.length" class="rounded-lg rounded-tl-2xl rounded-br-2xl" style="object-fit: cover; aspect-ratio: 1/1"
-               :src="`img/product/${order_item?.product_images[0].url}`"
-               width="100" height="100" alt="">
-          <img v-else class="rounded-lg rounded-tl-2xl rounded-br-2xl" style="object-fit: cover; aspect-ratio: 1/1"
-               src="public/img/common/nophoto.png"
-               width="100" height="100" alt="">
+          <NuxtImg  v-if="order_item?.product_images" class="rounded-lg rounded-tl-2xl rounded-br-2xl" style="object-fit: cover; aspect-ratio: 1/1"
+               :src="`/img/product/${order_item?.product_images}`"
+               width="100" height="100" alt="" />
+          <NuxtImg  v-else class="rounded-lg rounded-tl-2xl rounded-br-2xl" style="object-fit: cover; aspect-ratio: 1/1"
+               src="/img/common/nophoto.png"
+               width="100" height="100" alt="" />
           <div class="flex flex-col gap-3 p-1">
             <p class="font-medium text-lg">{{ order_item.title }}</p>
             <div class="flex flex-row items-center gap-2 mt-auto">
@@ -102,7 +103,7 @@ const delUpSale = (order_item, link) => {
             <article v-for="(link, i) in order_item.up_sale" :key="i"
                      class="panel bg-white rounded-md rounded-tl-xl rounded-br-xl">
               <div class="flex-col p-0.5">
-                <img class="rounded-md" :src="link" alt="">
+                <NuxtImg  class="rounded-md" :src="link" alt="" />
                 <p class="text-xs p-2">Ваза для ваших цветов № {{ i + 1 }}</p>
                 <UButton @click="delUpSale(order_item, link)" :ui="{rounded: 'rounded-md rounded-tl-xl rounded-br-xl'}" size="xs" color="white"
                          variant="solid" block>
@@ -112,7 +113,7 @@ const delUpSale = (order_item, link) => {
             </article>
           </div>
         </div>
-        <div v-if="props.sub_sales.length" class="pt-1">
+        <div v-if="props.sub_sales" class="pt-1">
           <p class="text-sm mb-2" style="margin-top: 3px">
             Добавьте к букету
           </p>
@@ -120,7 +121,7 @@ const delUpSale = (order_item, link) => {
             <article v-for="(link, i) in props.sub_sales" :key="i"
                      class="panel bg-white rounded-md rounded-tl-xl rounded-br-xl">
               <div class="flex-col p-0.5">
-                <img class="rounded-md" :src="link as string" alt="">
+                <NuxtImg  class="rounded-md" :src="link" alt="" />
                 <p class="text-xs p-2">Ваза для ваших цветов № {{ i + 1 }}</p>
                 <UButton @click="addUpSale(order_item, link)" :ui="{rounded: 'rounded-md rounded-tl-xl rounded-br-xl'}" size="xs" color="white"
                          variant="solid" block>
@@ -134,6 +135,9 @@ const delUpSale = (order_item, link) => {
       <UDivider class="mt-2 mb-2"/>
     </template>
   </div>
+  <pre>
+    {{ order_items }}
+  </pre>
 </template>
 
 <style scoped lang="scss">

@@ -5,7 +5,7 @@ import { stringSlugify } from '../utils/helpers';
 interface TagAttributes {
     id: string;
     title: string;
-    descriptions: string;
+    description: string;
     sort: number;
     slug: string;
 }
@@ -16,7 +16,7 @@ type TagCreationAttributes = Optional<TagAttributes, 'id' | 'sort'>;
 class Tag extends Model<TagAttributes, TagCreationAttributes> implements TagAttributes {
     declare id: string; // primary key
     declare title: string;
-    declare descriptions: string;
+    declare description: string;
     declare sort: number;
     declare slug: string;
 
@@ -37,7 +37,7 @@ Tag.init({
         allowNull: false,
         unique: true,
     },
-    descriptions: {
+    description: {
         type: DataTypes.STRING,
     },
     sort: {

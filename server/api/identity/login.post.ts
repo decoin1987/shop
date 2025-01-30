@@ -5,6 +5,8 @@ import {User} from "../../models/user";
 import bcrypt from "bcrypt";
 import TokenService from "../../utils/identity-service/token-service";
 
+
+
 class userValidate {
     static loginValidate(obj: { password: string; email: string }) {
         if (!obj.email) {
@@ -23,11 +25,10 @@ class userValidate {
     }
 }
 
-
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
     const {password, email} = userValidate.loginValidate(await readBody(event))
     const user = await User.findOne({
-        where: {email}
+        where: {email: email.toLowerCase()}
     })
     if (!user) {
         throw createError({
@@ -35,6 +36,8 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
             message: 'Пользователь с таким email не найден'
         })
     }
+
+
     const comparePassword = bcrypt.compareSync(password, user.password)
     if (!comparePassword) {
         throw createError({
@@ -42,10 +45,20 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
             message: 'Неправильно указан пароль или имя пользователя'
         })
     }
+
+
     const userDto = new UserDto(user as unknown as userModel)
     const tokens = TokenService.generateTokens({...userDto})
     await TokenService.saveToken(userDto.id as unknown as string, tokens.refreshToken)
-    setCookie(event, 'refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+    setCookie(event, 'refreshToken', tokens.refreshToken, {
+        // maxAge: 2592000,
+        maxAge: 5,
+        httpOnly: true,
+    })
+    // setCookie(event, 'token', JSON.stringify(userDto), {
+    //
+    //     encode: generateAccessToken
+    // })
     const token = tokens.accessToken
     return {user: userDto, token, status: 200, message: 'Вы успешно вошли на сайт'}
 });

@@ -112,7 +112,7 @@ const updateTax = async (row) => {
               v-if="taxStatus === 'success'"
               v-model="selected"
               :sort-button="{ icon: 'i-heroicons-sparkles-20-solid', color: 'white', variant: 'ghost', size: 'sm', square: false, ui: { rounded: 'rounded-full' } }"
-              :rows="tax?.rows" :columns="columns">
+              :rows="tax" :columns="columns">
         <template #title-data="{row}">
           <UInput v-model="newTax.title" v-if="isEdit === row.id" />
           <p v-else>{{ row.title }}</p>

@@ -1,8 +1,11 @@
-import Category from "../../../models/category";
 import {defineEventHandler, EventHandlerRequest, H3Event, readBody} from "h3";
 import Product from "../../../models/product";
-import Tag from "../../../models/tag";
-import ProductImage from "../../../models/product_image";
+import ProductColor from "../../../models/product_color";
+import {removedItems, addedItems} from '../../../utils/helpers'
+import ProductTag from "../../../models/product_tag";
+import Consist from "../../../models/consist";
+import consist from "../../../models/consist";
+
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
     const product = await readBody(event)
@@ -35,5 +38,50 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
         productToChange.tax_id = product.tax_id
         await productToChange.save()
     }
+    if (product.colors) {
+        const colorsInProduct = await ProductColor.findAll({
+            where: {
+                product_id: product.id
+            }
+        })
+        const currentColorsIds = colorsInProduct.map(color => color.color_id);
+        await productToChange.removeColors(removedItems(currentColorsIds as [], product.colors))
+        await productToChange.addColors(addedItems(currentColorsIds as [], product.colors))
+    }
+    if (product.tags) {
+        const tagsInProduct = await ProductTag.findAll({
+            where: {
+                product_id: product.id
+            }
+        })
+        const currentTagsIds = tagsInProduct.map(tag => tag.tag_id);
+        await productToChange.removeTags(removedItems(currentTagsIds as [], product.tags))
+        await productToChange.addTags(addedItems(currentTagsIds as [], product.tags))
+    }
+    if (product.consist) {
+        const productConsists = await Consist.findAll({
+            where: {
+                product_id: product.id
+            }
+        })
+        const removedProductConsist = JSON.parse(JSON.stringify(productConsists))
+            .filter(el => !product.consist.map(c => c.consist_id)?.includes(el.consist_id)).map(el => el.id)
+        const addedProductConsist = product.consist
+            .filter(el => !productConsists.map(el => el.consist_id).includes(el.consist_id)).map(el => {
+                return {
+                    product_id: product.id,
+                    ...el
+                }
+            })
+
+        await Consist.destroy({
+            where: {
+                id: removedProductConsist
+            }
+        })
+        await Consist.bulkCreate(addedProductConsist)
+    }
+
     return productToChange
 });
+

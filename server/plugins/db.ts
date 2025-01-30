@@ -1,11 +1,11 @@
 import {sequelize} from "../utils/db.connect"
-import Category from "../models/category";
-import Tag from "../models/tag";
-import Tax from "../models/tax";
-import Product from "../models/product";
-import {stringSlugify} from "../utils/helpers";
-import {elementNames} from "dom-serializer/lib/foreignNames";
-import Color from "../models/colors";
+import {defineNitroPlugin} from "nitropack/runtime";
+import seedSuperUser from "../.seeds/su";
+import 'dotenv/config'
+import {users} from "./../utils/users"
+import {User} from "../models/user";
+import { v4 as uuid } from 'uuid'
+import {useRuntimeConfig} from "nuxt/app";
 const cat = [
     {
         "title": "Букеты",
@@ -44,7 +44,6 @@ const cat = [
         "slug": "myagkie_igruishki",
     }
 ]
-
 const tags = [
     {
 
@@ -94,7 +93,6 @@ const tags = [
         "sort": "500",
         "slug": "popravlyaysya"
     }]
-
 const product = [
     {
         "title": "Ромашковый бриз",
@@ -427,7 +425,6 @@ const product = [
         "vendor_code": "AZ030"
     }
 ]
-
 const FlowersNames = [
     "Роза",
     "Пион",
@@ -478,7 +475,6 @@ const FlowersNames = [
     "Фаленопсис",
     "Ятрышник"
 ]
-
 const CategoryNames = [
     "Монобукеты",
     "Авторские букеты",
@@ -495,7 +491,6 @@ const CategoryNames = [
     "Цветы по подписке",
     "Цветы поштучно"
 ]
-
 const Colors = [
     {
         "id": "275f548d-996f-467e-b631-1c16b052a1fb",
@@ -619,11 +614,37 @@ const flowersToSaveBase = FlowersNames.map(elementNames => {
 })
 
 export default defineNitroPlugin(async () => {
+    // console.log(process.env)
     try {
         await sequelize.authenticate()
         await sequelize.sync({alter: true})
+        // const userForSave = users.filter(el => el.email != '').map((user, index) => {
+        //     if (!!user.email && !!user.telephone && !!user.salt && !!user.password) {
+        //         console.log(user.email != '', user.telephone != '', user.salt != '', user.password != '')
+        //         return {
+        //             telephone: '+7'+ user.telephone.replaceAll(' ', '').replaceAll('-', '').slice(-10),
+        //             email: user.email.toLowerCase(),
+        //             password: null,
+        //             salt: null,
+        //             activationLink: uuid(),
+        //             activated: true,
+        //             role_id: '893d8743-cc68-4089-8011-3c6d6418bf7c',
+        //         }
+        //     }
+        // })
+        // for (let el of userForSave) {
+        //     try {
+        //         if (!!el.email) {
+        //             console.log(el.email)
+        //             await User.create(el);
+        //         }
+        //
+        //     } catch (e) {
+        //         console.log (e)
+        //     }
+        // }
         // await User.sync({force: true});
-
+        // await User.bulkCreate(userForSave)
         // const flower = await Category.findOne({where: {title: "Цветы поштучно"}})
         //
         // // Добавляем parent_id ко всем цветам
@@ -633,6 +654,7 @@ export default defineNitroPlugin(async () => {
         // }))
         //
         // await Category.bulkCreate(flowersWithParent)
+        await seedSuperUser()
 
 
         // await Category.bulkCreate(categoryToSaveBase)
