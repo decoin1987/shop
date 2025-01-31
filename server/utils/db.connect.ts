@@ -1,8 +1,6 @@
 //@ts-nocheck
 import {Sequelize} from "sequelize";
 
-
-console.log(process.env)
 const doLog = (text: any) => {
     const date = new Date();
     console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`)
@@ -42,6 +40,11 @@ export const sequelize = new Sequelize(
             },
             underscored: true,
         },
-        logging: false
     }
 )
+
+sequelize.options.logging = (sql, timing) => {
+    if (timing > 500) { // Логируем только медленные запросы (более 1 секунды)
+        console.log(`Slow query: ${sql}, took ${timing}ms`);
+    }
+};

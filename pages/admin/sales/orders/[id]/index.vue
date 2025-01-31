@@ -182,7 +182,7 @@ const deleteRawTag = (item: any) => {
                   }"
     />
     <div class="flex w-full">
-      <NuxtImg v-if="images[0]" class="self-end mr-5" style="height:110px; aspect-ratio: 1; object-fit: cover" :src="`/img/product/${images[0].url}`" alt=""/>
+      <NuxtImg v-if="images?.[0]" class="self-end mr-5" style="height:110px; aspect-ratio: 1; object-fit: cover" :src="`/img/product/${images[0].url}`" alt=""/>
       <div class="w-full">
         <h1 class="text-3xl mb-6 font-sans">{{ product.title }}</h1>
         <UHorizontalNavigation size="" :links="nav" class="w-full border-b border-gray-500 dark:border-gray-800"/>

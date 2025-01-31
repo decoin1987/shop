@@ -7,7 +7,7 @@ export const Token = sequelize.define('token', {
             primaryKey: true,
             defaultValue: DataTypes.UUIDV4,
         },
-        refreshToken: {
+        refresh_token: {
             type : DataTypes.STRING,
         },
     },

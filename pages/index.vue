@@ -128,6 +128,7 @@ const LOCATION = ref<YMapLocationRequest>({
   center: [65.578139, 57.106595],
   zoom: 19,
 });
+
 const mapSettings = ref({
   location: LOCATION,
 })
@@ -273,7 +274,7 @@ const options = {
               <div
                   class="flex items-center justify-center bg-white ring-1 ring-primary-700 rounded-full relative w-10 h-10 -mt-7 -ml-5"
               >
-                <NuxtImg src="/icon/logoicon.svg" width="30px" height="30px" alt="" />
+                <img src="/icon/logoicon.svg" width="30px" height="30px" alt="" />
               </div>
             </YandexMapMarker>
           </YandexMap>

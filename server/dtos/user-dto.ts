@@ -14,9 +14,11 @@ export interface userModel {
 export default class UserDto {
     id;
     role;
+    activated;
 
     constructor(model: userModel) {
         this.id = model.id
-        this.role = model.role
+        this.role = model.role.role
+        this.activated = model.activated
     }
 }

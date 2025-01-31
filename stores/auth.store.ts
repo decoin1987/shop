@@ -2,19 +2,15 @@
 import {defineStore} from 'pinia'
 import {useCookie, useFetch, useRouter} from 'nuxt/app';
 import {ref} from "vue";
+import {useLocalStorage} from "@vueuse/core";
 
-
-interface event {
-  data: {}
-}
 
 export const useAuthStore = defineStore('auth', () => {
 
-  const token = useCookie('token', {maxAge: 5, secure: true, sameSite: true})
+  const token = useCookie('token', {maxAge: 60*15, secure: true, sameSite: true})
+  const user = useLocalStorage('bouquet_user')
   const router = useRouter()
-
-  const isAuth = ref(false)
-  const isUser = ref(null)
+  const toast = useToast()
 
   const useSignUp = async (event: event) => {
     const requestOptions: {} = {
@@ -31,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
       onResponse({request, response, options}) {
         if (response._data.status === 200) {
           token.value = response._data.token
-
+          user.value = JSON.stringify(response._data.user)
           router.push({path: "/"})
         }
       },
@@ -41,12 +37,7 @@ export const useAuthStore = defineStore('auth', () => {
       ...requestOptions
     });
   }
-  const useSignIn = async (event: event) => {
-    const requestOptions: {} = {
-      ...event
-    };
-    const token = useCookie('token', {maxAge: 15*60*60})
-    console.log(JSON.stringify(event.data))
+  const useLogIn = async (event: event) => {
     await useFetch('api/identity/login', {
       onRequest({request, options}: { request: any, options: any }) {
         options.method = 'POST'
@@ -58,19 +49,19 @@ export const useAuthStore = defineStore('auth', () => {
       onResponse({request, response, options}) {
         if (response?._data?.status === 200) {
           token.value = response._data.token
-          isUser.value = response._data.user
-          isAuth.value = true
-          // router.push({ path: "/" })
+          user.value = JSON.stringify(response._data.user)
         }
       },
       onResponseError({request, response, options}) {
 
       },
-      body: {...requestOptions}
+      body: {
+        ...event
+      }
     })
   }
-  const useLogout = async (no_message:boolean) => {
-    await useFetch('/api/logout', {
+  const useLogout = async () => {
+    await useFetch('/api/identity/logout', {
       onRequest({request, options}: { request: any, options: any }) {
         options.method = 'GET'
         options.headers = options.headers || {}
@@ -80,15 +71,32 @@ export const useAuthStore = defineStore('auth', () => {
       },
       onResponse({request, response, options}) {
         if (response?._data?.status === 200) {
-
-          isUser.value = null
-          isAuth.value = false
-          router.push({ path: "/" })
+          user.value = null
+          // router.push({ path: "/" })
         }
       },
       onResponseError({request, response, options}) {
 
       },
+    })
+  }
+
+  const useRefresh = async () => {
+    await useFetch('/api/identity/refresh', {
+      onResponse({request, response, options}) {
+        if (response?._data?.status === 200) {
+          user.value = JSON.stringify(response._data.user)
+          token.value = response._data.token
+        }
+        if (response?._data?.status === 401) {
+          user.value = null
+          authError(response?._data?.message)
+        }
+      },
+      method: 'POST',
+      body: {
+          user: JSON.parse(user.value),
+      }
     })
   }
 
@@ -98,14 +106,17 @@ export const useAuthStore = defineStore('auth', () => {
         await useLogout(true)
         break;
       case 'NO_COOKIE':
+        toast.add({ title: 'Войдите пожалуйста на сайт' })
         await router.replace('/login')
         break;
       case 'NO_RIGHTS':
+        await router.replace('/')
+        toast.add({ title: 'У тебя нет прав на это' })
         break;
       case 'SERVER_INTERNAL_ERROR':
         break;
     }
   }
 
-  return {isAuth, isUser, useSignUp, useSignIn, authError, useLogout}
+  return {useSignUp, useLogIn, authError, useLogout, useRefresh, useUser:user.value}
 })

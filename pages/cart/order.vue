@@ -69,16 +69,13 @@ const temp = ref(10)
 const addresses = ref([
   { "title": "2-й микрорайон, Тюмень",
     "coordinates": [ 65.588631, 57.115134 ],
-    "entrance": null,
-    "floor": null,
-    "flat": null,
-    "deliveryZonePrice": 250,
-    "village": true },
+    "entrance": null, "floor": null, "flat": null, "deliveryZonePrice": 250, "village": true },
   { "title": "Береговая улица, 222, садоводческое товарищество Калинка, Тюменский район",
     "coordinates": [ 65.729774, 57.146315 ],
     "entrance": null, "floor": null, "flat": null, "deliveryZonePrice": 450, "village": true },
   { "title": "товарищество собственников недвижимости Серебряный Бор, 1096, Тюменский район",
-    "coordinates": [ 65.877817, 57.12047 ], "entrance": "12", "floor": "21", "flat": "32", "deliveryZonePrice": 1000, "village": false }
+    "coordinates": [ 65.877817, 57.12047 ],
+    "entrance": "12", "floor": "21", "flat": "32", "deliveryZonePrice": 1000, "village": false }
 ])
 const selectedAddrs = ref([])
 const color = computed(() => {

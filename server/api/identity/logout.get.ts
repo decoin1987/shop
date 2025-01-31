@@ -1,8 +1,8 @@
-import {createError, defineEventHandler, getQuery, getRouterParam} from "h3";
+import {createError, defineEventHandler, getQuery, getRouterParam, setCookie} from "h3";
 const env = process.env.JWT_ACCESS_SECRET;
 
 export default defineEventHandler(async (event) => {
-
-
-    return
+    setCookie(event, 'refreshToken', '', {maxAge: 0})
+    setCookie(event, 'token', '', {maxAge: 0})
+    return {status: 200, message: 'Вы успешно вышли'}
 })

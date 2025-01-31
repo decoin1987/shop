@@ -3,5 +3,5 @@ import Product from "../../../../models/product";
 
 
 export default defineEventHandler(async (event) => {
-    return await Product.scope('active').findAll()
+    return await Product.scope('active').findAndCountAll()
 })

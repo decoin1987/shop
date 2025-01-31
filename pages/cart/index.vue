@@ -79,6 +79,7 @@ const delAddress = (address: {}) => {
         <p>Клубная скидка</p>
         <p>Скидка</p>
         <p>Итого</p>
+        <UButton to="/cart/order">Перейти к оформлению</UButton>
       </div>
     </div>
   </UContainer>

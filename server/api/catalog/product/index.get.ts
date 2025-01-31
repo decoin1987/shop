@@ -10,26 +10,26 @@ export default defineEventHandler(async (event) => {
     return await Product.findAndCountAll(
         {
             include: [
-                {
-                    model: Tag,
-                    as: 'tags',
-                    attributes: ['title', 'slug']
-                },
+                // {
+                //     model: Tag,
+                //     as: 'tags',
+                //     attributes: ['title', 'slug']
+                // },
                 {
                     model: ProductImage,
                     as: 'product_images',
                     attributes: ['url']
                 },
-                {
-                    model: Category,
-                    as: 'category',
-                    attributes: ['parent_id', 'title', 'slug']
-                },
-                {
-                    model: Tax,
-                    as: 'tax',
-                    attributes: ['title', 'value']
-                }
+                // {
+                //     model: Category,
+                //     as: 'category',
+                //     attributes: ['parent_id', 'title', 'slug']
+                // },
+                // {
+                //     model: Tax,
+                //     as: 'tax',
+                //     attributes: ['title', 'value']
+                // }
             ],
             attributes: ['id', 'title', 'slug', 'price'],
             distinct:true,

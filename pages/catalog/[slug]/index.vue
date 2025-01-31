@@ -21,23 +21,26 @@ const links = [
   }
 ]
 const cartStore = useCartStore()
-const products = await $fetch(`/api/catalog/category/${route.params.slug}/products?page=1`)
-const category = await $fetch(`/api/catalog/category/${route.params.slug}`)
+const { data:products, status:productStatus, refresh:productRefresh } = useFetch(`/api/catalog/category/${route.params.slug}/products?page=1`)
+const { data:category, status:categoryStatus, refresh:categoryRefresh  } = useFetch(`/api/catalog/category/${route.params.slug}`)
 const page = ref(1)
+
 </script>
 
 <template>
   <UContainer id="links" as="section" class="w-full mb-14">
     <UBreadcrumb class="mb-6" :links="links"/>
-    <h1 class="p-0 m-0 text-5xl mb-6">{{ category.title }}</h1>
+    <h1 v-if="categoryStatus==='success'" class="p-0 m-0 text-5xl mb-6">{{ category.title }}</h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-      <Card
-          v-for="product in products?.rows"
-          :key="product.id"
-          @showSaleDescription="showSaleDescription"
-          :product="product"
-          @addToCart="cartStore.addToCart"
-      />
+      <template v-if="productStatus==='success'">
+        <Card
+            v-for="product in products.rows"
+            :key="product.id"
+            @showSaleDescription="showSaleDescription"
+            :product="product"
+            @addToCart="cartStore.addToCart"
+        />
+      </template>
     </div>
     <div class="flex w-full justify-center mt-10">
       <UPagination

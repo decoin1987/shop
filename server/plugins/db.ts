@@ -6,6 +6,11 @@ import {users} from "./../utils/users"
 import {User} from "../models/user";
 import { v4 as uuid } from 'uuid'
 import {useRuntimeConfig} from "nuxt/app";
+import Category from "../models/category";
+import Color from "../models/colors";
+import Tag from "../models/tag";
+import Tax from "../models/tax";
+import Product from "../models/product";
 const cat = [
     {
         "title": "Букеты",

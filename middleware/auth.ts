@@ -1,7 +1,7 @@
-import {useCookie} from "nuxt/app";
 import { jwtDecode } from "jwt-decode";
 import useToken from "~/composables/useTokenValidate";
 import {useAuthStore} from "~/stores/auth.store";
+import {parseCookies} from "h3";
 const secret =  'faqwegfq34ti3-4i3f403[4f34f234R34f324F324f3f'
 
 const getDecodeToken = (token) => {
@@ -12,11 +12,11 @@ const getDecodeToken = (token) => {
     }
 }
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
+
 
     const authState = useAuthStore()
-    console.log('Статус авторизации на сайте: ' + authState.isAuth)
-        // console.log(to)
+
     const { token } = useToken('token')
     const { refreshToken } = useToken('refreshToken')
     const toast = useToast()

@@ -7,7 +7,7 @@ import Flicking from "@egjs/vue3-flicking";
 import {useCookie, useRuntimeConfig} from "nuxt/app";
 import { jwtDecode } from "jwt-decode";
 
-const token = useLocalStorage('token')
+const authStore = useAuthStore()
 
 const menu = [
   {
@@ -118,7 +118,7 @@ const logout = () => $fetch('/api/identity/logout').then(r => console.log(r))
         <UButton rounded size="md" type="button" @click="$router.push('/account')">
           ЛК
         </UButton>
-        <UButton rounded size="md" type="button" @click="logout">
+        <UButton rounded size="md" type="button" @click="authStore.useLogout">
           Выйти
         </UButton>
         <UButton rounded size="md"  type="button" @click="$router.push('/admin')">
