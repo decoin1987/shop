@@ -72,11 +72,13 @@ const payOrder = async () => {
     },
     async onResponse({request, response, options}) {
       // Process the response data
-
+      if (response._data.statusCode === 500) {
+        console.log(response._data)
+      }
       console.log(response._data)
-      // await navigateTo(response._data, {
-      //   external: true
-      // })
+      await navigateTo(response._data.PaymentURL, {
+        external: true
+      })
     },
     onResponseError({request, response, options}) {
       console.error(response._data)
@@ -84,7 +86,7 @@ const payOrder = async () => {
     },
     body: {
       "TerminalKey": "1695022074642DEMO",
-      "OrderId": "1211132311",
+      "OrderId": "1211132311211111", // идентификатр заказа в системе  - у нас к каждому заказу будет формироваться транзакция - транзакция и будет orderId
       "PaymentId": "5353155",
       "Amount": "851500",
       "Receipt": {

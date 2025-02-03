@@ -51,12 +51,15 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
         "Token": token(order)
     }
 
-    // console.log('body', body)
+    console.log('body', body)
 
-    // const responseFromBank = await $fetch('https://securepay.tinkoff.ru/v2/Init', {
-    //     method: "POST",
-    //     body
-    // })
-    // @ts-ignore
-    return await sendRedirect(event, responseFromBank.PaymentURL, 302)|| createError({ message: 'Ошибка при оплате попробуйте позже'})
+    const responseFromBank = await $fetch('https://securepay.tinkoff.ru/v2/Init', {
+        method: "POST",
+        body
+    })
+    console.log(responseFromBank)
+
+    // return await sendRedirect(event, 'https://securepayments.tinkoff.ru/XhyOleOj', 302)|| createError({ message: 'Ошибка при оплате попробуйте позже'})
+    return responseFromBank
+    // PaymentURL
 })

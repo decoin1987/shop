@@ -1,6 +1,11 @@
 <script lang="ts" setup>
+import {useLocalStorage} from "@vueuse/core";
+
 definePageMeta({
   layout: false,
+  // middleware: [
+  //   'refresh',
+  // ],
 });
 
 const catalogLinks = [

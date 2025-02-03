@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 
 const authStore = useAuthStore()
 
+
 const menu = [
   {
     name: 'Информация',
@@ -108,24 +109,25 @@ const logout = () => $fetch('/api/identity/logout').then(r => console.log(r))
         <UDivider orientation="vertical" class="my-3 mx-6" />
         <p class="self-center">Доставка свежих цветов</p>
       </div>
-      <div class="flex flex-row gap-4 items-center ml-auto">
-        <UButton rounded size="md"  @click="$router.push('/login')">
-          Войти
-        </UButton>
-        <UButton rounded size="md"  @click="$router.push('/registration')">
-          Регистрация
-        </UButton>
-        <UButton rounded size="md" type="button" @click="$router.push('/account')">
-          ЛК
-        </UButton>
-        <UButton rounded size="md" type="button" @click="authStore.useLogout">
-          Выйти
-        </UButton>
-        <UButton rounded size="md"  type="button" @click="$router.push('/admin')">
-          Админка
-        </UButton>
-
-      </div>
+      <client-only>
+        <div v-if="!authStore.auth" class="flex flex-row gap-4 items-center ml-auto">
+          <UButton v-if="!authStore.isAuth" rounded size="md"  @click="$router.push('/login')">
+            Войти
+          </UButton>
+          <UButton v-if="!authStore.isAuth" rounded size="md"  @click="$router.push('/registration')">
+            Регистрация
+          </UButton>
+          <UButton v-if="authStore.isAuth" rounded size="md" type="button" @click="$router.push('/account')">
+            ЛК
+          </UButton>
+          <UButton v-if="authStore.isAuth" rounded size="md" type="button" @click="authStore.useLogout">
+            Выйти
+          </UButton>
+          <UButton v-if="authStore.isAuth" rounded size="md"  type="button" @click="$router.push('/admin')">
+            Админка
+          </UButton>
+        </div>
+      </client-only>
     </UContainer>
   </header>
   <nav class="bg-gray-100 py-6 mb-10 border-b border-gray-300 shadow-sm">

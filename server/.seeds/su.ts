@@ -13,12 +13,13 @@ const hashPassword = async (password) => {
 const seedSuperUser = async () => {
     const superUser = {
         username: process.env.SEED_USER_USERNAME || 'admin',
-        email: process.env.SEED_USER_EMAIL || 'admin@example.com',
+        email: process.env.SEED_USER_EMAIL || 'admin',
         change: true, create: true, read: true, role_id: '',
         password: ''
     };
     const existingUser = await User.findOne({ where: { email: superUser.email } });
-    let existingRole = await Role.findOne({ where: { title: 'admin' } });
+    let existingAdminRole = await Role.findOne({ where: { title: 'admin' } });
+    let existingUserRole = await Role.findOne({ where: { title: 'user' } });
     try {
         if (existingUser) {
             // console.log('Суперюзер с таким e-mail уже существует.');
@@ -26,8 +27,8 @@ const seedSuperUser = async () => {
         }
         const hashedPassword = await hashPassword(process.env.SEED_USER_PASSWORD || 'admin');
 
-        if (!existingRole) {
-            existingRole = await Role.create({
+        if (!existingAdminRole) {
+            existingAdminRole = await Role.create({
                 change: true,
                 create: true,
                 read: true,
@@ -36,10 +37,23 @@ const seedSuperUser = async () => {
             })
 
         }
+
+        if (!existingUserRole) {
+            existingUserRole = await Role.create({
+                change: true,
+                create: true,
+                read: true,
+                role: [true, false, false],
+                title: 'user'
+            })
+
+        }
+
         superUser.password = hashedPassword;
-        superUser.role_id = existingRole.id;
+        superUser.role_id = existingAdminRole.id;
 
         const newUser = await User.create(superUser);
+
         console.log('Суперюзер успешно создан.');
     } catch (err) {
         console.error(err.message);

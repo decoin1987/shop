@@ -15,7 +15,6 @@ import bcrypt from "bcrypt";
 import TokenService from "../../utils/identity-service/token-service";
 import {Token} from "../../models/token";
 
-const env = process.env.JWT_SECRET;
 
 class userService {
 
@@ -97,29 +96,75 @@ class userService {
         }
         return bcrypt.compareSync(password, userPassword)
     }
-
-    static compareTokens(oldToken, newToken) {
-
-    }
 }
 
 
 export default defineEventHandler(async (event) => {
-    const {user: bouquet_user} = await readBody(event)
     const {token, refreshToken} = parseCookies(event);
-    const userProfile = bouquet_user
+
+    console.log({token, refreshToken})
+
+    if (!token && refreshToken) {
+        const userProfile = TokenService.verifyRefreshToken(refreshToken)
+        console.log(userProfile)
+        if (!userProfile) {
+            setCookie(event, 'refreshToken', '', {maxAge: 0})
+            setCookie(event, 'token', '', {maxAge: 0})
+        }
+        const user = await userService.getUserById(userProfile.id)
+        const userRefreshToken = await Token.findByPk(userProfile.id)
+        if (!TokenService.compareTokens(refreshToken, userRefreshToken?.dataValues.refresh_token)) {
+            setCookie(event, 'refreshToken', '', {maxAge: 0})
+            setCookie(event, 'token', '', {maxAge: 0})
+
+        }
+        const newTokens = TokenService.generateTokens({...user})
+        await TokenService.saveToken(user.id as unknown as string, newTokens.refreshToken)
+        setCookie(event, 'refreshToken', newTokens.refreshToken, {
+            maxAge: 60 * 60 * 24 * 5, secure: false, sameSite: true, httpOnly: true,
+        })
+        setCookie(event, 'token', newTokens.accessToken, {
+            maxAge: 60 * 60 * 24, secure: false, sameSite: true,
+        })
+        const newToken = newTokens.accessToken
+        return {token:newToken, status: 200}
+    } else if (token && !refreshToken) {
+        setCookie(event, 'refreshToken', '', {maxAge: 0})
+        setCookie(event, 'token', '', {maxAge: 0})
+    }
+
+
+    const userProfile = TokenService.verifyAccessToken(token)
+    if (!userProfile) {
+        setCookie(event, 'refreshToken', '', {maxAge: 0})
+        setCookie(event, 'token', '', {maxAge: 0})
+
+    }
     const user = await userService.getUserById(userProfile.id)
     const userRefreshToken = await Token.findByPk(userProfile.id)
-
     if (!TokenService.compareTokens(refreshToken, userRefreshToken?.dataValues.refresh_token)) {
-        return { status: 401, message: 'EXPIRED_REFRESH_COOKIE' }
+        setCookie(event, 'refreshToken', '', {maxAge: 0})
+        setCookie(event, 'token', '', {maxAge: 0})
+
     }
     const newTokens = TokenService.generateTokens({...user})
     await TokenService.saveToken(user.id as unknown as string, newTokens.refreshToken)
     setCookie(event, 'refreshToken', newTokens.refreshToken, {
-        maxAge: 60 * 60 * 24 * 5, secure: true, sameSite: true, httpOnly: true,
+        maxAge: 60 * 60 * 24 * 5, secure: false, sameSite: true, httpOnly: true,
+    })
+    setCookie(event, 'token', newTokens.accessToken, {
+        maxAge: 60 * 60 * 24, secure: false, sameSite: true,
     })
     const newToken = newTokens.accessToken
-    return {user, token:newToken, status: 200}
+    return {token:newToken, status: 200}
+
+
+
+
+
+
+
+
+
 
 })

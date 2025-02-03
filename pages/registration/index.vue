@@ -5,12 +5,16 @@ import {ref} from "vue";
 const authStore = useAuthStore()
 const state = ref({})
 
+const registration = async () => {
+  await authStore.useSignUp({...state.value})
+}
+
 </script>
 
 <template>
   <UContainer class="w-full">
     <div class="pt-5 pb-10 flex gap-10">
-      <UForm class="flex flex-col rounded-md bg-cool-100 p-10 gap-5" style="flex: 1 0" @submit="authStore.useSignUp(state)">
+      <UForm class="flex flex-col rounded-md bg-cool-100 p-10 gap-5" style="flex: 1 0" @submit="registration">
         <div class="flex  items-baseline gap-2">
           <h1 class="p-0 m-0 text-5xl mb-6">Регистрация</h1>
         </div>

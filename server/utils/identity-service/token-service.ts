@@ -28,6 +28,21 @@ export default new class TokenService {
     }
   }
 
+  verifyRefreshToken (token) {
+    try {
+      return jwt.verify(token, process.env.NUXT_API_JWT_REFRESH_SECRET as unknown as string)
+    } catch (e) {
+      return null
+    }
+  }
+  verifyAccessToken (token) {
+    try {
+      return jwt.verify(token, process.env.NUXT_API_JWT_ACCESS_SECRET as unknown as string)
+    } catch (e) {
+      return null
+    }
+  }
+
   // https://youtu.be/fN25fMQZ2v0?t=1816 токены
 
   async saveToken (userId: string, refreshToken: string) {

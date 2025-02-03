@@ -4,8 +4,10 @@ import Flicking from "@egjs/vue3-flicking";
 import {ref} from "@vue/reactivity";
 import {useCartStore} from "~/stores/cart.store";
 import order from "~/pages/cart/order.vue";
+import {useAuthStore} from "~/stores/auth.store";
 
 const cartStore = useCartStore()
+
 const show = ref(true)
 const vazes = [
     'https://www.odealarose.com/media/cache/185_185_webp/accessory/php2AAlou-646d26d2b6fb3.webp',
@@ -31,11 +33,7 @@ const prezents = [
   'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpsGvZTB-646d25a9499ea.webp',
   'https://www.odealarose.com/media/cache/185_185_webp/accessory/phpG2BRDY-646d270811add.webp',
 ]
-const flowers = [
-    'https://букет72.рф/image/cache/catalog/111/dblkl./lavfdswxqka-900x900.jpg',
-    'https://букет72.рф/image/cache/catalog/111/qz-xir7m89w-900x900.jpg',
-    'https://букет72.рф/image/cache/catalog/2500bukety/2400fjz-900x900.jpg',
-]
+
 const options = {
   preventClickOnDrag: true,
   moveType: 'snap',
@@ -85,10 +83,12 @@ const orderUpSaleAdd = (product, up_sale) => {
 <template>
 
     <UContainer as="section" class="w-full -mt-14 flex flex-col md:flex-row flex-wrap w-full mb-6">
+
       <div class="flex-col gap-4 w-full md:w-2/4">
         <ProductSlider v-if="imageStatus === 'success'" :images="images" :aspect="0.75" />
       </div>
       <div class="flex-col gap-8 w-full px-0 pt-10 md:w-2/4 md:pl-10 md:pr-7 ">
+        {{product}}
         <div class="flex flex-wrap flex-row gap-3 items-center">
           <h1 class="text-4xl">{{ product?.title }}</h1>
           <ClientOnly>

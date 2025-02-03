@@ -3,6 +3,9 @@ import {useCategoryStore} from "~/stores/category.store";
 import {useTagStore} from "~/stores/tag.store";
 import {useProductStore} from "~/stores/product.store";
 import {object, string, type InferType, boolean, array, number} from 'yup'
+import {useRoute} from "nuxt/app";
+import {computed} from "vue";
+
 
 const schema = object({
   title: string().required('Введите имя'),
@@ -18,10 +21,23 @@ const schema = object({
   consist: array(),
 })
 type Schema = InferType<typeof schema>
-
+const page  = ref(0)
+const viewMore = ref(1)
+const pageSize = computed(()=> {
+  return 5 * viewMore.value
+})
+const route = useRoute()
 
 const {data: colors, status: colorStatus, refresh: colorRefresh} = useFetch(`/api/utils/colors`)
 const {data: tax, status: taxStatus, refresh: taxRefresh} = useFetch(`/api/utils/taxes`)
+    // ?page=${page.value}&pageSize=${pageSize.value}
+let {data: products, status: productsStatus, refresh: productsRefresh} = useFetch(`/api/catalog/product`, {
+    query: { page: page, pageSize: pageSize },
+    watch: [page, pageSize],
+    // immediate: false
+})
+
+
 
 const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
@@ -97,17 +113,25 @@ const columns = [
 ]
 const selected = ref([])
 const q = ref('')
-const filteredRows = await computed(() => {
-  if (!q.value) {
-    return productStore.products.rows
-  }
 
-  return productStore.products.rows.filter((el) => {
-    return Object.values(el).some((el) => {
-      return String(el).toLowerCase().includes(q.value.toLowerCase())
+
+const filteredRows = computed(() => {
+  try {
+    if (!q.value) {
+      return products.value.rows
+    }
+
+    return products.value.rows.filter((el) => {
+      return Object.values(el).some((el) => {
+        return String(el).toLowerCase().includes(q.value.toLowerCase())
+      })
     })
-  })
+  }
+  catch (e) {
+    return
+  }
 })
+
 const onSubmit = async () => {
   await productStore.createProduct({
     title: state.value.title,
@@ -125,10 +149,12 @@ const onSubmit = async () => {
     consist: state.value.consist,
   })
 }
+
 </script>
 
 <template>
   <!--  {{productStore.products}}-->
+<!--  {{products}}-->
   <section class="flex flex-col items-start py-8 px-10" style="position: relative">
     <h1 class="text-3xl mb-6 font-sans">Товары</h1>
     <UForm :state="state" class="p-4 ring-2 ring-gray-300 rounded-lg mt-1 flex w-full flex-col gap-3 mb-10"
@@ -257,6 +283,19 @@ const onSubmit = async () => {
         </UDropdown>
       </template>
     </UTable>
+    <div class="flex w-full justify-center mt-10">
+      <UPagination
+          v-if="products?.count > 1 && Math.ceil(products?.count / pageSize) > 1"
+          size="xl"
+          v-model="page"
+          :page-count="pageSize"
+          :total="products?.count"
+          :ui="{rounded: 'first:rounded-s-full last:rounded-e-full'}"
+          :prev-button="{ icon: 'i-solar-alt-arrow-left-bold-duotone', label:'назад', color: 'gray' }"
+          :next-button="{ icon: 'i-solar-alt-arrow-right-bold-duotone', label:'вперед', trailing: true,color: 'gray' }"
+      />
+    </div>
+    <UButton class="self-center mt-5" v-if="Math.ceil(products?.count / pageSize) > 1" type="button" @click="viewMore += 1; console.log(pageSize)">Показать еще{{ viewMore }}</UButton>
   </section>
 
 </template>

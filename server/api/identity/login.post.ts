@@ -98,10 +98,11 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
 
     setCookie(event, 'refreshToken', tokens.refreshToken, {
         // maxAge: 2592000,
-        maxAge: 60 * 60 * 24 * 5, secure: true, sameSite: true, httpOnly: true,
+        maxAge: 60 * 60 * 24 * 5, secure: false, sameSite: true, httpOnly: true,
+    })
+    setCookie(event, 'token', tokens.accessToken, {
+        maxAge: 60 * 60 * 24, secure: false, sameSite: true,
     })
 
-    const token = tokens.accessToken
-
-    return {user, token, status: 200, message: 'Вы успешно вошли на сайт'}
+    return {status: 200, message: 'Вы успешно вошли на сайт'}
 });

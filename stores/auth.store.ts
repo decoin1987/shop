@@ -1,122 +1,85 @@
 // @ts-nocheck
-import {defineStore} from 'pinia'
-import {useCookie, useFetch, useRouter} from 'nuxt/app';
+import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
 import {ref} from "vue";
+import {jwtDecode} from "jwt-decode";
+import {useStore} from "@headlessui/vue/dist/hooks/use-store";
 import {useLocalStorage} from "@vueuse/core";
 
 
 export const useAuthStore = defineStore('auth', () => {
+    const router = useRouter()
+    const toast = useToast()
+    const isAuth = useLocalStorage('auth', false)
 
-  const token = useCookie('token', {maxAge: 60*15, secure: true, sameSite: true})
-  const user = useLocalStorage('bouquet_user')
-  const router = useRouter()
-  const toast = useToast()
-
-  const useSignUp = async (event: event) => {
-    const requestOptions: {} = {
-      body: event
-    };
-    // @ts-ignore-all
-    await useFetch('api/identity/registration', {
-      onRequest({request, options}: { request: any, options: any }) {
-        options.method = 'POST'
-        options.headers = options.headers || {}
-        options.headers.authorization = token.value
-      },
-      onRequestError({request, options, error}) {},
-      onResponse({request, response, options}) {
-        if (response._data.status === 200) {
-          token.value = response._data.token
-          user.value = JSON.stringify(response._data.user)
-          router.push({path: "/"})
-        }
-      },
-      onResponseError({request, response, options}) {
-
-      },
-      ...requestOptions
-    });
-  }
-  const useLogIn = async (event: event) => {
-    await useFetch('api/identity/login', {
-      onRequest({request, options}: { request: any, options: any }) {
-        options.method = 'POST'
-        options.headers = options.headers || {}
-        options.headers.authorization = !!token.value ? token.value : ''
-      },
-      onRequestError({request, options, error}) {
-      },
-      onResponse({request, response, options}) {
-        if (response?._data?.status === 200) {
-          token.value = response._data.token
-          user.value = JSON.stringify(response._data.user)
-        }
-      },
-      onResponseError({request, response, options}) {
-
-      },
-      body: {
-        ...event
-      }
-    })
-  }
-  const useLogout = async () => {
-    await useFetch('/api/identity/logout', {
-      onRequest({request, options}: { request: any, options: any }) {
-        options.method = 'GET'
-        options.headers = options.headers || {}
-        options.headers.authorization = !!token.value ? token.value : ''
-      },
-      onRequestError({request, options, error}) {
-      },
-      onResponse({request, response, options}) {
-        if (response?._data?.status === 200) {
-          user.value = null
-          // router.push({ path: "/" })
-        }
-      },
-      onResponseError({request, response, options}) {
-
-      },
-    })
-  }
-
-  const useRefresh = async () => {
-    await useFetch('/api/identity/refresh', {
-      onResponse({request, response, options}) {
-        if (response?._data?.status === 200) {
-          user.value = JSON.stringify(response._data.user)
-          token.value = response._data.token
-        }
-        if (response?._data?.status === 401) {
-          user.value = null
-          authError(response?._data?.message)
-        }
-      },
-      method: 'POST',
-      body: {
-          user: JSON.parse(user.value),
-      }
-    })
-  }
-
-  const authError = async (reason: string) => {
-    switch (reason) {
-      case 'EXPIRED_REFRESH_COOKIE':
-        await useLogout(true)
-        break;
-      case 'NO_COOKIE':
-        toast.add({ title: 'Войдите пожалуйста на сайт' })
-        await router.replace('/login')
-        break;
-      case 'NO_RIGHTS':
-        await router.replace('/')
-        toast.add({ title: 'У тебя нет прав на это' })
-        break;
-      case 'SERVER_INTERNAL_ERROR':
-        break;
+    const useSignUp = async (event: event) => {
+        const requestOptions: {} = {
+            body: event
+        };
+        await useFetch('api/identity/registration', {
+            onResponse({request, response, options}) {
+                if (response._data.status === 200) {
+                    router.push({path: "/"})
+                    isAuth.value = true
+                    toast.add({title: response._data.message})
+                }
+                if (response?._data?.status === 404) {
+                    isAuth.value = false
+                    toast.add({title: response._data.message})
+                }
+            },
+            method: 'POST',
+            ...requestOptions
+        });
     }
-  }
+    const useLogIn = async (event: event) => {
+        await useFetch('api/identity/login', {
+            onResponse({request, response, options}) {
+                if (response?._data?.status === 200) {
+                    isAuth.value = true
+                    toast.add({title: response._data.message})
+                }
+                if (response?._data?.status === 404) {
+                    isAuth.value = false
+                    toast.add({title: response._data.message})
+                }
+            },
+            method: 'POST',
+            body: {
+                ...event
+            }
+        })
+    }
+    const useLogout = async () => {
+        await useFetch('/api/identity/logout', {
+            onResponse({request, response, options}) {
+                if (response?._data?.status === 200) {
+                    router.push({path: "/"})
+                    isAuth.value = false
+                }
+            },
+            method: 'GET'
+        })
+    }
 
-  return {useSignUp, useLogIn, authError, useLogout, useRefresh, useUser:user.value}
+    const useRefresh = async () => {
+        await useFetch('/api/identity/refresh', {
+            method: 'GET',
+            onResponse({request, response, options}) {
+                if (response?._data?.status === 200) {
+                    isAuth.value = true
+                }
+                if (response?._data?.status === 401) {
+                    isAuth.value = false
+                }
+            },
+        })
+    }
+
+    return {
+        useSignUp,
+        useLogIn,
+        useLogout,
+        useRefresh,
+        isAuth,
+    }
 })

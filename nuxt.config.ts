@@ -47,7 +47,8 @@ export default defineNuxtConfig({
                 wght: [400, 500, 600, 700, 900],
             },
         }
-    }], '@pinia/nuxt', '@vueuse/nuxt', "@nuxt/image", 'dayjs-nuxt', '@nuxt/ui'],
+    }], ['@pinia/nuxt', {},], '@vueuse/nuxt', "@nuxt/image", 'dayjs-nuxt', '@nuxt/ui'],
+
     ui: {
         global: true,
         safelistColors: ['cool', 'primary', 'green', 'red', 'malibu']
