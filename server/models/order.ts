@@ -76,7 +76,7 @@ Order.init({
 // Определения связей
 
 Order.hasMany(Transaction, { as: 'transaction', foreignKey: 'order_id' }, );
-Transaction.belongsTo(Transaction, { as: 'order', foreignKey: 'order_id' });
+Transaction.belongsTo(Order, { as: 'order', foreignKey: 'order_id' });
 
 OrderStatus.hasMany(Order, { as: 'order_status', foreignKey: 'order_status_id' }, );
 Order.belongsTo(OrderStatus, { as: 'order', foreignKey: 'order_status_id' });

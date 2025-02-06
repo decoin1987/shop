@@ -53,7 +53,6 @@ export default defineEventHandler(async (event) => {
             distinct:true,
             limit: pageSize,
             offset: offset(pageSize, page),
-            // order: [['updated_at', 'DESC']],
             order: [['created_at', 'DESC']],
         }
     )

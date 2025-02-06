@@ -21,7 +21,7 @@ const schema = object({
   consist: array(),
 })
 type Schema = InferType<typeof schema>
-const page  = ref(0)
+const page  = ref(1)
 const viewMore = ref(1)
 const pageSize = computed(()=> {
   return 5 * viewMore.value
