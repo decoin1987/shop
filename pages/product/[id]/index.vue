@@ -88,7 +88,6 @@ const orderUpSaleAdd = (product, up_sale) => {
         <ProductSlider v-if="imageStatus === 'success'" :images="images" :aspect="0.75" />
       </div>
       <div class="flex-col gap-8 w-full px-0 pt-10 md:w-2/4 md:pl-10 md:pr-7 ">
-        {{product}}
         <div class="flex flex-wrap flex-row gap-3 items-center">
           <h1 class="text-4xl">{{ product?.title }}</h1>
           <ClientOnly>

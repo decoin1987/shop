@@ -85,8 +85,8 @@ const payOrder = async () => {
       // Handle the response errors
     },
     body: {
-      "TerminalKey": "1695022074642DEMO",
-      "OrderId": "1211132311211111", // идентификатр заказа в системе  - у нас к каждому заказу будет формироваться транзакция - транзакция и будет orderId
+      "TerminalKey": process.env.NUXT_API_TERMINAL,
+      "OrderId": "128787871113234656651211111", // идентификатр заказа в системе  - у нас к каждому заказу будет формироваться транзакция - транзакция и будет orderId
       "PaymentId": "5353155",
       "Amount": "851500",
       "Receipt": {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 //@ts-nocheck
 import {useCategoryStore} from "~/stores/category.store"
-import {computed, ref, watch} from "vue";
+import {computed, ref, watch, watchEffect} from "vue";
 
 
 
@@ -148,7 +148,7 @@ const columns = [
 const update_show_menu = ref(false)
 const update_parent_id = ref(false)
 const update_is_upsale = ref(false)
-watch([update_show_menu, update_parent_id, update_is_upsale], () => {
+watchEffect([update_show_menu, update_parent_id, update_is_upsale], () => {
   if (update_show_menu.value === false) {
     update_show_menu.value = false
     delete updateState.value.show_menu
@@ -205,7 +205,7 @@ watch([update_show_menu, update_parent_id, update_is_upsale], () => {
             <UInput size="lg" v-model="state.sort"/>
           </UFormGroup>
         </div>
-        <UButton class="rounded-full self-start mt-2" size="lg" color="black" type="submit">
+        <UButton class="submit-btn mt-5 self-start" type="submit">
           Создать категорию
         </UButton>
       </UForm>

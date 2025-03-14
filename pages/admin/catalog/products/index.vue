@@ -241,7 +241,7 @@ const onSubmit = async () => {
         </UFormGroup>
       </div>
 
-      <UButton class="submit-btn mt-10 self-start" type="submit">Создать</UButton>
+      <UButton class="submit-btn mt-5 self-start" type="submit">Создать</UButton>
     </UForm>
     <div class="w-full flex px-3 py-3.5 border-b border-t border-gray-200 dark:border-gray-700">
       <UInput variant="none" class="w-full" v-model="q" placeholder="Поиск"/>

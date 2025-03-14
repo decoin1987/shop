@@ -140,8 +140,8 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
     const user = await userService.createNewDTO(password, email)
 
     console.log(user)
-
-    // await MailService.sendActivationMail(email, `${process.env.API_URL}/api/identity/activate/${activationLink}`)
+    const activationLink = uuid()
+    await MailService.sendActivationMail(email, `${process.env.API_URL}/api/identity/activate/${activationLink}`)
 
     const tokens = TokenService.generateTokens({ ...user })
 

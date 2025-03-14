@@ -153,7 +153,7 @@ const options = {
 
     <section class="mb-14">
       <h1 class="p-0 m-0 text-5xl mb-6">Витрина</h1>
-      <div class="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-3">
+      <div class="grid grid-cols-2 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 gap-3">
         <Card
             v-for="product in productStore.products.rows"
             :key="product.id"

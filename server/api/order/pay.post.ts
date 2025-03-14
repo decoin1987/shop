@@ -14,10 +14,8 @@ import crypto from 'crypto'
 const {TERMINAL:log, T_SECRET:pass} = process.env;
 
 function sha256(str: string) {
-    // Создаем экземпляр объекта hash с алгоритмом SHA-256
     const sha256 = crypto.createHash('sha256');
 
-    // Передаем строку в объект hash и получаем её хеш
     sha256.update(str);
     const hash = sha256.digest('hex');
     return hash;

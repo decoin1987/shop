@@ -1,8 +1,5 @@
 // @ts-nocheck
 import {useCookie, useFetch, useRouter, useState} from 'nuxt/app';
-import {ref} from "vue";
-import {jwtDecode} from "jwt-decode";
-import {useStore} from "@headlessui/vue/dist/hooks/use-store";
 import {useLocalStorage} from "@vueuse/core";
 
 

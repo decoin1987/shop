@@ -59,7 +59,7 @@ const orderItemAdd = (product) => {
           <UBadge size="xs" color="primary" :ui="{ rounded: 'rounded-full'}" class="line-clamp-1" v-if="parseInt(props.product.price - props.product.price * (props.product.sale + props.product.club) / 100) % 2 >= 1">НОВИНКА</UBadge>
           <UBadge size="xs" color="malibu" :ui="{ rounded: 'rounded-full' }" v-if="parseInt(props.product.price - props.product.price * (props.product.sale + props.product.club) / 100) > 4000">БЕСПЛАТНАЯ ДОСТАВКА</UBadge>
         </div>
-        <NuxtImg  class="rounded-sm rounded-tl-card w-full" style="aspect-ratio: 3/4; object-fit: cover" :src="`${props.product.product_images?.length ? '/img/product/' + props.product.product_images[0].url : '/img/common/nophoto.png'}`" alt="" />
+        <NuxtImg  class="rounded-sm rounded-tl-card w-full" style="aspect-ratio: 3/3; object-fit: cover" :src="`${props.product.product_images?.length ? '/img/product/' + props.product.product_images[0].url : '/img/common/nophoto.png'}`" alt="" />
 
       </div>
     </template>
